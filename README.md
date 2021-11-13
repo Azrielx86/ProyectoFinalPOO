@@ -13,13 +13,39 @@ para este proyecto).
 
 ## Dependencias
 Para manejar las dependencias, se recomienda instalarlas con Maven o 
-usar las incluidas en lib
+usar las incluidas en lib.
 * lanterna (com.googlecode.lanterna)
 
 ## Compilación
 Para la compilación, se recomienda usar los scripts
-para Linux y Windows incluidos, o los siguientes comandos:
+para Linux y Windows incluidos, o los siguientes comandos desde la raíz del proyecto.
 
-    javac -classpath "lib/lanterna-3.1.1.jar:" src/test/BasicFormText.java -d out/
+    javac -classpath "lib/lanterna-3.1.1.jar" src/com/fiunam/main/Main.java -d out
 
-    java -classpath "lib/lanterna-3.1.1.jar:" test.BasicFormText
+Desde el directorio out ejecutar
+
+    java -classpath "../lib/lanterna-3.1.1.jar:" com.fiunam.main.Main
+
+## Ejecución desde scripts
+Para únicamente compilar, usar el script de compilación.
+
+    ./CompilarLinux.sh
+    ./CompilarWindows.bat
+
+Dentro de la carpeta out se crean los scripts para ejecutar después el programa.
+
+    ./start.sh
+    ./start.bat
+
+Para compilar y ejecutar.
+
+    ./run.sh
+    ./run.bat
+
+Para crear el .jar directamente.
+
+    (pendiente)
+
+Para Linux probablemente sea necesario dar permisos de ejecución con el siguiente comando.
+
+    chmod +x <script>
