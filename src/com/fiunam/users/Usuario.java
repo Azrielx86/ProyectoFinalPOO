@@ -1,6 +1,10 @@
 package com.fiunam.users;
 
-public class Usuario {
+/**
+ * Base pasa la creación de un usuario con nombre de
+ * usuario y contraseña
+ */
+public abstract class Usuario {
     private String username;
     private String password;
 

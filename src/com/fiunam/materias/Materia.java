@@ -4,6 +4,9 @@ import com.fiunam.users.Alumno;
 
 import java.util.ArrayList;
 
+/**
+ * Crea una materia con su nombre, grupo, profesor y la lista de alumnos
+ */
 public class Materia {
     private String nombre;
     private int grupo;

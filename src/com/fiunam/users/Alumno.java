@@ -4,6 +4,10 @@ import com.fiunam.materias.Materia;
 
 import java.util.ArrayList;
 
+/**
+ * Crea un usuario para un alumno, con su nombre, número de cuenta,
+ * semestre que cursa y su lista de materias
+ */
 public class Alumno extends Usuario{
     private String nombre;
     private int semestre;
@@ -11,13 +15,13 @@ public class Alumno extends Usuario{
     private ArrayList<Materia> materias;
 
     public Alumno() {
-        this.materias = new ArrayList<Materia>();
+        this.materias = new ArrayList<>();
     }
 
     public Alumno(String username, String nombre, String password, int semestre, String numCuenta) {
         super(username, password);
         this.nombre = nombre;
-        this.materias = new ArrayList<Materia>();
+        this.materias = new ArrayList<>();
         this.semestre = semestre;
         this.numCuenta = numCuenta;
     }
