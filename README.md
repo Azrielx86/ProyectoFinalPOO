@@ -20,11 +20,17 @@ usar las incluidas en lib.
 Para la compilación, se recomienda usar los scripts
 para Linux y Windows incluidos, o los siguientes comandos desde la raíz del proyecto.
 
+Comandos para Linux
+
     javac -classpath "lib/lanterna-3.1.1.jar" src/com/fiunam/main/Main.java -d out
-
-Desde el directorio out ejecutar
-
+    cd out
     java -classpath "../lib/lanterna-3.1.1.jar:" com.fiunam.main.Main
+
+Comandos para Windows
+
+    javac -classpath "lib/lanterna-3.1.1.jar" src/com/fiunam/main/Main.java -d out
+    cd out
+    javaw -classpath "../lib/lanterna-3.1.1.jar;" com.fiunam.main.Main
 
 ## Ejecución desde scripts
 Para únicamente compilar, usar el script de compilación.
