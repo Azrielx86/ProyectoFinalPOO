@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Compilando proyecto [LINUX]"
+echo "Compilando y ejecutando proyecto [LINUX]"
 javac -classpath "lib/lanterna-3.1.1.jar" src/com/fiunam/main/Main.java -d out
 echo -e "Proyecto compilado\nEjectando..."
 cd out
