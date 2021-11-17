@@ -22,28 +22,28 @@ para Linux y Windows incluidos, o los siguientes comandos desde la raíz del pro
 
 Comandos para Linux
 
-    javac -classpath "lib/lanterna-3.1.1.jar" src/com/fiunam/main/Main.java -d out
+    javac -cp ".:lib/lanterna-3.1.1.jar:" src/**/*.java -d out
     cd out
-    java -classpath "../lib/lanterna-3.1.1.jar:" com.fiunam.main.Main
+    java -cp "../lib/lanterna-3.1.1.jar:" com.fiunam.main.Main
 
 Comandos para Windows
 
-    javac -classpath "lib/lanterna-3.1.1.jar" src/com/fiunam/main/Main.java -d out
+    javac -cp ".;lib/lanterna-3.1.1.jar" src/**/*.java -d out
     cd out
-    javaw -classpath "../lib/lanterna-3.1.1.jar;" com.fiunam.main.Main
+    javaw -cp "../lib/lanterna-3.1.1.jar;" com.fiunam.main.Main
 
 ## Ejecución desde scripts
 Para únicamente compilar, usar el script de compilación.
 
-    ./CompilarLinux.sh
-    ./CompilarWindows.bat
+    ./CompilarLinuxAll.sh
+    ./CompilarWindowsAll.bat
 
 Dentro de la carpeta out se crean los scripts para ejecutar después el programa.
 
     ./start.sh
     ./start.bat
 
-Para compilar y ejecutar.
+Para compilar y ejecutar. (por eliminar(?))
 
     ./run.sh
     ./run.bat
