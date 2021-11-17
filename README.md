@@ -26,9 +26,9 @@ Comandos para Linux
     cd out
     java -cp "../lib/lanterna-3.1.1.jar:" com.fiunam.main.Main
 
-Comandos para Windows
+Comandos para Windows (sujeto a cambios... te odio, Windows)
 
-    javac -cp ".;lib/lanterna-3.1.1.jar" src/**/*.java -d out
+    javac -cp ".;lib/lanterna-3.1.1.jar" src/com/fiunam/main/*.java src/com/fiunam/materias/*.java src/com/fiunam/users/*.java -d out
     cd out
     javaw -cp "../lib/lanterna-3.1.1.jar;" com.fiunam.main.Main
 
