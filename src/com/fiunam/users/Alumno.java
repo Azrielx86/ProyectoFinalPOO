@@ -12,7 +12,7 @@ public class Alumno extends Usuario{
     private String nombre;
     private int semestre;
     private String numCuenta;
-    private ArrayList<Materia> materias;
+    private ArrayList<String> materias;
 
     public Alumno() {
         this.materias = new ArrayList<>();
@@ -26,7 +26,7 @@ public class Alumno extends Usuario{
         this.numCuenta = numCuenta;
     }
 
-    public Alumno(String username, String password, String nombre, int semestre, String numCuenta, ArrayList<Materia> materias) {
+    public Alumno(String username, String password, String nombre, int semestre, String numCuenta, ArrayList<String> materias) {
         super(username, password);
         this.nombre = nombre;
         this.semestre = semestre;
@@ -50,11 +50,11 @@ public class Alumno extends Usuario{
         this.semestre = semestre;
     }
 
-    public ArrayList<Materia> getMaterias() {
+    public ArrayList<String> getMaterias() {
         return materias;
     }
 
-    public void setMaterias(ArrayList<Materia> materias) {
+    public void setMaterias(ArrayList<String> materias) {
         this.materias = materias;
     }
 
@@ -71,9 +71,9 @@ public class Alumno extends Usuario{
         StringBuilder listaMaterias = new StringBuilder();
         for (int i = 0; i < this.materias.size(); i++) {
             listaMaterias.append("[").append(i+1).append("] ");
-            listaMaterias.append(this.materias.get(i).getNombre());
-            listaMaterias.append(" | Grupo: ");
-            listaMaterias.append(this.materias.get(i).getGrupo()).append("\n");
+//            listaMaterias.append(this.materias.get(i).getNombre());
+//            listaMaterias.append(" | Grupo: ");
+//            listaMaterias.append(this.materias.get(i).getGrupo()).append("\n");
         }
 
         return "[ALUMNO]\n" + this.nombre + "\n" +

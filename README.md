@@ -1,9 +1,13 @@
 # Proyecto Final Programación Orientada a Objetos
-Moreno Chalico Edgar Ulises
 
 Proyecto final para la materia de Programación Orientada a Objetos
 
 Semestre 2022-1
+
+Integrantes
+
+* Osorio Ángeles Rodrigo Jafet
+* Moreno Chalico Edgar Ulises
 
 ## Sistema de Inscripciones a cursos
 Programa para administrar las inscripciones de los alumnos,
@@ -15,8 +19,9 @@ para este proyecto).
 Para manejar las dependencias, se recomienda instalarlas con Maven o 
 usar las incluidas en lib.
 * lanterna (com.googlecode.lanterna)
+* flexjson (net.sf.flexjson)
 
-## Compilación
+## Compilación (En proceso)
 Para la compilación, se recomienda usar los scripts
 para Linux y Windows incluidos, o los siguientes comandos desde la raíz del proyecto.
 

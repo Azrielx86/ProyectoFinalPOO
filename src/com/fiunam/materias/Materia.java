@@ -11,7 +11,9 @@ public class Materia {
     private String nombre;
     private int grupo;
     private String proferor;
-    private ArrayList<Alumno> alumnos;
+    //TODO: Agregar métodos para iniciar un ID
+    private String idMateria;
+    private ArrayList<String> alumnos;
 
     public Materia() {
         this.alumnos = new ArrayList<>();
@@ -24,7 +26,7 @@ public class Materia {
         this.proferor = proferor;
     }
 
-    public Materia(String nombre, int grupo, String proferor, ArrayList<Alumno> alumnos) {
+    public Materia(String nombre, int grupo, String proferor, ArrayList<String> alumnos) {
         this.nombre = nombre;
         this.grupo = grupo;
         this.proferor = proferor;
@@ -55,11 +57,11 @@ public class Materia {
         this.proferor = proferor;
     }
 
-    public ArrayList<Alumno> getAlumnos() {
+    public ArrayList<String> getAlumnos() {
         return alumnos;
     }
 
-    public void setAlumnos(ArrayList<Alumno> alumnos) {
+    public void setAlumnos(ArrayList<String> alumnos) {
         this.alumnos = alumnos;
     }
 
@@ -68,8 +70,8 @@ public class Materia {
         StringBuilder listaAlumos = new StringBuilder();
         for (int i = 0; i < this.alumnos.size(); i++) {
             listaAlumos.append("[").append(i+1).append("] ");
-            listaAlumos.append(this.alumnos.get(i).getUsername()).append("\n");
-
+//            listaAlumos.append(this.alumnos.get(i).getUsername()).append("\n");
+        // TODO : Obtener alumnos desde numero de cuenta.
         }
 
         return "Materia: " + this.nombre + " | " + this.grupo +"\n" +

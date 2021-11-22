@@ -14,8 +14,8 @@ public class TestUsuarios {
         materias.add(new Materia("EDA II", 1, "Jose"));
         materias.add(new Materia("POO", 4, "Guadalupe"));
 
-        Alumno alumno = new Alumno("alan", "passGeneric", "Alan XD", 3, "453637457", materias);
-        System.out.println(alumno);
+//        Alumno alumno = new Alumno("alan", "passGeneric", "Alan XD", 3, "453637457", materias);
+//        System.out.println(alumno);
 
         System.out.println();
 

@@ -1,0 +1,26 @@
+[
+    {
+        "class": "com.fiunam.users.Alumno",
+        "nombre": "Alumno 1",
+        "numCuenta": null,
+        "password": null,
+        "semestre": 0,
+        "username": null
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "nombre": "Alumno 2",
+        "numCuenta": null,
+        "password": null,
+        "semestre": 0,
+        "username": null
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "nombre": "Alumno 3",
+        "numCuenta": null,
+        "password": null,
+        "semestre": 0,
+        "username": null
+    }
+]
