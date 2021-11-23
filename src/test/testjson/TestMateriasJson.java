@@ -12,8 +12,8 @@ public class TestMateriasJson {
     public static void main(String[] args) {
         JSONSerializer serializer = new JSONSerializer();
         Alumno alumno = new Alumno("edgarchalico", "Edgar Chalico", "testXD",3, "318192932");
-        Materia poo = new Materia("Programación Orientada a Objetos", 1,"Guadalupe");
-        Materia edaii = new Materia("Estructuras de Datos y Algoritmos II", 4, "José");
+        Materia poo = new Materia("Programación Orientada a Objetos", 1,"Guadalupe", "001");
+        Materia edaii = new Materia("Estructuras de Datos y Algoritmos II", 4, "José", "002");
 
         AdminMateria.altaMateria(poo, alumno);
         AdminMateria.altaMateria(edaii, alumno);

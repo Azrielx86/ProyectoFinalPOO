@@ -17,11 +17,12 @@ public class Materia {
         this.alumnos = new ArrayList<>();
     }
 
-    public Materia(String nombre, int grupo, String profesor) {
+    public Materia(String nombre, int grupo, String profesor, String idMateria) {
         this.alumnos = new ArrayList<>();
         this.nombre = nombre;
         this.grupo = grupo;
         this.profesor = profesor;
+        this.idMateria = idMateria;
     }
 
     public Materia(String nombre, int grupo, String profesor, ArrayList<String> alumnos) {
