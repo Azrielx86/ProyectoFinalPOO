@@ -88,6 +88,8 @@ public class DatabaseAlumnos extends Database {
         this.alumnos.add(alumno);
     }
 
+//    TODO : Comprobar .gets, debido al null puede causar errores.
+
     /**
      * Obtiene el objeto del Alumno por su número de cuenta
      *
