@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class DatabaseMaterias extends Database {
     private ArrayList<Materia> materias;
-    private final String pathMateriasDB = Paths.get(super.PathFiles, "materias.json").toString();
+    private final String pathMateriasDB = Paths.get(super.pathFiles, "materias.json").toString();
 
     public DatabaseMaterias() {
         this.materias = new ArrayList<>();

@@ -3,6 +3,7 @@ package com.fiunam.databases;
 import com.fiunam.users.Alumno;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.nio.file.Path;
@@ -16,7 +17,7 @@ import flexjson.*;
  */
 public class DatabaseAlumnos extends Database {
     private ArrayList<Alumno> alumnos;
-    private final String pathAlumnosDB = Path.of(super.PathFiles, "alumnos.json").toString();
+    private final String pathAlumnosDB = Path.of(super.pathFiles, "alumnos.json").toString();
 
     public DatabaseAlumnos() {
         this.alumnos = new ArrayList<>();
@@ -29,6 +30,12 @@ public class DatabaseAlumnos extends Database {
 
         try (FileReader file = new FileReader(this.pathAlumnosDB)) {
             this.alumnos = jsonDeserializer.deserialize(file);
+        }catch (FileNotFoundException fnt){
+            try {
+                super.createDir();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         } catch (JSONException io) {
             System.out.println("La base de datos \"ALUMNOS\" no existe, creando una nueva.");
             this.createDB();

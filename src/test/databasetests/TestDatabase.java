@@ -11,8 +11,6 @@ public class TestDatabase {
         Scanner console = new Scanner(System.in);
         DatabaseAlumnos databaseAlumnos = new DatabaseAlumnos();
 
-        System.out.println(databaseAlumnos);
-
 //        Alumno alumno1 = new Alumno("edgarsfeic", "Edgars Feic", "edz1234", 3, "3181----0");
 //        Alumno alumno2 = new Alumno("otroalumno", "Otro Alumno", "1234asdf", 2, "3453----5");
 //        Alumno alumno3 = new Alumno();
@@ -46,6 +44,8 @@ public class TestDatabase {
         System.out.println(databaseAlumnos.readAlumno("Num que no existe"));
 
         databaseAlumnos.saveDB();
+
+        System.out.println(databaseAlumnos);
 
     }
 }
