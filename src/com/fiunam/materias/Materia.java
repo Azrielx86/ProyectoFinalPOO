@@ -1,7 +1,5 @@
 package com.fiunam.materias;
 
-import com.fiunam.users.Alumno;
-
 import java.util.ArrayList;
 
 /**
@@ -10,7 +8,7 @@ import java.util.ArrayList;
 public class Materia {
     private String nombre;
     private int grupo;
-    private String proferor;
+    private String profesor;
     //TODO: Agregar métodos para iniciar un ID
     private String idMateria;
     private ArrayList<String> alumnos;
@@ -19,17 +17,17 @@ public class Materia {
         this.alumnos = new ArrayList<>();
     }
 
-    public Materia(String nombre, int grupo, String proferor) {
+    public Materia(String nombre, int grupo, String profesor) {
         this.alumnos = new ArrayList<>();
         this.nombre = nombre;
         this.grupo = grupo;
-        this.proferor = proferor;
+        this.profesor = profesor;
     }
 
-    public Materia(String nombre, int grupo, String proferor, ArrayList<String> alumnos) {
+    public Materia(String nombre, int grupo, String profesor, ArrayList<String> alumnos) {
         this.nombre = nombre;
         this.grupo = grupo;
-        this.proferor = proferor;
+        this.profesor = profesor;
         this.alumnos = alumnos;
     }
 
@@ -49,12 +47,12 @@ public class Materia {
         this.grupo = grupo;
     }
 
-    public String getProferor() {
-        return proferor;
+    public String getProfesor() {
+        return profesor;
     }
 
-    public void setProferor(String proferor) {
-        this.proferor = proferor;
+    public void setProfesor(String profesor) {
+        this.profesor = profesor;
     }
 
     public ArrayList<String> getAlumnos() {
@@ -75,7 +73,7 @@ public class Materia {
         }
 
         return "Materia: " + this.nombre + " | " + this.grupo +"\n" +
-                "Profesor: " + this.proferor + "\n" +
+                "Profesor: " + this.profesor + "\n" +
                 "Alumnos: \n" + listaAlumos;
     }
 }

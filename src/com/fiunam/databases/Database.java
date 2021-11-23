@@ -11,7 +11,7 @@ import flexjson.*;
 
 public class Database {
     private static ArrayList<Alumno> alumnos;
-    private static final String pathAlumnosDB = "alumnos.json";
+    private static final String pathAlumnosDB = "./json/alumnos.json";
 
     public Database(){
         Database.alumnos = new ArrayList<>();
