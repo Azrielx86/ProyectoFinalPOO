@@ -3,16 +3,18 @@ package test.databasetests;
 import com.fiunam.databases.DatabaseAlumnos;
 import com.fiunam.users.Alumno;
 
+import java.util.Objects;
+import java.util.Scanner;
+
 public class TestDatabase {
     public static void main(String[] args) {
+        Scanner console = new Scanner(System.in);
         DatabaseAlumnos databaseAlumnos = new DatabaseAlumnos();
 
         System.out.println(databaseAlumnos);
 
-//        Alumno alumno1 = new Alumno();
-//        alumno1.setNombre("Alumno 1");
-//        Alumno alumno2 = new Alumno();
-//        alumno2.setNombre("Alumno 2");
+//        Alumno alumno1 = new Alumno("edgarsfeic", "Edgars Feic", "edz1234", 3, "3181----0");
+//        Alumno alumno2 = new Alumno("otroalumno", "Otro Alumno", "1234asdf", 2, "3453----5");
 //        Alumno alumno3 = new Alumno();
 //        alumno3.setNombre("Alumno 3");
 //
@@ -20,11 +22,30 @@ public class TestDatabase {
 //        databaseAlumnos.getAlumnos().add(alumno2);
 //        databaseAlumnos.getAlumnos().add(alumno3);
 
-        databaseAlumnos.saveDB();
+        while(true){
+            System.out.println("Añadir otro? (s/n)");
+            String op = console.nextLine();
+            if (Objects.equals(op, "n") || Objects.equals(op, "N")){
+                break;
+            }
 
-        Alumno alumno = databaseAlumnos.getAlumnos().get(1);
-        System.out.println("=".repeat(30));
-        System.out.println(alumno);
+            Alumno alumno = new Alumno();
+            System.out.print("Nombre: ");
+            alumno.setNombre(console.nextLine());
+            System.out.print("Número de cuenta: ");
+            alumno.setNumCuenta(console.nextLine());
+
+            databaseAlumnos.agregarAlumno(alumno);
+        }
+
+//        Eliminado de un alumno
+        databaseAlumnos.eliminarAlumno("n");
+
+//        Lectura de alumnos, cuando existe y cuando no
+        System.out.println(databaseAlumnos.readAlumno("3181----0"));
+        System.out.println(databaseAlumnos.readAlumno("Num que no existe"));
+
+        databaseAlumnos.saveDB();
 
     }
 }

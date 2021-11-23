@@ -1,24 +1,56 @@
 [
     {
         "class": "com.fiunam.users.Alumno",
-        "nombre": "Alumno 1",
-        "numCuenta": null,
-        "password": null,
-        "semestre": 0,
-        "username": null
+        "nombre": "Edgars Feic",
+        "numCuenta": "3181----0",
+        "password": "edz1234",
+        "semestre": 3,
+        "username": "edgarsfeic"
     },
     {
         "class": "com.fiunam.users.Alumno",
-        "nombre": "Alumno 2",
-        "numCuenta": null,
-        "password": null,
-        "semestre": 0,
-        "username": null
+        "nombre": "Otro Alumno",
+        "numCuenta": "3453----5",
+        "password": "1234asdf",
+        "semestre": 2,
+        "username": "otroalumno"
     },
     {
         "class": "com.fiunam.users.Alumno",
         "nombre": "Alumno 3",
         "numCuenta": null,
+        "password": null,
+        "semestre": 0,
+        "username": null
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "nombre": "HOla Mundo",
+        "numCuenta": "34235346",
+        "password": null,
+        "semestre": 0,
+        "username": null
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "nombre": "Jose Luis",
+        "numCuenta": "2732847",
+        "password": null,
+        "semestre": 0,
+        "username": null
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "nombre": "Otro Alumno",
+        "numCuenta": "365473",
+        "password": null,
+        "semestre": 0,
+        "username": null
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "nombre": "Eduardo",
+        "numCuenta": "465436",
         "password": null,
         "semestre": 0,
         "username": null

@@ -1,13 +1,12 @@
 package com.fiunam.databases;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 
 /**
  * Métodos base para las bases de datos de Alumnos y Materias
  */
 public abstract class Database {
-//    protected final String PathFiles = "./json/";
-    protected final String PathFiles = Paths.get(".", "json").toString();
+    protected final String PathFiles = Path.of(".", "json").toString();
 
     /**
      * Inicializa la base de datos, en cada subclase se especifica
