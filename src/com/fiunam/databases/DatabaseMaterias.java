@@ -2,12 +2,10 @@ package com.fiunam.databases;
 
 import com.fiunam.materias.Materia;
 import flexjson.JSONDeserializer;
+import flexjson.JSONException;
 import flexjson.JSONSerializer;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -33,7 +31,13 @@ public class DatabaseMaterias extends Database {
         try (FileReader file = new FileReader(this.pathMateriasDB)) {
             this.materias = jsonDeserializer.deserialize(file);
             this.idMaterias = Integer.parseInt(materias.get(materias.size()-1).getIdMateria());
-        } catch (IOException io) {
+        } catch(FileNotFoundException fnf){
+            try {
+                super.createDir();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        } catch (JSONException io) {
             System.out.println("La base de datos \"MATERIAS\" no existe, creando una nueva.");
         } catch (Exception e) {
             e.printStackTrace();

@@ -11,7 +11,7 @@ public class TestAltas {
         DatabaseMaterias dbMaterias = new DatabaseMaterias();
         DatabaseAlumnos dbAlumnos = new DatabaseAlumnos();
 
-        Alumno alumno = dbAlumnos.readAlumno("3181----0");
+        Alumno alumno = dbAlumnos.readAlumno("318196960");
         Materia materia = dbMaterias.readMateria("0002");
 
         AdminMateria.altaMateria(dbMaterias, dbAlumnos, materia.getIdMateria(), alumno.getNumCuenta());

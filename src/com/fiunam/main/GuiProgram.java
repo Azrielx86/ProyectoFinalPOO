@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GuiProgram {
     public static void run() throws IOException {
-        Terminal terminal = new DefaultTerminalFactory().createTerminal();
+        Terminal terminal = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(130, 30)).createTerminal();
         Screen screen = new TerminalScreen(terminal);
         screen.startScreen();
 

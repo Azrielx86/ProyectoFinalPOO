@@ -70,15 +70,13 @@ public class Alumno extends Usuario{
     public String toString() {
         StringBuilder listaMaterias = new StringBuilder();
         for (int i = 0; i < this.materias.size(); i++) {
-            listaMaterias.append("[").append(i+1).append("] ");
-//            listaMaterias.append(this.materias.get(i).getNombre());
-//            listaMaterias.append(" | Grupo: ");
-//            listaMaterias.append(this.materias.get(i).getGrupo()).append("\n");
+            listaMaterias.append("(").append(i+1).append(") - ");
+            listaMaterias.append(this.materias.get(i)).append("\n");
         }
 
         return "[ALUMNO]\n" + this.nombre + "\n" +
                 "Número de cuenta: " + this.numCuenta + "\n" +
-                "Semestre: " + this.semestre + " | Materias:" + "\n" +
+                "Semestre: " + this.semestre + "\nLista de Materias:" + "\n" +
                 listaMaterias;
     }
 }
