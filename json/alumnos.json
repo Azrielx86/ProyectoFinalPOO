@@ -3,7 +3,8 @@
         "class": "com.fiunam.users.Alumno",
         "materias": [
             "0002",
-            "0005"
+            "0005",
+            "0003"
         ],
         "nombre": "Edgars",
         "numCuenta": "3181----0",

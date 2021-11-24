@@ -21,7 +21,7 @@
     },
     {
         "alumnos": [
-
+            "3181----0"
         ],
         "class": "com.fiunam.materias.Materia",
         "grupo": 20,
@@ -31,18 +31,6 @@
     },
     {
         "alumnos": [
-
-        ],
-        "class": "com.fiunam.materias.Materia",
-        "grupo": 20,
-        "idMateria": "0004",
-        "nombre": "Calculo Diferencial",
-        "profesor": "Aldo"
-    },
-    {
-        "alumnos": [
-            "3181----0",
-            "3181----0",
             "3181----0"
         ],
         "class": "com.fiunam.materias.Materia",
@@ -59,6 +47,16 @@
         "grupo": 34,
         "idMateria": "0006",
         "nombre": "Calculo Vectorial",
+        "profesor": null
+    },
+    {
+        "alumnos": [
+
+        ],
+        "class": "com.fiunam.materias.Materia",
+        "grupo": 4,
+        "idMateria": "0007",
+        "nombre": "Azure Course",
         "profesor": null
     }
 ]

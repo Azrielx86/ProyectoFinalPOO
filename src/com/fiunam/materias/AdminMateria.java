@@ -21,9 +21,16 @@ public class AdminMateria {
      */
     public static void altaMateria(DatabaseMaterias dbMaterias, DatabaseAlumnos dbAlumnos, String idmateria, String numCuenta){
         try {
-//            TODO: Comprobación previa a que se agregue la materia.
-            dbMaterias.readMateria(idmateria).getAlumnos().add(numCuenta);
-            dbAlumnos.readAlumno(numCuenta).getMaterias().add(idmateria);
+            if (dbMaterias.readMateria(idmateria) != null && dbAlumnos.readAlumno(numCuenta) != null){
+                if (!dbMaterias.readMateria(idmateria).getAlumnos().contains(numCuenta) && !dbAlumnos.readAlumno(numCuenta).getMaterias().contains(idmateria)){
+                    dbMaterias.readMateria(idmateria).getAlumnos().add(numCuenta);
+                    dbAlumnos.readAlumno(numCuenta).getMaterias().add(idmateria);
+                } else{
+                    System.out.println("La materia ya está inscrita");
+                }
+            } else {
+                System.out.println("El Alumno o la materia no existen");
+            }
         } catch (Exception e){
             e.printStackTrace();
         }

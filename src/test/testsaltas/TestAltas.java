@@ -19,6 +19,9 @@ public class TestAltas {
         materia = dbMaterias.readMateria("0005");
         AdminMateria.altaMateria(dbMaterias, dbAlumnos, materia.getIdMateria(), alumno.getNumCuenta());
 
+        materia = dbMaterias.readMateria("0003");
+        AdminMateria.altaMateria(dbMaterias, dbAlumnos, materia.getIdMateria(), alumno.getNumCuenta());
+
 
 //        AdminMateria.
 

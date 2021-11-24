@@ -32,7 +32,7 @@ public class DatabaseMaterias extends Database {
 
         try (FileReader file = new FileReader(this.pathMateriasDB)) {
             this.materias = jsonDeserializer.deserialize(file);
-            this.idMaterias = materias.size();
+            this.idMaterias = Integer.parseInt(materias.get(materias.size()-1).getIdMateria());
         } catch (IOException io) {
             System.out.println("La base de datos \"MATERIAS\" no existe, creando una nueva.");
         } catch (Exception e) {
@@ -76,6 +76,10 @@ public class DatabaseMaterias extends Database {
         return sb.toString();
     }
 
+    /**
+     * Agrega un alumno a la base de datos
+     * @param materia Objeto de una materia
+     */
     public void agregarMateria(Materia materia) {
         materia.setIdMateria(String.valueOf(++this.idMaterias));
         this.materias.add(materia);

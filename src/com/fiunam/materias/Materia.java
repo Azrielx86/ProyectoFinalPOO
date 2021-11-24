@@ -9,7 +9,6 @@ public class Materia {
     private String nombre;
     private int grupo;
     private String profesor;
-    //TODO: Agregar métodos para iniciar un ID
     private String idMateria;
     private ArrayList<String> alumnos;
 
