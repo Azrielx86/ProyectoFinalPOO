@@ -1,6 +1,11 @@
 [
     {
         "class": "com.fiunam.users.Alumno",
+        "materias": [
+            "0002",
+            "0005",
+            "0003"
+        ],
         "nombre": "Edgars",
         "numCuenta": "3181----0",
         "password": null,
@@ -9,6 +14,9 @@
     },
     {
         "class": "com.fiunam.users.Alumno",
+        "materias": [
+
+        ],
         "nombre": "Ricardo",
         "numCuenta": "356546",
         "password": null,
@@ -17,6 +25,9 @@
     },
     {
         "class": "com.fiunam.users.Alumno",
+        "materias": [
+
+        ],
         "nombre": "Otro más",
         "numCuenta": "3647645",
         "password": null,

@@ -9,7 +9,6 @@ public class Materia {
     private String nombre;
     private int grupo;
     private String profesor;
-    //TODO: Agregar métodos para iniciar un ID
     private String idMateria;
     private ArrayList<String> alumnos;
 
@@ -22,14 +21,7 @@ public class Materia {
         this.nombre = nombre;
         this.grupo = grupo;
         this.profesor = profesor;
-        this.idMateria = idMateria;
-    }
-
-    public Materia(String nombre, int grupo, String profesor, ArrayList<String> alumnos) {
-        this.nombre = nombre;
-        this.grupo = grupo;
-        this.profesor = profesor;
-        this.alumnos = alumnos;
+        this.idMateria = String.format("%04d", Integer.parseInt(idMateria));
     }
 
     public String getNombre() {
@@ -64,6 +56,14 @@ public class Materia {
         this.alumnos = alumnos;
     }
 
+    public String getIdMateria() {
+        return idMateria;
+    }
+
+    public void setIdMateria(String idMateria) {
+        this.idMateria = String.format("%04d", Integer.parseInt(idMateria));
+    }
+
     @Override
     public String toString() {
         StringBuilder listaAlumos = new StringBuilder();
@@ -73,7 +73,8 @@ public class Materia {
         // TODO : Obtener alumnos desde numero de cuenta.
         }
 
-        return "Materia: " + this.nombre + " | " + this.grupo +"\n" +
+        return "Materia: " + this.nombre + " | " + this.grupo + " | ID: " +
+                this.idMateria + "\n" +
                 "Profesor: " + this.profesor + "\n" +
                 "Alumnos: \n" + listaAlumos;
     }
