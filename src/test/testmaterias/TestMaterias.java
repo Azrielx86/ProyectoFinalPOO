@@ -10,8 +10,8 @@ public class TestMaterias {
         Materia poo = new Materia("Programación Orientada a Objetos", 1,"Guadalupe", "001");
         Materia edaii = new Materia("Estructuras de Datos y Algoritmos II", 4, "José", "001");
 
-        AdminMateria.altaMateria(poo, alumno);
-        AdminMateria.altaMateria(edaii, alumno);
+//        AdminMateria.altaMateria(poo, alumno);
+//        AdminMateria.altaMateria(edaii, alumno);
 
         System.out.println("============== Test Agregar materias ================");
         System.out.println(alumno);
