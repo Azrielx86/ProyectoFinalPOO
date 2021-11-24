@@ -1,0 +1,25 @@
+Rúbrica:
+Introducción: 15%
+Desarrollo: 35%
+Diagramas UML 25%
+Conclusiones: 15%
+
+Referencias: 10%
+
+* El equipo puede constar de máximo 5 integrantes.
+* El programa desarrollado debe implementar los conceptos que conforman al paradigma orientado a objetos.
+
+* Debe tener una carátula en la que se registren los datos de los integrantes del equipo.
+* La introducción deberá contener la justificación de su proyecto.
+* En el desarrollo deben explicar el funcionamiento de su programa, las clases creadas
+por ustedes, las clases del API de Java elegidas para su desarrollo, indicar si han
+hecho uso de clases desarrolladas por terceros, documentar las pruebas de funcionamiento de su programa.
+* Deben incluir el diagrama de casos de uso de su programa (no es necesaria la explicación
+textual de cada caso), el diagrama de clases y un diagrama de secuencias que modele la interacción
+del usuario con el programa.
+* Las conclusiones deben ser individuales.
+
+* Se tomará como un punto extra sobre la calificación del proyecto la documentación para javadoc.
+
+Nota: No se solicita la creación de una interfaz gráfica de usuario y no se toma
+como punto extra. No se aceptan proyectos reciclados de otras materias.

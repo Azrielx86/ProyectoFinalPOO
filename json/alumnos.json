@@ -8,9 +8,9 @@
         ],
         "nombre": "Edgars",
         "numCuenta": "3181----0",
-        "password": null,
-        "semestre": 0,
-        "username": null
+        "password": "passwdedgars",
+        "semestre": 3,
+        "username": "edgarsfeic"
     },
     {
         "class": "com.fiunam.users.Alumno",

@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Crea una materia con su nombre, grupo, profesor y la lista de alumnos
  */
 public class Materia {
+//    TODO : Máximo de usuarios
     private String nombre;
     private int grupo;
     private String profesor;
