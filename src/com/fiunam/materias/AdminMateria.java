@@ -1,5 +1,7 @@
 package com.fiunam.materias;
 
+import com.fiunam.databases.DatabaseAlumnos;
+import com.fiunam.databases.DatabaseMaterias;
 import com.fiunam.users.Alumno;
 
 /**
@@ -8,15 +10,23 @@ import com.fiunam.users.Alumno;
  * alumnos de estas
  */
 public class AdminMateria {
-    private static int conteoMateria = 0;    /**
+    private static int conteoMateria = 0;
+
+    /**
      * Da de alta una inscripción
-     * @param materia Materia de la que se dará de alta
-     * @param alumno Alumno que se inscribe
+     * @param dbMaterias Base de datos de las materias
+     * @param dbAlumnos Base de dato de los alumnos
+     * @param idmateria ID de la materia
+     * @param numCuenta Número de Cuenta del alumno
      */
-    //FIXME: Corregir y agrerarse ente número de cuenta e ID de la materia
-    public static void altaMateria(Materia materia, Alumno alumno){
-//        materia.getAlumnos().add(alumno);
-//        alumno.getMaterias().add(materia);
+    public static void altaMateria(DatabaseMaterias dbMaterias, DatabaseAlumnos dbAlumnos, String idmateria, String numCuenta){
+        try {
+//            TODO: Comprobación previa a que se agregue la materia.
+            dbMaterias.readMateria(idmateria).getAlumnos().add(numCuenta);
+            dbAlumnos.readAlumno(numCuenta).getMaterias().add(idmateria);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**

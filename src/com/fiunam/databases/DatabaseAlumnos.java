@@ -63,7 +63,7 @@ public class DatabaseAlumnos extends Database {
         try (FileWriter file = new FileWriter(this.pathAlumnosDB)) {
             JSONSerializer serializer = new JSONSerializer();
 
-            file.write(serializer.prettyPrint(true).serialize(this.alumnos));
+            file.write(serializer.prettyPrint(true).include("materias").serialize(this.alumnos));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,8 +115,8 @@ public class DatabaseAlumnos extends Database {
                 break;
             }
         }
-        System.out.println("El alumno con número de cuenta " +
-                numCuenta + " no existe.");
+        System.out.println("El alumno con número de cuenta \"" +
+                numCuenta + "\" no existe.");
     }
 
 
