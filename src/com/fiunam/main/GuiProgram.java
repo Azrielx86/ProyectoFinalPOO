@@ -1,9 +1,15 @@
 package com.fiunam.main;
 
+import com.fiunam.databases.DatabaseAlumnos;
+import com.fiunam.databases.DatabaseMaterias;
+import com.fiunam.users.Alumno;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.SimpleTheme;
 import com.googlecode.lanterna.gui2.*;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
+import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
@@ -11,10 +17,17 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Pattern;
 
+/**
+ * Programa principal de inscripción con interfaz por consola,
+ * requiere el paquete com.googlecode.lanterna
+ */
 public class GuiProgram {
     private static final int WIDTH = 150;
     private static final int HEIGHT = 40;
+    private final static DatabaseAlumnos dbAlumnos = new DatabaseAlumnos();
+    private final static DatabaseMaterias dbMaterias = new DatabaseMaterias();
 
     public static void run() throws IOException {
         // FIXME : System.out.println("[INFO] Iniciando terminal");
@@ -36,12 +49,74 @@ public class GuiProgram {
         new Button("Salir", () -> {
             // FIXME : System.out.println("[INFO] Cerrando interfaz de alumnos");
             gui.removeWindow(gui.getActiveWindow());
-//            System.exit(0);
         }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(guiAlumnoPanel);
 
         windowAlumno.setComponent(guiAlumnoPanel);
 
-//        LOGIN PRINCIPAL
+//        ===================================REGISTRO DE ALUMNOS==================================
+        BasicWindow registerWindow = new BasicWindow();
+        registerWindow.setHints(List.of(Window.Hint.CENTERED));
+        registerWindow.setFixedSize(new TerminalSize(60, 7));
+        registerWindow.setTitle("Registro de Alumnos");
+
+        Panel registerPanel = new Panel(new GridLayout(3));
+        registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
+        new Label("Ingresa los datos").addTo(registerPanel);
+        registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
+
+        new Label("Nombre: ").addTo(registerPanel);
+        final TextBox userNameRegister = new TextBox(new TerminalSize(25, 1));
+        userNameRegister.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
+        registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
+
+        new Label("Núm. Cuenta: ").addTo(registerPanel);
+        final TextBox numCuentaReg = new TextBox(new TerminalSize(25, 1));
+        numCuentaReg.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
+        registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
+
+        new Label("Usuario: ").addTo(registerPanel);
+        final TextBox userRegister = new TextBox(new TerminalSize(25, 1));
+        userRegister.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
+        registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
+
+        new Label("Contraseña: ").addTo(registerPanel);
+        final TextBox passRegister = new TextBox(new TerminalSize(25, 1));
+        passRegister.setMask('*');
+        passRegister.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
+        registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
+
+        new Label("Semestre: ").addTo(registerPanel);
+        final TextBox semesterRegister = new TextBox(new TerminalSize(25, 1));
+        semesterRegister.setValidationPattern(Pattern.compile("[0-9]"));
+        semesterRegister.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
+        registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
+
+        new Button("Registrarse", () -> {
+           Alumno alumno = new Alumno(userNameRegister.getText(), userRegister.getText(),
+                   passRegister.getText(), Integer.parseInt(semesterRegister.getText()), numCuentaReg.getText());
+            GuiProgram.dbAlumnos.agregarAlumno(alumno);
+            GuiProgram.dbAlumnos.saveDB();
+
+            userNameRegister.setText("");
+            userRegister.setText("");
+            passRegister.setText("");
+            semesterRegister.setText("");
+            numCuentaReg.setText("");
+
+            new MessageDialogBuilder().setTitle("Aviso").setText("Registro completo")
+                    .addButton(MessageDialogButton.OK).build().showDialog(gui);
+
+            gui.removeWindow(gui.getActiveWindow());
+
+        }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
+        registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
+        new Button("Cancelar", () -> {
+            gui.removeWindow(gui.getActiveWindow());
+        }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
+
+        registerWindow.setComponent(registerPanel);
+
+//        =======================================LOGIN PRINCIPAL======================================
         // Se crea la ventana inicial, y se colocan los atributos básicos, como el centrar la ventana.
         BasicWindow loginWindow = new BasicWindow();
         loginWindow.setHints(List.of(Window.Hint.CENTERED));
@@ -74,7 +149,9 @@ public class GuiProgram {
             pwdTxt.setText("");
             gui.addWindowAndWait(windowAlumno);
         }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
-        loginPanel.addComponent(new EmptySpace(new TerminalSize(0,0)));
+        new Button("Registrarse", () ->{
+            gui.addWindowAndWait(registerWindow);
+        }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
         new Button("Salir", () -> {
             // FIXME : System.out.println("[INFO] Finalizando programa.");
             System.exit(0);
