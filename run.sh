@@ -1,7 +1,14 @@
 #!/bin/bash
 
-echo "Compilando y ejecutando proyecto [LINUX]"
-javac -classpath "lib/lanterna-3.1.1.jar" src/com/fiunam/main/Main.java -d out
-echo -e "Proyecto compilado\nEjectando..."
+echo "Compilando e iniciando proyecto [LINUX]"
+shopt -s globstar
+mkdir -p ./out/json
+cp -r ./json ./out
+cp -r json/ out/json/
+javac -cp ".:lib/*" src/**/*.java -d out/
+echo "Proyecto compilado"
+# shellcheck disable=SC2164
 cd out
-java -classpath "../lib/lanterna-3.1.1.jar:" com.fiunam.main.Main
+echo "Iniciando programa"
+# shellcheck disable=SC2140
+java -cp ".:../lib/*" com.fiunam.main.Main
