@@ -102,7 +102,7 @@ public class DatabaseAlumnos extends Database {
                 return alumno;
             }
         }
-        return null;
+        return new Alumno();
     }
 
     /**

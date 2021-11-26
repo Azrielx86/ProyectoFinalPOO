@@ -11,7 +11,8 @@
     },
     {
         "alumnos": [
-            "318196960"
+            "318196960",
+            "3647645"
         ],
         "class": "com.fiunam.materias.Materia",
         "grupo": 4,
@@ -21,7 +22,8 @@
     },
     {
         "alumnos": [
-            "318196960"
+            "318196960",
+            "3647645"
         ],
         "class": "com.fiunam.materias.Materia",
         "grupo": 20,

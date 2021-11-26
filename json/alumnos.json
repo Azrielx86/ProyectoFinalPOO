@@ -26,12 +26,35 @@
     {
         "class": "com.fiunam.users.Alumno",
         "materias": [
-
+            "0002",
+            "0003"
         ],
         "nombre": "Otro más",
         "numCuenta": "3647645",
         "password": null,
         "semestre": 0,
         "username": null
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+
+        ],
+        "nombre": "pedroperez",
+        "numCuenta": "32432523",
+        "password": "pedroXDp",
+        "semestre": 5,
+        "username": "Pedro Perez"
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+
+        ],
+        "nombre": "eduram",
+        "numCuenta": "4354365",
+        "password": "ed1234r",
+        "semestre": 4,
+        "username": "Eduardo Ramirez"
     }
 ]

@@ -7,7 +7,6 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.SimpleTheme;
 import com.googlecode.lanterna.gui2.*;
-import com.googlecode.lanterna.gui2.dialogs.MessageDialog;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.screen.Screen;
@@ -38,7 +37,7 @@ public class GuiProgram {
 
         MultiWindowTextGUI gui = new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(TextColor.ANSI.CYAN));
 
-//        PANTALLA ALUMNO
+//        ===================================PANTALLA DE REGISTRO==================================
         BasicWindow windowAlumno = new BasicWindow();
         windowAlumno.setTitle("Inscripción de alumnos");
         windowAlumno.setHints(List.of(Window.Hint.CENTERED));

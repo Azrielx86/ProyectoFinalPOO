@@ -95,7 +95,7 @@ public class DatabaseMaterias extends Database {
                 return materia;
             }
         }
-        return null;
+        return new Materia();
     }
 
     public void eliminarMateria(String idMateria) {

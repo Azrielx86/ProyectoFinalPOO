@@ -1,7 +1,5 @@
 package com.fiunam.users;
 
-import com.fiunam.materias.Materia;
-
 import java.util.ArrayList;
 
 /**

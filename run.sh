@@ -4,7 +4,6 @@ echo "Compilando e iniciando proyecto [LINUX]"
 shopt -s globstar
 mkdir -p ./out/json
 cp -r ./json ./out
-cp -r json/ out/json/
 javac -cp ".:lib/*" src/**/*.java -d out/
 echo "Proyecto compilado"
 # shellcheck disable=SC2164
