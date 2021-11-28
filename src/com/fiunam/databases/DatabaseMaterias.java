@@ -1,5 +1,6 @@
 package com.fiunam.databases;
 
+import com.fiunam.Logger;
 import com.fiunam.materias.Materia;
 import flexjson.JSONDeserializer;
 import flexjson.JSONException;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class DatabaseMaterias extends Database {
+    private final Logger log = new Logger(DatabaseMaterias.class);
     private ArrayList<Materia> materias;
     private final String pathMateriasDB = Paths.get(super.pathFiles, "materias.json").toString();
     private int idMaterias;
@@ -18,10 +20,6 @@ public class DatabaseMaterias extends Database {
     public DatabaseMaterias() {
         this.materias = new ArrayList<>();
         this.initDB();
-    }
-
-    public int getIdMaterias() {
-        return idMaterias;
     }
 
     @Override
@@ -35,12 +33,12 @@ public class DatabaseMaterias extends Database {
             try {
                 super.createDir();
             } catch (Exception e){
-                e.printStackTrace();
+                log.sendError(e.getMessage());
             }
         } catch (JSONException io) {
-            System.out.println("La base de datos \"MATERIAS\" no existe, creando una nueva.");
+            log.sendWarning("La base de datos \"MATERIAS\" no existe, creando una nueva.");
         } catch (Exception e) {
-            e.printStackTrace();
+            log.sendError(e.getMessage());
         }
     }
 
@@ -54,7 +52,7 @@ public class DatabaseMaterias extends Database {
                 throw new Exception("El archivo no se pudo crear");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.sendError(e.getMessage());
         }
     }
 
@@ -66,7 +64,7 @@ public class DatabaseMaterias extends Database {
             file.write(serializer.prettyPrint(true).include("alumnos").serialize(this.materias));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.sendError(e.getMessage());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.fiunam.main;
 
+import com.fiunam.Logger;
 import com.fiunam.databases.DatabaseAlumnos;
 import com.fiunam.databases.DatabaseMaterias;
 import com.fiunam.users.Alumno;
@@ -16,6 +17,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -29,11 +31,12 @@ public class GuiProgram {
     private final static DatabaseMaterias dbMaterias = new DatabaseMaterias();
 
     public static void run() throws IOException {
-        // FIXME : System.out.println("[INFO] Iniciando terminal");
+        Logger log = new Logger(GuiProgram.class);
+        log.sendInfo("Iniciando terminal.");
         Terminal terminal = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(GuiProgram.WIDTH, GuiProgram.HEIGHT)).createTerminal();
         Screen screen = new TerminalScreen(terminal);
         screen.startScreen();
-        // FIXME : System.out.println("[INFO] Terminal Iniciada con éxito");
+        log.sendInfo("Terminal iniciada con éxito.");
 
         MultiWindowTextGUI gui = new MultiWindowTextGUI(screen, new DefaultWindowManager(), new EmptySpace(TextColor.ANSI.CYAN));
 
@@ -43,10 +46,10 @@ public class GuiProgram {
         windowAlumno.setHints(List.of(Window.Hint.CENTERED));
 
         Panel guiAlumnoPanel = new Panel(new GridLayout(3));
-        guiAlumnoPanel.setPreferredSize(new TerminalSize(GuiProgram.WIDTH-10, GuiProgram.HEIGHT-5));
+        guiAlumnoPanel.setPreferredSize(new TerminalSize(GuiProgram.WIDTH - 10, GuiProgram.HEIGHT - 5));
         guiAlumnoPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
         new Button("Salir", () -> {
-            // FIXME : System.out.println("[INFO] Cerrando interfaz de alumnos");
+            log.sendInfo("Cerrando la interfaz de alumno.");
             gui.removeWindow(gui.getActiveWindow());
         }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(guiAlumnoPanel);
 
@@ -70,6 +73,7 @@ public class GuiProgram {
 
         new Label("Núm. Cuenta: ").addTo(registerPanel);
         final TextBox numCuentaReg = new TextBox(new TerminalSize(25, 1));
+        numCuentaReg.setValidationPattern(Pattern.compile("[0-9]+"));
         numCuentaReg.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
         registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
 
@@ -91,25 +95,44 @@ public class GuiProgram {
         registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
 
         new Button("Registrarse", () -> {
-           Alumno alumno = new Alumno(userNameRegister.getText(), userRegister.getText(),
-                   passRegister.getText(), Integer.parseInt(semesterRegister.getText()), numCuentaReg.getText());
-            GuiProgram.dbAlumnos.agregarAlumno(alumno);
-            GuiProgram.dbAlumnos.saveDB();
+            // FIXME : Registro de Semestre toma Strings, debe ser int
+            try {
+                if (Objects.equals(userNameRegister.getText(), "")) throw new Exception();
+                if (Objects.equals(userRegister.getText(), "")) throw new Exception();
+                if (Objects.equals(passRegister.getText(), "")) throw new Exception();
+                if (Objects.equals(semesterRegister.getText(), "")) throw new Exception();
+                if (Objects.equals(numCuentaReg.getText(), "")) throw new Exception();
 
+                Alumno alumno = new Alumno(userNameRegister.getText(), userRegister.getText(),
+                        passRegister.getText(), Integer.parseInt(semesterRegister.getText()), numCuentaReg.getText());
+                GuiProgram.dbAlumnos.agregarAlumno(alumno);
+                GuiProgram.dbAlumnos.saveDB();
+
+                userNameRegister.setText("");
+                userRegister.setText("");
+                passRegister.setText("");
+                semesterRegister.setText("");
+                numCuentaReg.setText("");
+
+                new MessageDialogBuilder().setTitle("Aviso").setText("Registro completo")
+                        .addButton(MessageDialogButton.OK).build().showDialog(gui);
+
+                gui.removeWindow(gui.getActiveWindow());
+
+            } catch (Exception e) {
+                new MessageDialogBuilder().setTitle("Advertencia").setText("Debes rellenar todos los campos: ")
+                        .addButton(MessageDialogButton.Retry).build().showDialog(gui);
+            }
+
+
+        }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
+        registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
+        new Button("Cancelar", () -> {
             userNameRegister.setText("");
             userRegister.setText("");
             passRegister.setText("");
             semesterRegister.setText("");
             numCuentaReg.setText("");
-
-            new MessageDialogBuilder().setTitle("Aviso").setText("Registro completo")
-                    .addButton(MessageDialogButton.OK).build().showDialog(gui);
-
-            gui.removeWindow(gui.getActiveWindow());
-
-        }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
-        registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
-        new Button("Cancelar", () -> {
             gui.removeWindow(gui.getActiveWindow());
         }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
 
@@ -125,40 +148,47 @@ public class GuiProgram {
         // Label para textos, TextBox para capturar entradas, Button para accionar botones, y EmptySpace
         // para agregar espacios vacíos, también se les pone algunos colores a algunos elementos con SimpleTheme.
         Panel loginPanel = new Panel(new GridLayout(3));
-        loginPanel.addComponent(new EmptySpace(new TerminalSize(10,0)));
+        loginPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
         loginPanel.addComponent(new Label("Ingresa tus datos"));
         loginPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
 
-        new Label("Usuario: ").setPreferredSize(new TerminalSize(15,1)).addTo(loginPanel);
-        TextBox userTxt = new TextBox(new TerminalSize(25, 1));
+        new Label("Usuario: ").setPreferredSize(new TerminalSize(15, 1)).addTo(loginPanel);
+        final TextBox userTxt = new TextBox(new TerminalSize(25, 1));
         userTxt.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
         loginPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
 
         new Label("Contraseña: ").addTo(loginPanel);
-        TextBox pwdTxt = new TextBox(new TerminalSize(25, 1)).setMask('*');
+        final TextBox pwdTxt = new TextBox(new TerminalSize(25, 1)).setMask('*');
         pwdTxt.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
         loginPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
 
         // Para los botones, se les agrega la acción en el constructor, dicha acción es un Runnable.
         new Button("Ingresar", () -> {
-//            TODO : Login
+            try{
+    //            TODO : Login
+                if (Objects.equals(userTxt.getText(), "")) throw new Exception();
+                if (Objects.equals(pwdTxt.getText(), "")) throw new Exception();
 
-            //FIXME : System.out.println("[INFO] Iniciando interfaz de alumnos");
-            userTxt.setText("");
-            pwdTxt.setText("");
-            gui.addWindowAndWait(windowAlumno);
+                log.sendInfo("Iniciando interfaz de alumnos.");
+                userTxt.setText("");
+                pwdTxt.setText("");
+                gui.addWindowAndWait(windowAlumno);
+
+            } catch (Exception e){
+                new MessageDialogBuilder().setTitle("Advertencia").setText("Deber llenar todos los campos")
+                        .addButton(MessageDialogButton.Retry).build().showDialog(gui);
+            }
+
         }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
-        new Button("Registrarse", () ->{
-            gui.addWindowAndWait(registerWindow);
-        }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
+        new Button("Registrarse", () -> gui.addWindowAndWait(registerWindow))
+                .setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
         new Button("Salir", () -> {
-            // FIXME : System.out.println("[INFO] Finalizando programa.");
+            log.sendInfo("Finalizando programa.");
             System.exit(0);
         }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
 
         // Finalmente se agrega el panel en la ventana
         loginWindow.setComponent(loginPanel);
-
 
 
 //        GUI PRINCIPAL

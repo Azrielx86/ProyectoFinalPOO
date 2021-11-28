@@ -1,5 +1,6 @@
 package com.fiunam.databases;
 
+import com.fiunam.Logger;
 import com.fiunam.users.Alumno;
 
 import java.io.File;
@@ -18,6 +19,7 @@ import flexjson.*;
 public class DatabaseAlumnos extends Database {
     private ArrayList<Alumno> alumnos;
     private final String pathAlumnosDB = Path.of(super.pathFiles, "alumnos.json").toString();
+    private final Logger log = new Logger(DatabaseAlumnos.class);
 
     public DatabaseAlumnos() {
         this.alumnos = new ArrayList<>();
@@ -34,13 +36,13 @@ public class DatabaseAlumnos extends Database {
             try {
                 super.createDir();
             } catch (Exception e){
-                e.printStackTrace();
+                log.sendError(e.getMessage());
             }
         } catch (JSONException io) {
-            System.out.println("La base de datos \"ALUMNOS\" no existe, creando una nueva.");
+            log.sendWarning("La base de datos \"ALUMNOS\" no existe, creando una nueva.");
             this.createDB();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.sendError(e.getMessage());
         }
     }
 
@@ -51,10 +53,10 @@ public class DatabaseAlumnos extends Database {
             final var newFile = file.createNewFile();
 
             if (newFile) {
-                System.out.println("El archivo ya existe");
+                log.sendWarning("El archivo ya existe");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.sendError(e.getMessage());
         }
     }
 
@@ -66,7 +68,7 @@ public class DatabaseAlumnos extends Database {
             file.write(serializer.prettyPrint(true).include("materias").serialize(this.alumnos));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.sendError(e.getMessage());
         }
     }
 
@@ -86,6 +88,7 @@ public class DatabaseAlumnos extends Database {
      */
     public void agregarAlumno(Alumno alumno) {
         this.alumnos.add(alumno);
+        log.sendInfo("Alumno registrado: " + alumno.toString());
     }
 
 //    TODO : Comprobar .gets, debido al null puede causar errores.
