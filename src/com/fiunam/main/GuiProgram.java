@@ -4,10 +4,17 @@ import com.fiunam.Logger;
 import com.fiunam.databases.DatabaseAlumnos;
 import com.fiunam.databases.DatabaseMaterias;
 import com.fiunam.users.Alumno;
+import com.fiunam.users.Usuario;
+import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.SimpleTheme;
 import com.googlecode.lanterna.gui2.*;
+import com.googlecode.lanterna.gui2.Button;
+import com.googlecode.lanterna.gui2.GridLayout;
+import com.googlecode.lanterna.gui2.Label;
+import com.googlecode.lanterna.gui2.Panel;
+import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.screen.Screen;
@@ -29,6 +36,10 @@ public class GuiProgram {
     private static final int HEIGHT = 40;
     private final static DatabaseAlumnos dbAlumnos = new DatabaseAlumnos();
     private final static DatabaseMaterias dbMaterias = new DatabaseMaterias();
+    private final static SimpleTheme temaGlobal = SimpleTheme.makeTheme(true, TextColor.ANSI.BLACK,
+            TextColor.ANSI.WHITE, TextColor.ANSI.BLACK, TextColor.ANSI.WHITE,
+            TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT, TextColor.ANSI.WHITE);
+    private static Usuario currentUser;
 
     public static void run() throws IOException {
         Logger log = new Logger(GuiProgram.class);
@@ -46,12 +57,56 @@ public class GuiProgram {
         windowAlumno.setHints(List.of(Window.Hint.CENTERED));
 
         Panel guiAlumnoPanel = new Panel(new GridLayout(3));
-        guiAlumnoPanel.setPreferredSize(new TerminalSize(GuiProgram.WIDTH - 10, GuiProgram.HEIGHT - 5));
-        guiAlumnoPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
-        new Button("Salir", () -> {
-            log.sendInfo("Cerrando la interfaz de alumno.");
-            gui.removeWindow(gui.getActiveWindow());
-        }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(guiAlumnoPanel);
+//        guiAlumnoPanel.setPreferredSize(new TerminalSize(GuiProgram.WIDTH - 20, GuiProgram.HEIGHT - 10));
+
+        Panel menuAlumnoPanel = new Panel(new GridLayout(1));
+        guiAlumnoPanel.addComponent(menuAlumnoPanel.withBorder(Borders.singleLine("Menú principal")));
+
+        Panel menuAcciones = new Panel(new LinearLayout());
+//        menuAcciones.setPreferredSize(new TerminalSize(GuiProgram.WIDTH - 45, GuiProgram.HEIGHT-8));
+        new Label("Selecciona una opción").addTo(menuAcciones);
+        guiAlumnoPanel.addComponent(menuAcciones.withBorder(Borders.singleLine("Área de acciones (?)")));
+
+        new ActionListBox(new TerminalSize(30, 5))
+                .addItem("Inscripción de materias", () -> {
+                    menuAcciones.removeAllComponents();
+                    menuAcciones.addComponent(new Label("Inscripción de materias"));
+
+
+                }).addItem("Baja de materias", () -> {
+                    menuAcciones.removeAllComponents();
+                    menuAcciones.addComponent(new Label("Baja de materias"));
+
+                }).addItem("Actualizar datos", () ->{
+                    menuAcciones.removeAllComponents();
+                    Alumno alumnoActual = (Alumno) GuiProgram.currentUser.getCurrentUser();
+
+                    Panel infoAlumnos = new Panel(new GridLayout(2));
+                    menuAcciones.addComponent(infoAlumnos.withBorder(Borders.singleLine("Información del alumno")));
+
+                    Panel subMenuAcciones = new Panel(new GridLayout(2));
+                    menuAcciones.addComponent(subMenuAcciones.withBorder(Borders.singleLine("Actualización de datos")));
+
+                    new Label("Nombre:").addTo(infoAlumnos);
+                    new Label(alumnoActual.getNombre()).addTo(infoAlumnos);
+                    new Label("Número de cuenta:").addTo(infoAlumnos);
+                    new Label(alumnoActual.getNumCuenta()).addTo(infoAlumnos);
+                    new Label("Semestre actual:").addTo(infoAlumnos);
+                    new Label(String.valueOf(alumnoActual.getSemestre())).addTo(infoAlumnos);
+
+                    new Label("Password: ").addTo(subMenuAcciones);
+                    final TextBox pwdUpdtA = new TextBox().setMask('*');
+                    pwdUpdtA.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAcciones);
+
+
+                }).addItem("Salir", () -> {
+                    log.sendInfo("Cerrando la interfaz de alumno.");
+                    menuAcciones.removeAllComponents();
+                    new Label("Selecciona una opción").addTo(menuAcciones);
+                    GuiProgram.currentUser = null;
+                    gui.removeWindow(gui.getActiveWindow());
+                }).setTheme(GuiProgram.temaGlobal).addTo(menuAlumnoPanel);
+
 
         windowAlumno.setComponent(guiAlumnoPanel);
 
@@ -95,7 +150,6 @@ public class GuiProgram {
         registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
 
         new Button("Registrarse", () -> {
-            // FIXME : Registro de Semestre toma Strings, debe ser int
             try {
                 if (Objects.equals(userNameRegister.getText(), "")) throw new Exception();
                 if (Objects.equals(userRegister.getText(), "")) throw new Exception();
@@ -164,18 +218,21 @@ public class GuiProgram {
 
         // Para los botones, se les agrega la acción en el constructor, dicha acción es un Runnable.
         new Button("Ingresar", () -> {
-            try{
-    //            TODO : Login
-                if (Objects.equals(userTxt.getText(), "")) throw new Exception();
-                if (Objects.equals(pwdTxt.getText(), "")) throw new Exception();
+            try {
+                //            TODO : Login
+                if (Objects.equals(userTxt.getText(), "")) throw new Exception("Debes rellenar todos los campos");
+                if (Objects.equals(pwdTxt.getText(), "")) throw new Exception("Debes rellenar todos los campos");
+
+                GuiProgram.currentUser = dbAlumnos.readAlumno(userTxt.getText(), pwdTxt.getText());
+                if (Objects.equals(GuiProgram.currentUser.getUsername(), null))throw new Exception("Usuario inválido");
 
                 log.sendInfo("Iniciando interfaz de alumnos.");
                 userTxt.setText("");
                 pwdTxt.setText("");
                 gui.addWindowAndWait(windowAlumno);
 
-            } catch (Exception e){
-                new MessageDialogBuilder().setTitle("Advertencia").setText("Deber llenar todos los campos")
+            } catch (Exception e) {
+                new MessageDialogBuilder().setTitle("Advertencia").setText(e.getMessage())
                         .addButton(MessageDialogButton.Retry).build().showDialog(gui);
             }
 

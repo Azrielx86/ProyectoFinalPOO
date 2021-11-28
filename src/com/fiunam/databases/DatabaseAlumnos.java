@@ -108,6 +108,17 @@ public class DatabaseAlumnos extends Database {
         return new Alumno();
     }
 
+    public Alumno readAlumno(String nombre, String password) {
+        for (Alumno alumno : this.alumnos) {
+            if (Objects.equals(alumno.getUsername(), nombre) || Objects.equals(alumno.getNombre(), nombre)) {
+                if (Objects.equals(alumno.getPassword(), password)){
+                    return alumno;
+                }
+            }
+        }
+        return new Alumno();
+    }
+
     /**
      * @param numCuenta Número de cuenta del alumno que se va a eliminar
      */

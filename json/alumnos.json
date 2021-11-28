@@ -6,9 +6,9 @@
             "0005",
             "0003"
         ],
-        "nombre": "Edgars",
+        "nombre": "Edgars Feic",
         "numCuenta": "318196960",
-        "password": "passwdedgars",
+        "password": "admin",
         "semestre": 3,
         "username": "edgarsfeic"
     },
@@ -56,5 +56,38 @@
         "password": "ed1234r",
         "semestre": 4,
         "username": "Eduardo Ramirez"
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+
+        ],
+        "nombre": "alexlopez",
+        "numCuenta": "453456345",
+        "password": "3greg456re",
+        "semestre": 1,
+        "username": "Alex Lopez"
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+
+        ],
+        "nombre": "srcalceto",
+        "numCuenta": "45435632",
+        "password": "efwet3w3",
+        "semestre": 1,
+        "username": "Señor Calceto :v"
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+
+        ],
+        "nombre": "a",
+        "numCuenta": "1",
+        "password": "a",
+        "semestre": 1,
+        "username": "a"
     }
 ]

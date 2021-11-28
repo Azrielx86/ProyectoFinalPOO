@@ -33,6 +33,10 @@ public abstract class Usuario {
         this.password = password;
     }
 
+    public Usuario getCurrentUser(){
+        return this;
+    }
+
     @Override
     public String toString() {
         return "User: " +  this.username + " | Password:  " + "*".repeat(this.password.length());
