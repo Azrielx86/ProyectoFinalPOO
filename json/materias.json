@@ -11,7 +11,8 @@
     },
     {
         "alumnos": [
-            "3181----0"
+            "318196960",
+            "3647645"
         ],
         "class": "com.fiunam.materias.Materia",
         "grupo": 4,
@@ -21,7 +22,8 @@
     },
     {
         "alumnos": [
-            "3181----0"
+            "318196960",
+            "3647645"
         ],
         "class": "com.fiunam.materias.Materia",
         "grupo": 20,
@@ -31,7 +33,7 @@
     },
     {
         "alumnos": [
-            "3181----0"
+            "318196960"
         ],
         "class": "com.fiunam.materias.Materia",
         "grupo": 5,
@@ -57,6 +59,16 @@
         "grupo": 4,
         "idMateria": "0007",
         "nombre": "Azure Course",
+        "profesor": null
+    },
+    {
+        "alumnos": [
+
+        ],
+        "class": "com.fiunam.materias.Materia",
+        "grupo": 9,
+        "idMateria": "0008",
+        "nombre": "Redacción",
         "profesor": null
     }
 ]

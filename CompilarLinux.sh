@@ -1,10 +1,14 @@
 #!/bin/bash
 
 echo "Compilando proyecto [LINUX]"
-javac -classpath "lib/lanterna-3.1.1.jar" src/com/fiunam/main/Main.java -d out
-echo "Proyecto compilado, guardado en out/"
+shopt -s globstar
+mkdir -p ./out/json
+cp -r ./json ./out
+javac -cp ".:lib/*" src/**/*.java -d out/
+echo "Proyecto compilado, guardado en ./out"
+# shellcheck disable=SC2164
 cd out
-echo "java -classpath "../lib/lanterna-3.1.1.jar:" com.fiunam.main.Main" > start.sh
+# shellcheck disable=SC2140
+echo "java -cp ".:../lib/*" com.fiunam.main.Main" > start.sh
 chmod +x start.sh
 echo "Ejecutar start.sh (Si se requiere, dar permisos con chmod +x)"
-

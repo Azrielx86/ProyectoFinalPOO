@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Crea una materia con su nombre, grupo, profesor y la lista de alumnos
  */
 public class Materia {
+//    TODO : Máximo de usuarios
     private String nombre;
     private int grupo;
     private String profesor;
@@ -68,14 +69,13 @@ public class Materia {
     public String toString() {
         StringBuilder listaAlumos = new StringBuilder();
         for (int i = 0; i < this.alumnos.size(); i++) {
-            listaAlumos.append("[").append(i+1).append("] ");
-//            listaAlumos.append(this.alumnos.get(i).getUsername()).append("\n");
-        // TODO : Obtener alumnos desde numero de cuenta.
+            listaAlumos.append("(").append(i+1).append(") - ");
+            listaAlumos.append(this.alumnos.get(i)).append("\n");
         }
 
         return "Materia: " + this.nombre + " | " + this.grupo + " | ID: " +
                 this.idMateria + "\n" +
                 "Profesor: " + this.profesor + "\n" +
-                "Alumnos: \n" + listaAlumos;
+                "Lista de Alumnos: \n" + listaAlumos;
     }
 }

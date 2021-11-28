@@ -27,28 +27,28 @@ para Linux y Windows incluidos, o los siguientes comandos desde la raíz del pro
 
 Comandos para Linux
 
-    javac -cp ".:lib/lanterna-3.1.1.jar:" src/**/*.java -d out
+    javac -cp ".:lib/*" src/**/*.java -d out/
     cd out
-    java -cp "../lib/lanterna-3.1.1.jar:" com.fiunam.main.Main
+    java -cp ".:../lib/*" com.fiunam.main.Main
 
 Comandos para Windows (sujeto a cambios... te odio, Windows)
 
-    javac -cp ".;lib/lanterna-3.1.1.jar" src/com/fiunam/main/*.java src/com/fiunam/materias/*.java src/com/fiunam/users/*.java -d out
+    javac -classpath ".;lib/lanterna-3.1.1.jar;lib/flexjson-3.3.jar;" src/com/fiunam/main/*.java src/com/fiunam/materias/*.java src/com/fiunam/users/*.java src/com/fiunam/databases/*.java -d out
     cd out
-    javaw -cp "../lib/lanterna-3.1.1.jar;" com.fiunam.main.Main
+    javaw -classpath "../lib/lanterna-3.1.1.jar;lib/flexjson-3.3.jar;" com.fiunam.main.Main
 
 ## Ejecución desde scripts
 Para únicamente compilar, usar el script de compilación.
 
-    ./CompilarLinuxAll.sh
-    ./CompilarWindowsAll.bat
+    ./CompilarLinux.sh
+    ./CompilarWindows.bat
 
 Dentro de la carpeta out se crean los scripts para ejecutar después el programa.
 
     ./start.sh
     ./start.bat
 
-Para compilar y ejecutar. (por eliminar(?))
+Para compilar y ejecutar.
 
     ./run.sh
     ./run.bat

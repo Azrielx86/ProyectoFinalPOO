@@ -11,16 +11,23 @@ public class TestAltas {
         DatabaseMaterias dbMaterias = new DatabaseMaterias();
         DatabaseAlumnos dbAlumnos = new DatabaseAlumnos();
 
-        Alumno alumno = dbAlumnos.readAlumno("3181----0");
+        Alumno alumno = dbAlumnos.readAlumno("318196960");
+        Alumno alumno2 = dbAlumnos.readAlumno("3647645");
         Materia materia = dbMaterias.readMateria("0002");
 
         AdminMateria.altaMateria(dbMaterias, dbAlumnos, materia.getIdMateria(), alumno.getNumCuenta());
+        AdminMateria.altaMateria(dbMaterias, dbAlumnos, materia.getIdMateria(), alumno2.getNumCuenta());
 
         materia = dbMaterias.readMateria("0005");
         AdminMateria.altaMateria(dbMaterias, dbAlumnos, materia.getIdMateria(), alumno.getNumCuenta());
 
         materia = dbMaterias.readMateria("0003");
         AdminMateria.altaMateria(dbMaterias, dbAlumnos, materia.getIdMateria(), alumno.getNumCuenta());
+        AdminMateria.altaMateria(dbMaterias, dbAlumnos, materia.getIdMateria(), alumno2.getNumCuenta());
+
+
+        System.out.println("=================");
+        System.out.println(dbAlumnos.readAlumno("aaa").getNumCuenta());
 
 
 //        AdminMateria.

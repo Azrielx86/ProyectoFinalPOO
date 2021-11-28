@@ -5,6 +5,7 @@ package com.fiunam.users;
  */
 public class Administrador extends Usuario {
     private String nombre;
+    private String numTrabajador;
     private String key;
 
     public Administrador(){
@@ -25,6 +26,14 @@ public class Administrador extends Usuario {
         this.nombre = nombre;
     }
 
+    public String getNumTrabajador() {
+        return numTrabajador;
+    }
+
+    public void setNumTrabajador(String numTrabajador) {
+        this.numTrabajador = numTrabajador;
+    }
+
     public String getKey() {
         return key;
     }
@@ -35,6 +44,7 @@ public class Administrador extends Usuario {
 
     @Override
     public String toString() {
-        return "[ADMIN]\n" + super.toString() + "\nKey: " + "*".repeat(this.key.length());
+        return "[ADMIN]\n" + super.toString() + "\nKey: " + "*".repeat(this.key.length()) +
+                "\nNúmero de trabajador" + this.numTrabajador;
     }
 }

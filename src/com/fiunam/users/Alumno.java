@@ -1,14 +1,12 @@
 package com.fiunam.users;
 
-import com.fiunam.materias.Materia;
-
 import java.util.ArrayList;
 
 /**
  * Crea un usuario para un alumno, con su nombre, número de cuenta,
  * semestre que cursa y su lista de materias
  */
-public class Alumno extends Usuario{
+public class Alumno extends Usuario {
     private String nombre;
     private int semestre;
     private String numCuenta;
@@ -70,15 +68,13 @@ public class Alumno extends Usuario{
     public String toString() {
         StringBuilder listaMaterias = new StringBuilder();
         for (int i = 0; i < this.materias.size(); i++) {
-            listaMaterias.append("[").append(i+1).append("] ");
-//            listaMaterias.append(this.materias.get(i).getNombre());
-//            listaMaterias.append(" | Grupo: ");
-//            listaMaterias.append(this.materias.get(i).getGrupo()).append("\n");
+            listaMaterias.append("(").append(i + 1).append(") - ");
+            listaMaterias.append(this.materias.get(i)).append("\n");
         }
 
-        return "[ALUMNO]\n" + this.nombre + "\n" +
+        return "ALUMNO: " + this.nombre + "\n" +
                 "Número de cuenta: " + this.numCuenta + "\n" +
-                "Semestre: " + this.semestre + " | Materias:" + "\n" +
+                "Semestre: " + this.semestre + "\nLista de Materias:" + "\n" +
                 listaMaterias;
     }
 }
