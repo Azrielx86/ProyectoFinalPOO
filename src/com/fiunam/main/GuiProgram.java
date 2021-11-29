@@ -5,7 +5,6 @@ import com.fiunam.databases.DatabaseAlumnos;
 import com.fiunam.databases.DatabaseMaterias;
 import com.fiunam.users.Alumno;
 import com.fiunam.users.Usuario;
-import com.googlecode.lanterna.SGR;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.SimpleTheme;
@@ -87,18 +86,33 @@ public class GuiProgram {
                     Panel subMenuAcciones = new Panel(new GridLayout(2));
                     menuAcciones.addComponent(subMenuAcciones.withBorder(Borders.singleLine("Actualización de datos")));
 
-                    new Label("Nombre:").addTo(infoAlumnos);
-                    new Label(alumnoActual.getNombre()).addTo(infoAlumnos);
+                    new Label("Nombre:")
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                            .addTo(infoAlumnos);
+                    new Label(alumnoActual.getNombre())
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                            .addTo(infoAlumnos);
                     new Label("Número de cuenta:").addTo(infoAlumnos);
-                    new Label(alumnoActual.getNumCuenta()).addTo(infoAlumnos);
-                    new Label("Semestre actual:").addTo(infoAlumnos);
+                    new Label(alumnoActual.getNumCuenta())
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                            .addTo(infoAlumnos);
+                    new Label("Semestre actual:")
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                            .addTo(infoAlumnos);
                     new Label(String.valueOf(alumnoActual.getSemestre())).addTo(infoAlumnos);
 
-                    new Label("Password: ").addTo(subMenuAcciones);
+                    new Label("Password: ")
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                            .addTo(subMenuAcciones);
                     final TextBox pwdUpdtA = new TextBox().setMask('*');
                     pwdUpdtA.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAcciones);
 
 
+                }).addItem("Ayuda", () -> {
+                    menuAcciones.removeAllComponents();
+                    new Label("Ayuda de la aplicación\n" +
+                            "Para moverse entre ventanas: <Tab>")
+                            .addTo(menuAcciones);
                 }).addItem("Salir", () -> {
                     log.sendInfo("Cerrando la interfaz de alumno.");
                     menuAcciones.removeAllComponents();
