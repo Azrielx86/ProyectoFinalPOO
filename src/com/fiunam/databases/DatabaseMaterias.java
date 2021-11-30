@@ -22,6 +22,10 @@ public class DatabaseMaterias extends Database {
         this.initDB();
     }
 
+    public ArrayList<Materia> getMaterias() {
+        return materias;
+    }
+
     @Override
     protected void initDB() {
         JSONDeserializer<ArrayList<Materia>> jsonDeserializer = new JSONDeserializer<>();

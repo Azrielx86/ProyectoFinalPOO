@@ -3,8 +3,11 @@ package com.fiunam.main;
 import com.fiunam.Logger;
 import com.fiunam.databases.DatabaseAlumnos;
 import com.fiunam.databases.DatabaseMaterias;
+import com.fiunam.materias.AdminMateria;
+import com.fiunam.materias.Materia;
 import com.fiunam.users.Alumno;
 import com.fiunam.users.Usuario;
+import com.googlecode.lanterna.Symbols;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.SimpleTheme;
@@ -16,12 +19,14 @@ import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
+import com.googlecode.lanterna.gui2.table.Table;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -36,7 +41,7 @@ public class GuiProgram {
     private final static DatabaseAlumnos dbAlumnos = new DatabaseAlumnos();
     private final static DatabaseMaterias dbMaterias = new DatabaseMaterias();
     private final static SimpleTheme temaGlobal = SimpleTheme.makeTheme(true, TextColor.ANSI.BLACK,
-            TextColor.ANSI.WHITE, TextColor.ANSI.BLACK, TextColor.ANSI.WHITE,
+            TextColor.ANSI.WHITE, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT,
             TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT, TextColor.ANSI.WHITE);
     private static Usuario currentUser;
 
@@ -63,20 +68,39 @@ public class GuiProgram {
 
         Panel menuAcciones = new Panel(new LinearLayout());
 //        menuAcciones.setPreferredSize(new TerminalSize(GuiProgram.WIDTH - 45, GuiProgram.HEIGHT-8));
-        new Label("Selecciona una opción").addTo(menuAcciones);
+        new Label("Selecciona una opción.\n" +
+                "Utiliza <Tab> para moverte entre menús.\n" +
+                "Usa las flechas " + Symbols.ARROW_UP + " y " + Symbols.ARROW_DOWN + "\n" +
+                "para moverte dentro de los menús.").addTo(menuAcciones);
         guiAlumnoPanel.addComponent(menuAcciones.withBorder(Borders.singleLine("Área de acciones (?)")));
 
         new ActionListBox(new TerminalSize(30, 5))
                 .addItem("Inscripción de materias", () -> {
                     menuAcciones.removeAllComponents();
                     menuAcciones.addComponent(new Label("Inscripción de materias"));
+//                        TODO : INSCRIPCIÓN
+                    Alumno alumnoActual = (Alumno) GuiProgram.currentUser.getCurrentUser();
+                    ArrayList<Materia> listadoMaterias = GuiProgram.dbMaterias.getMaterias();
+                    Table<String> tablaMaterias = new Table<>("Nombre", "Profesor", "Clave");
+                    for (Materia materia : listadoMaterias) {
+                        tablaMaterias.getTableModel().addRow(materia.getNombre(), materia.getProfesor(), materia.getIdMateria());
+                    }
 
+                    tablaMaterias.setSelectAction(() ->{
+                        List<String> idMateria = tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow());
+                        AdminMateria.altaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos, idMateria.get(2), alumnoActual.getNumCuenta());
+                        log.sendInfo(idMateria.toString());
+                    });
+
+
+                    tablaMaterias.setTheme(GuiProgram.temaGlobal);
+                    tablaMaterias.addTo(menuAcciones);
 
                 }).addItem("Baja de materias", () -> {
                     menuAcciones.removeAllComponents();
                     menuAcciones.addComponent(new Label("Baja de materias"));
 
-                }).addItem("Actualizar datos", () ->{
+                }).addItem("Información del usuario", () ->{
                     menuAcciones.removeAllComponents();
                     Alumno alumnoActual = (Alumno) GuiProgram.currentUser.getCurrentUser();
 
@@ -101,22 +125,51 @@ public class GuiProgram {
                             .addTo(infoAlumnos);
                     new Label(String.valueOf(alumnoActual.getSemestre())).addTo(infoAlumnos);
 
-                    new Label("Password: ")
+                    new Label("Contraseña actual: ")
                             .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
                             .addTo(subMenuAcciones);
                     final TextBox pwdUpdtA = new TextBox().setMask('*');
                     pwdUpdtA.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAcciones);
+                    new Label("Contraseña nueva: ")
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                                    .addTo(subMenuAcciones);
+                    final TextBox pwdUpdtB = new TextBox().setMask('*');
+                    pwdUpdtB.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAcciones);
+                    new Label("Repite la contraseña: ")
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                                    .addTo(subMenuAcciones);
+                    final TextBox pwdUpdtC = new TextBox().setMask('*');
+                    pwdUpdtC.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAcciones);
+
+                    new EmptySpace(new TerminalSize(0,0)).addTo(subMenuAcciones);
+                    new Button("Actualizar", () -> {
+    //                    TODO : Actualización de Passwords
+                        if (Objects.equals(pwdUpdtB.getText(), "") && Objects.equals(pwdUpdtC.getText(), "")){
+                            new MessageDialogBuilder().setTitle("Aviso")
+                                    .setText("Debes ingresar una nueva contraseña").addButton(MessageDialogButton.Retry)
+                                    .build().showDialog(gui);
+                        } else if (Objects.equals(pwdUpdtA.getText(), alumnoActual.getPassword()) && alumnoActual.changePassword(pwdUpdtB.getText(), pwdUpdtC.getText())){
+                            new MessageDialogBuilder().setTitle("Aviso")
+                                    .setText("Contraseña actualizada con éxito").addButton(MessageDialogButton.OK)
+                                    .build().showDialog(gui);
+                        } else {
+                            new MessageDialogBuilder().setTitle("Aviso")
+                                    .setText("Las contraseñas no coinciden").addButton(MessageDialogButton.Retry)
+                                    .build().showDialog(gui);
+                        }
+                        pwdUpdtA.setText("");
+                        pwdUpdtB.setText("");
+                        pwdUpdtC.setText("");
+                    }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAcciones);
 
 
-                }).addItem("Ayuda", () -> {
-                    menuAcciones.removeAllComponents();
-                    new Label("Ayuda de la aplicación\n" +
-                            "Para moverse entre ventanas: <Tab>")
-                            .addTo(menuAcciones);
                 }).addItem("Salir", () -> {
                     log.sendInfo("Cerrando la interfaz de alumno.");
                     menuAcciones.removeAllComponents();
-                    new Label("Selecciona una opción").addTo(menuAcciones);
+                    new Label("Selecciona una opción.\n" +
+                            "Utiliza <Tab> para moverte entre menús.\n" +
+                            "Usa las flechas " + Symbols.ARROW_UP + " y " + Symbols.ARROW_DOWN + "\n" +
+                            "para moverte dentro de los menús.").addTo(menuAcciones);
                     GuiProgram.currentUser = null;
                     gui.removeWindow(gui.getActiveWindow());
                 }).setTheme(GuiProgram.temaGlobal).addTo(menuAlumnoPanel);
@@ -255,6 +308,10 @@ public class GuiProgram {
                 .setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
         new Button("Salir", () -> {
             log.sendInfo("Finalizando programa.");
+            GuiProgram.dbMaterias.saveDB();
+            log.sendInfo("Materias actualizados.");
+            GuiProgram.dbAlumnos.saveDB();
+            log.sendInfo("Alumnos actualizados.");
             System.exit(0);
         }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
 

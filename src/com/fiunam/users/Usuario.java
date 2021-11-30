@@ -1,5 +1,7 @@
 package com.fiunam.users;
 
+import java.util.Objects;
+
 /**
  * Base pasa la creación de un usuario con nombre de
  * usuario y contraseña
@@ -35,6 +37,15 @@ public abstract class Usuario {
 
     public Usuario getCurrentUser(){
         return this;
+    }
+
+    public boolean changePassword(String pswd, String pswdConf){
+        if (Objects.equals(pswd, pswdConf)){
+            this.password = pswd;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

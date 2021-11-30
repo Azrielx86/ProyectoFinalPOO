@@ -82,7 +82,8 @@
     {
         "class": "com.fiunam.users.Alumno",
         "materias": [
-
+            "0002",
+            "0005"
         ],
         "nombre": "a",
         "numCuenta": "1",

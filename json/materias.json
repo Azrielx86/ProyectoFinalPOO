@@ -12,7 +12,8 @@
     {
         "alumnos": [
             "318196960",
-            "3647645"
+            "3647645",
+            "1"
         ],
         "class": "com.fiunam.materias.Materia",
         "grupo": 4,
@@ -33,13 +34,14 @@
     },
     {
         "alumnos": [
-            "318196960"
+            "318196960",
+            "1"
         ],
         "class": "com.fiunam.materias.Materia",
         "grupo": 5,
         "idMateria": "0005",
         "nombre": "Cálculo Integral",
-        "profesor": "Shamara"
+        "profesor": "Aldo"
     },
     {
         "alumnos": [
@@ -49,17 +51,7 @@
         "grupo": 34,
         "idMateria": "0006",
         "nombre": "Calculo Vectorial",
-        "profesor": null
-    },
-    {
-        "alumnos": [
-
-        ],
-        "class": "com.fiunam.materias.Materia",
-        "grupo": 4,
-        "idMateria": "0007",
-        "nombre": "Azure Course",
-        "profesor": null
+        "profesor": "Ricardo"
     },
     {
         "alumnos": [
@@ -69,6 +61,6 @@
         "grupo": 9,
         "idMateria": "0008",
         "nombre": "Redacción",
-        "profesor": null
+        "profesor": "Paola"
     }
 ]
