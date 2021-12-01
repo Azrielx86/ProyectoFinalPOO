@@ -14,6 +14,7 @@ public class Materia {
     private ArrayList<String> alumnos;
     // TODO: Maximo de alumnos
     private int MAX_ALUMNOS;
+    private String area;
 
     public Materia() {
         this.alumnos = new ArrayList<>();
