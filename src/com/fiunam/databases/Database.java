@@ -28,12 +28,20 @@ public abstract class Database {
      */
     public abstract void saveDB();
 
+
     /**
      * Retorna una impresión más detallada de cada elemento
      * con un formato más legible
      * @return String con los datos
      */
     public abstract String printDB();
+
+    /**
+     * Restaura la base de datos.
+     */
+    public void reloadDB(){
+        this.initDB();
+    };
 
     /**
      * Crea la carpeta donde se guardarán los archivos json

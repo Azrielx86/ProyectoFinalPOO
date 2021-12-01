@@ -33,7 +33,7 @@ public class DatabaseMaterias extends Database {
         try (FileReader file = new FileReader(this.pathMateriasDB)) {
             this.materias = jsonDeserializer.deserialize(file);
             this.idMaterias = Integer.parseInt(materias.get(materias.size()-1).getIdMateria());
-        } catch(FileNotFoundException fnf){
+        } catch(FileNotFoundException fne){
             try {
                 super.createDir();
             } catch (Exception e){

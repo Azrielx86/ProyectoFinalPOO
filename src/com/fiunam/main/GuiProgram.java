@@ -78,29 +78,58 @@ public class GuiProgram {
                 .addItem("Inscripción de materias", () -> {
                     menuAcciones.removeAllComponents();
                     menuAcciones.addComponent(new Label("Inscripción de materias"));
+
+                    Panel panelMateriasDisp = new Panel();
+                    Panel panelMateriasIns = new Panel();
+//                    panelMateriasDisp.addTo(menuAcciones);
+                    menuAcciones.addComponent(panelMateriasDisp.withBorder(Borders.singleLine("Materias disponibles")));
+                    menuAcciones.addComponent(panelMateriasIns.withBorder(Borders.singleLine("Materias por inscribir")));
+
 //                        TODO : INSCRIPCIÓN
                     Alumno alumnoActual = (Alumno) GuiProgram.currentUser.getCurrentUser();
                     ArrayList<Materia> listadoMaterias = GuiProgram.dbMaterias.getMaterias();
                     Table<String> tablaMaterias = new Table<>("Nombre", "Profesor", "Clave");
+                    Table<String> tablaMateriasIns = new Table<>("Nombre", "Profesor", "Clave");
                     for (Materia materia : listadoMaterias) {
                         tablaMaterias.getTableModel().addRow(materia.getNombre(), materia.getProfesor(), materia.getIdMateria());
                     }
 
-                    tablaMaterias.setSelectAction(() ->{
+                    tablaMaterias.setSelectAction(() -> {
                         List<String> idMateria = tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow());
+                        tablaMateriasIns.getTableModel().addRow(tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow()));
+                        tablaMaterias.getTableModel().removeRow(tablaMaterias.getSelectedRow());
                         AdminMateria.altaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos, idMateria.get(2), alumnoActual.getNumCuenta());
-                        log.sendInfo(idMateria.toString());
+//                        log.sendInfo(idMateria.toString());
                     });
 
+                    tablaMateriasIns.setSelectAction(() -> {
+                        tablaMaterias.getTableModel().addRow(tablaMateriasIns.getTableModel().getRow(tablaMateriasIns.getSelectedRow()));
+                        tablaMateriasIns.getTableModel().removeRow(tablaMateriasIns.getSelectedRow());
+                    });
 
                     tablaMaterias.setTheme(GuiProgram.temaGlobal);
-                    tablaMaterias.addTo(menuAcciones);
+                    tablaMateriasIns.setTheme(GuiProgram.temaGlobal);
+                    tablaMaterias.addTo(panelMateriasDisp);
+                    tablaMateriasIns.addTo(panelMateriasIns);
+
+                    new Panel(new GridLayout(2)).addTo(menuAcciones)
+                            .addComponent(new Button("Inscribir materias", () -> {
+                                GuiProgram.dbAlumnos.saveDB();
+                                GuiProgram.dbMaterias.saveDB();
+                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)))
+                            .addComponent(new Button("Cancelar", () -> {
+//                                TODO : Botones de confirmacion
+                                GuiProgram.dbAlumnos.reloadDB();
+                                GuiProgram.dbMaterias.reloadDB();
+                                menuAcciones.removeAllComponents();
+                                log.sendWarning("Bases de datos restauradas");
+                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)));
 
                 }).addItem("Baja de materias", () -> {
                     menuAcciones.removeAllComponents();
                     menuAcciones.addComponent(new Label("Baja de materias"));
 
-                }).addItem("Información del usuario", () ->{
+                }).addItem("Información del usuario", () -> {
                     menuAcciones.removeAllComponents();
                     Alumno alumnoActual = (Alumno) GuiProgram.currentUser.getCurrentUser();
 
@@ -108,7 +137,7 @@ public class GuiProgram {
                     menuAcciones.addComponent(infoAlumnos.withBorder(Borders.singleLine("Información del alumno")));
 
                     Panel subMenuAcciones = new Panel(new GridLayout(2));
-                    menuAcciones.addComponent(subMenuAcciones.withBorder(Borders.singleLine("Actualización de datos")));
+                    menuAcciones.addComponent(subMenuAcciones.withBorder(Borders.singleLine("Actualización de contraseña")));
 
                     new Label("Nombre:")
                             .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
@@ -132,23 +161,23 @@ public class GuiProgram {
                     pwdUpdtA.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAcciones);
                     new Label("Contraseña nueva: ")
                             .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
-                                    .addTo(subMenuAcciones);
+                            .addTo(subMenuAcciones);
                     final TextBox pwdUpdtB = new TextBox().setMask('*');
                     pwdUpdtB.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAcciones);
                     new Label("Repite la contraseña: ")
                             .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
-                                    .addTo(subMenuAcciones);
+                            .addTo(subMenuAcciones);
                     final TextBox pwdUpdtC = new TextBox().setMask('*');
                     pwdUpdtC.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAcciones);
 
-                    new EmptySpace(new TerminalSize(0,0)).addTo(subMenuAcciones);
+                    new EmptySpace(new TerminalSize(0, 0)).addTo(subMenuAcciones);
                     new Button("Actualizar", () -> {
-    //                    TODO : Actualización de Passwords
-                        if (Objects.equals(pwdUpdtB.getText(), "") && Objects.equals(pwdUpdtC.getText(), "")){
+                        //                    TODO : Actualización de Passwords
+                        if (Objects.equals(pwdUpdtB.getText(), "") && Objects.equals(pwdUpdtC.getText(), "")) {
                             new MessageDialogBuilder().setTitle("Aviso")
                                     .setText("Debes ingresar una nueva contraseña").addButton(MessageDialogButton.Retry)
                                     .build().showDialog(gui);
-                        } else if (Objects.equals(pwdUpdtA.getText(), alumnoActual.getPassword()) && alumnoActual.changePassword(pwdUpdtB.getText(), pwdUpdtC.getText())){
+                        } else if (Objects.equals(pwdUpdtA.getText(), alumnoActual.getPassword()) && alumnoActual.changePassword(pwdUpdtB.getText(), pwdUpdtC.getText())) {
                             new MessageDialogBuilder().setTitle("Aviso")
                                     .setText("Contraseña actualizada con éxito").addButton(MessageDialogButton.OK)
                                     .build().showDialog(gui);
@@ -291,7 +320,7 @@ public class GuiProgram {
                 if (Objects.equals(pwdTxt.getText(), "")) throw new Exception("Debes rellenar todos los campos");
 
                 GuiProgram.currentUser = dbAlumnos.readAlumno(userTxt.getText(), pwdTxt.getText());
-                if (Objects.equals(GuiProgram.currentUser.getUsername(), null))throw new Exception("Usuario inválido");
+                if (Objects.equals(GuiProgram.currentUser.getUsername(), null)) throw new Exception("Usuario inválido");
 
                 log.sendInfo("Iniciando interfaz de alumnos.");
                 userTxt.setText("");

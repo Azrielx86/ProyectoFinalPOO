@@ -1,5 +1,6 @@
 package com.fiunam.materias;
 
+import com.fiunam.Logger;
 import com.fiunam.databases.DatabaseAlumnos;
 import com.fiunam.databases.DatabaseMaterias;
 import com.fiunam.users.Alumno;
@@ -11,6 +12,7 @@ import com.fiunam.users.Alumno;
  */
 public class AdminMateria {
     private static int conteoMateria = 0;
+    private static final Logger log = new Logger(AdminMateria.class);
 
     /**
      * Da de alta una inscripción
@@ -25,11 +27,12 @@ public class AdminMateria {
                 if (!dbMaterias.readMateria(idmateria).getAlumnos().contains(numCuenta) && !dbAlumnos.readAlumno(numCuenta).getMaterias().contains(idmateria)){
                     dbMaterias.readMateria(idmateria).getAlumnos().add(numCuenta);
                     dbAlumnos.readAlumno(numCuenta).getMaterias().add(idmateria);
+                    log.sendInfo("Materia " + dbMaterias.readMateria(idmateria) + " inscrita por el alumno " + dbAlumnos.readAlumno(numCuenta) + ".");
                 } else{
-                    System.out.println("La materia ya está inscrita");
+                    AdminMateria.log.sendInfo("La materia ya está inscrita");
                 }
             } else {
-                System.out.println("El Alumno o la materia no existen");
+                AdminMateria.log.sendInfo("El Alumno o la materia no existen");
             }
         } catch (Exception e){
             e.printStackTrace();
