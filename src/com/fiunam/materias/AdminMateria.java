@@ -12,7 +12,16 @@ import com.fiunam.users.Alumno;
  */
 public class AdminMateria {
     private static int conteoMateria = 0;
+    private static String[] areas = {"Ciencias Básicas", "Ciencias de la ingeniería", "Ingeniería aplicada", "Ciencias Sociales", "Otras asignaturas"};
     private static final Logger log = new Logger(AdminMateria.class);
+
+    public static String[] getAreas() {
+        return areas;
+    }
+
+    public static void setAreas(String[] areas) {
+        AdminMateria.areas = areas;
+    }
 
     /**
      * Da de alta una inscripción

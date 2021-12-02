@@ -22,8 +22,18 @@ public class DatabaseMaterias extends Database {
         this.initDB();
     }
 
-    public ArrayList<Materia> getMaterias() {
-        return materias;
+    public ArrayList<Materia> getCopiaMaterias() {
+        return new ArrayList<>(this.materias);
+    }
+
+    public ArrayList<Materia> getCopiaMaterias(String key){
+        ArrayList<Materia> materiasFiltradas = new ArrayList<>();
+        for (Materia materia: this.materias){
+            if (Objects.equals(materia.getArea(), key)){
+                materiasFiltradas.add(materia);
+            }
+        }
+        return materiasFiltradas;
     }
 
     @Override

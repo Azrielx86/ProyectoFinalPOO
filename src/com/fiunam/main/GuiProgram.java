@@ -17,6 +17,7 @@ import com.googlecode.lanterna.gui2.GridLayout;
 import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.Panel;
 import com.googlecode.lanterna.gui2.Window;
+import com.googlecode.lanterna.gui2.dialogs.ActionListDialogBuilder;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogBuilder;
 import com.googlecode.lanterna.gui2.dialogs.MessageDialogButton;
 import com.googlecode.lanterna.gui2.table.Table;
@@ -76,6 +77,8 @@ public class GuiProgram {
 
         new ActionListBox(new TerminalSize(30, 5))
                 .addItem("Inscripción de materias", () -> {
+                    String[] areas = AdminMateria.getAreas();
+
                     menuAcciones.removeAllComponents();
                     menuAcciones.addComponent(new Label("Inscripción de materias"));
 
@@ -85,21 +88,66 @@ public class GuiProgram {
                     menuAcciones.addComponent(panelMateriasDisp.withBorder(Borders.singleLine("Materias disponibles")));
                     menuAcciones.addComponent(panelMateriasIns.withBorder(Borders.singleLine("Materias por inscribir")));
 
-//                        TODO : INSCRIPCIÓN
                     Alumno alumnoActual = (Alumno) GuiProgram.currentUser.getCurrentUser();
-                    ArrayList<Materia> listadoMaterias = GuiProgram.dbMaterias.getMaterias();
+
                     Table<String> tablaMaterias = new Table<>("Nombre", "Profesor", "Clave");
                     Table<String> tablaMateriasIns = new Table<>("Nombre", "Profesor", "Clave");
+
+                    ArrayList<Materia> listadoMaterias = GuiProgram.dbMaterias.getCopiaMaterias();
+                    // Filtrado de las materias ya inscritas
+                    listadoMaterias.removeIf(materia -> alumnoActual.getMaterias().contains(materia.getIdMateria()));
+
                     for (Materia materia : listadoMaterias) {
                         tablaMaterias.getTableModel().addRow(materia.getNombre(), materia.getProfesor(), materia.getIdMateria());
                     }
+
+
+                    new Button("Selecciona un área", () -> {
+                        ActionListDialogBuilder listadoAreas = new ActionListDialogBuilder();
+                        listadoAreas.setTitle("Areas disponibles").setDescription("Selecciona un area");
+                        for (String area : areas) {
+                            listadoAreas.addAction(area, () -> {
+
+                                while (tablaMaterias.getTableModel().getRowCount() > 0){
+                                    tablaMaterias.getTableModel().removeRow(0);
+                                }
+
+                                ArrayList<Materia> materiasFiltradas = dbMaterias.getCopiaMaterias(area);
+
+                                materiasFiltradas.removeIf(materia -> alumnoActual.getMaterias().contains(materia.getIdMateria()));
+
+                                for (Materia materiaFiltrada : materiasFiltradas) {
+                                    tablaMaterias.getTableModel().addRow(
+                                            materiaFiltrada.getNombre(),
+                                            materiaFiltrada.getProfesor(),
+                                            materiaFiltrada.getIdMateria()
+                                    );
+                                }
+
+                            });
+                        }
+                        listadoAreas.addAction("Ver todas", () -> {
+                            while (tablaMaterias.getTableModel().getRowCount() > 0){
+                                tablaMaterias.getTableModel().removeRow(0);
+                            }
+                            for (Materia materia : listadoMaterias) {
+                                tablaMaterias.getTableModel().addRow(materia.getNombre(), materia.getProfesor(), materia.getIdMateria());
+                            }
+                        });
+                        listadoAreas.setCanCancel(true);
+                        listadoAreas.build().showDialog(gui);
+
+                    }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                            .addTo(panelMateriasDisp);
+
+                    new EmptySpace(new TerminalSize(0, 1)).addTo(panelMateriasDisp);
 
                     tablaMaterias.setSelectAction(() -> {
                         List<String> idMateria = tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow());
                         tablaMateriasIns.getTableModel().addRow(tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow()));
                         tablaMaterias.getTableModel().removeRow(tablaMaterias.getSelectedRow());
                         AdminMateria.altaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos, idMateria.get(2), alumnoActual.getNumCuenta());
-//                        log.sendInfo(idMateria.toString());
                     });
 
                     tablaMateriasIns.setSelectAction(() -> {
