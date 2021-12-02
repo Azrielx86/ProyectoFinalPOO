@@ -3,6 +3,7 @@
         "alumnos": [
 
         ],
+        "area": "Ciencias de la ingeniería",
         "class": "com.fiunam.materias.Materia",
         "grupo": 1,
         "idMateria": "0001",
@@ -15,6 +16,7 @@
             "3647645",
             "1"
         ],
+        "area": "Otras asignaturas",
         "class": "com.fiunam.materias.Materia",
         "grupo": 4,
         "idMateria": "0002",
@@ -26,6 +28,7 @@
             "318196960",
             "3647645"
         ],
+        "area": "Ciencias Básicas",
         "class": "com.fiunam.materias.Materia",
         "grupo": 20,
         "idMateria": "0003",
@@ -37,6 +40,7 @@
             "318196960",
             "1"
         ],
+        "area": "Ciencias Básicas",
         "class": "com.fiunam.materias.Materia",
         "grupo": 5,
         "idMateria": "0005",
@@ -47,6 +51,7 @@
         "alumnos": [
 
         ],
+        "area": "Ciencias Básicas",
         "class": "com.fiunam.materias.Materia",
         "grupo": 34,
         "idMateria": "0006",
@@ -57,6 +62,7 @@
         "alumnos": [
 
         ],
+        "area": "Ciencias Sociales",
         "class": "com.fiunam.materias.Materia",
         "grupo": 9,
         "idMateria": "0008",
