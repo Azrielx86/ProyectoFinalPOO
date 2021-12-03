@@ -80,13 +80,23 @@
     {
         "class": "com.fiunam.users.Alumno",
         "materias": [
-
+            "0003",
+            "0005",
+            "0006",
+            "0008",
+            "0009",
+            "0010",
+            "0011",
+            "0012",
+            "0013",
+            "0002",
+            "0001"
         ],
-        "nombre": "a",
+        "nombre": "b",
         "numCuenta": "89770684",
-        "password": "a",
+        "password": "b",
         "semestre": 1,
-        "username": "a"
+        "username": "b"
     },
     {
         "class": "com.fiunam.users.Alumno",
@@ -98,5 +108,17 @@
         "password": "hola",
         "semestre": 1,
         "username": "Hola XD"
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+            "0003",
+            "0001"
+        ],
+        "nombre": "a",
+        "numCuenta": "1587710",
+        "password": "a",
+        "semestre": 2,
+        "username": "a"
     }
 ]

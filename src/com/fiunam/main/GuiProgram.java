@@ -51,6 +51,11 @@ public class GuiProgram {
 
     public static void run() throws IOException {
         Logger log = new Logger(GuiProgram.class);
+        String mensajeMenuInicial = "Selecciona una opción.\n" +
+                "Utiliza <Tab> para moverte entre menús.\n" +
+                "Usa las flechas " + Symbols.ARROW_UP + " y " + Symbols.ARROW_DOWN + "\n" +
+                "para moverte dentro de los menús.";
+
         log.sendInfo("Iniciando terminal.");
         Terminal terminal = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(GuiProgram.WIDTH, GuiProgram.HEIGHT)).createTerminal();
         Screen screen = new TerminalScreen(terminal);
@@ -81,8 +86,11 @@ public class GuiProgram {
                     String[] areas = AdminMateria.getAreas();
                     Alumno alumnoActual = (Alumno) GuiProgram.currentUser.getCurrentUser();
 
-                    Table<String> tablaMaterias = new Table<>("Nombre", "Profesor", "Clave");
-                    Table<String> tablaMateriasIns = new Table<>("Nombre", "Profesor", "Clave");
+                    Table<String> tablaMaterias = new Table<>("Nombre", "Profesor", "Cupo", "Clave");
+                    Table<String> tablaMateriasIns = new Table<>("Nombre", "Profesor", "Cupo", "Clave");
+
+                    tablaMaterias.setPreferredSize(new TerminalSize(50, 8));
+                    tablaMateriasIns.setPreferredSize(new TerminalSize(50, 4));
 
                     ArrayList<Materia> listadoMaterias = GuiProgram.dbMaterias.getCopiaMaterias();
                     // Filtrado de las materias ya inscritas
@@ -99,7 +107,9 @@ public class GuiProgram {
 
 
                     for (Materia materia : listadoMaterias) {
-                        tablaMaterias.getTableModel().addRow(materia.getNombre(), materia.getProfesor(), materia.getIdMateria());
+                        tablaMaterias.getTableModel().addRow(materia.getNombre(),
+                                materia.getProfesor(), String.valueOf(materia.cupoDisponible())
+                                , materia.getIdMateria());
                     }
 
 
@@ -109,7 +119,7 @@ public class GuiProgram {
                         for (String area : areas) {
                             listadoAreas.addAction(area, () -> {
 
-                                while (tablaMaterias.getTableModel().getRowCount() > 0){
+                                while (tablaMaterias.getTableModel().getRowCount() > 0) {
                                     tablaMaterias.getTableModel().removeRow(0);
                                 }
 
@@ -121,6 +131,7 @@ public class GuiProgram {
                                     tablaMaterias.getTableModel().addRow(
                                             materiaFiltrada.getNombre(),
                                             materiaFiltrada.getProfesor(),
+                                            String.valueOf(materiaFiltrada.cupoDisponible()),
                                             materiaFiltrada.getIdMateria()
                                     );
                                 }
@@ -128,11 +139,13 @@ public class GuiProgram {
                             });
                         }
                         listadoAreas.addAction("Ver todas", () -> {
-                            while (tablaMaterias.getTableModel().getRowCount() > 0){
+                            while (tablaMaterias.getTableModel().getRowCount() > 0) {
                                 tablaMaterias.getTableModel().removeRow(0);
                             }
                             for (Materia materia : listadoMaterias) {
-                                tablaMaterias.getTableModel().addRow(materia.getNombre(), materia.getProfesor(), materia.getIdMateria());
+                                tablaMaterias.getTableModel().addRow(materia.getNombre(),
+                                        materia.getProfesor(), String.valueOf(materia.cupoDisponible()),
+                                        materia.getIdMateria());
                             }
                         });
                         listadoAreas.setCanCancel(true);
@@ -145,15 +158,26 @@ public class GuiProgram {
                     new EmptySpace(new TerminalSize(0, 1)).addTo(panelMateriasDisp);
 
                     tablaMaterias.setSelectAction(() -> {
-                        List<String> idMateria = tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow());
-                        tablaMateriasIns.getTableModel().addRow(tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow()));
-                        tablaMaterias.getTableModel().removeRow(tablaMaterias.getSelectedRow());
-                        AdminMateria.altaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos, idMateria.get(2), alumnoActual.getNumCuenta());
+                        try {
+                            List<String> idMateria = tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow());
+                            tablaMateriasIns.getTableModel().addRow(tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow()));
+                            tablaMaterias.getTableModel().removeRow(tablaMaterias.getSelectedRow());
+                            AdminMateria.altaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos, idMateria.get(3), alumnoActual.getNumCuenta());
+
+                        } catch (Exception e) {
+                            new MessageDialogBuilder().setTitle("Advertencia").setText("Ya no hay materias disponibles")
+                                    .addButton(MessageDialogButton.OK).build().showDialog(gui);
+                        }
                     });
 
                     tablaMateriasIns.setSelectAction(() -> {
-                        tablaMaterias.getTableModel().addRow(tablaMateriasIns.getTableModel().getRow(tablaMateriasIns.getSelectedRow()));
-                        tablaMateriasIns.getTableModel().removeRow(tablaMateriasIns.getSelectedRow());
+                        try {
+                            tablaMaterias.getTableModel().addRow(tablaMateriasIns.getTableModel().getRow(tablaMateriasIns.getSelectedRow()));
+                            tablaMateriasIns.getTableModel().removeRow(tablaMateriasIns.getSelectedRow());
+                        } catch (Exception e) {
+                            new MessageDialogBuilder().setTitle("Advertencia").setText("Ya no hay materias disponibles")
+                                    .addButton(MessageDialogButton.OK).build().showDialog(gui);
+                        }
                     });
 
                     tablaMaterias.setTheme(GuiProgram.temaGlobal);
@@ -163,15 +187,22 @@ public class GuiProgram {
 
                     new Panel(new GridLayout(2)).addTo(menuAlumnoAcc)
                             .addComponent(new Button("Inscribir materias", () -> {
-//                                TODO : Botones de confirmacion
+//                                TODO : Botones de confirmacion y conmprobar que se hayan agregado, creación de comprobante.
                                 GuiProgram.dbAlumnos.saveDB();
                                 GuiProgram.dbMaterias.saveDB();
+
+                                new MessageDialogBuilder().setTitle("Aviso").setText("Materias inscritas con éxito")
+                                        .addButton(MessageDialogButton.OK).build().showDialog(gui);
+
+                                menuAlumnoAcc.removeAllComponents();
+                                new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
+                                log.sendWarning("Bases de datos restauradas");
                             }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)))
                             .addComponent(new Button("Cancelar", () -> {
                                 GuiProgram.dbAlumnos.reloadDB();
                                 GuiProgram.dbMaterias.reloadDB();
                                 menuAlumnoAcc.removeAllComponents();
-                                log.sendWarning("Bases de datos restauradas");
+                                new Label(mensajeMenuInicial);
                             }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)));
 
 //                    ==========Baja de materias
@@ -209,11 +240,13 @@ public class GuiProgram {
                             .addTo(subMenuAccionesA);
                     final TextBox pwdUpdtA = new TextBox().setMask('*');
                     pwdUpdtA.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAccionesA);
+
                     new Label("Contraseña nueva: ")
                             .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
                             .addTo(subMenuAccionesA);
                     final TextBox pwdUpdtB = new TextBox().setMask('*');
                     pwdUpdtB.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAccionesA);
+
                     new Label("Repite la contraseña: ")
                             .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
                             .addTo(subMenuAccionesA);
@@ -275,7 +308,112 @@ public class GuiProgram {
         guiAdminPanel.addComponent(menuAdminAcc.withBorder(Borders.singleLine("Área de acciones (?)")));
 
         new ActionListBox(new TerminalSize(30, 5))
+                .addItem("Crear nueva materia", () -> {
+                    menuAdminAcc.removeAllComponents();
+                    Panel creacionMaterias = new Panel(new GridLayout(2));
+                    menuAdminAcc.addComponent(creacionMaterias.withBorder(Borders.singleLine("Creación de materias")));
+
+                    new Label("Ingresa los datos requeridos").addTo(creacionMaterias);
+                    new EmptySpace(new TerminalSize(0, 0)).addTo(creacionMaterias);
+
+                    new Label("Nombre de la materia: ")
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                            .addTo(creacionMaterias);
+                    final TextBox nombreMateria = new TextBox(new TerminalSize(20, 1));
+                    nombreMateria.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(creacionMaterias);
+
+                    new Label("Profesor de la materia: ")
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                            .addTo(creacionMaterias);
+                    final TextBox nombreProfMateria = new TextBox(new TerminalSize(20, 1));
+                    nombreProfMateria.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(creacionMaterias);
+
+                    new Label("Grupo: ")
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                            .addTo(creacionMaterias);
+                    final TextBox grupoMateria = new TextBox(new TerminalSize(20, 1));
+                    grupoMateria.setValidationPattern(Pattern.compile("[0-9]+"))
+                            .setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
+                            .addTo(creacionMaterias);
+
+                    new EmptySpace(new TerminalSize(0, 0)).addTo(creacionMaterias);
+
+                    Label areaSeleccionadaLabel = new Label("")
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER));
+
+                    new Button("Selecciona un área", () -> {
+                        ActionListDialogBuilder listadoAreasA = new ActionListDialogBuilder();
+                        listadoAreasA.setTitle("Areas disponibles").setDescription("Selecciona un área para la materia");
+                        String areaSeleccionada = AdminMateria.getAreas()[0];
+                        areaSeleccionadaLabel.setText(areaSeleccionada);
+                        for (String area : AdminMateria.getAreas()) {
+                            listadoAreasA.addAction(area, () -> areaSeleccionadaLabel.setText(area));
+                        }
+                        listadoAreasA.setCanCancel(true);
+                        listadoAreasA.build().showDialog(gui);
+                    }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(creacionMaterias);
+
+                    new Label("Area seleccionada: ")
+                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
+                            .addTo(creacionMaterias);
+
+                    areaSeleccionadaLabel.addTo(creacionMaterias);
+
+                    new Panel(new GridLayout(3))
+                            .addComponent(new Button("Cancelar", () -> {
+                                menuAdminAcc.removeAllComponents();
+                                new Label("Selecciona una opción.\n" +
+                                        "Utiliza <Tab> para moverte entre menús.\n" +
+                                        "Usa las flechas " + Symbols.ARROW_UP + " y " + Symbols.ARROW_DOWN + "\n" +
+                                        "para moverte dentro de los menús.").addTo(menuAdminAcc);
+                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
+                                    .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER)))
+
+                            .addComponent(new EmptySpace(new TerminalSize(20, 1)))
+
+                            .addComponent(new Button("Crear materia", () -> {
+                                try {
+                                    if (Objects.equals(nombreMateria.getText(), ""))
+                                        throw new Exception("Falta el nombre de la materia");
+                                    if (Objects.equals(nombreProfMateria.getText(), ""))
+                                        throw new Exception("Falta el nombre del profesor");
+                                    if (Objects.equals(grupoMateria.getText(), ""))
+                                        throw new Exception("Falta el semestre");
+                                    if (Objects.equals(areaSeleccionadaLabel.getText(), ""))
+                                        throw new Exception("Debes seleccionar un área");
+
+                                    GuiProgram.dbMaterias.agregarMateria(new Materia(nombreMateria.getText(),
+                                            Integer.parseInt(grupoMateria.getText()), nombreProfMateria.getText(), areaSeleccionadaLabel.getText()));
+
+                                    GuiProgram.dbMaterias.saveDB();
+
+                                    new MessageDialogBuilder().setTitle("Aviso").setText("La materia se creó exitosamente")
+                                            .addButton(MessageDialogButton.OK).build().showDialog(gui);
+
+                                    nombreMateria.setText("");
+                                    nombreProfMateria.setText("");
+                                    grupoMateria.setText("");
+                                    areaSeleccionadaLabel.setText("");
+
+                                } catch (Exception e) {
+                                    new MessageDialogBuilder().setTitle("Advertencia").setText(e.getMessage())
+                                            .addButton(MessageDialogButton.Retry)
+                                            .build().showDialog(gui);
+                                }
+                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
+                                    .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER)))
+                            .addTo(menuAdminAcc);
+
+                })
                 .addItem("Salir", () -> {
+                    log.sendInfo("Cerrando la interfaz del administrador");
+                    menuAdminAcc.removeAllComponents();
+                    new Label("Selecciona una opción.\n" +
+                            "Utiliza <Tab> para moverte entre menús.\n" +
+                            "Usa las flechas " + Symbols.ARROW_UP + " y " + Symbols.ARROW_DOWN + "\n" +
+                            "para moverte dentro de los menús.").addTo(menuAdminAcc);
+
+                    GuiProgram.currentUser = null;
                     gui.removeWindow(gui.getActiveWindow());
                 }).setTheme(GuiProgram.temaGlobal).addTo(menuAdminPanel);
 
@@ -296,13 +434,6 @@ public class GuiProgram {
         final TextBox userNameRegister = new TextBox(new TerminalSize(25, 1));
         userNameRegister.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
         registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
-
-//        TODO : REMOVER
-//        new Label("Núm. Cuenta: ").addTo(registerPanel);
-//        final TextBox numCuentaReg = new TextBox(new TerminalSize(25, 1));
-//        numCuentaReg.setValidationPattern(Pattern.compile("[0-9]+"));
-//        numCuentaReg.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
-//        registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
 
         new Label("Usuario: ").addTo(registerPanel);
         final TextBox userRegister = new TextBox(new TerminalSize(25, 1));
@@ -327,7 +458,6 @@ public class GuiProgram {
                 if (Objects.equals(userRegister.getText(), "")) throw new Exception();
                 if (Objects.equals(passRegister.getText(), "")) throw new Exception();
                 if (Objects.equals(semesterRegister.getText(), "")) throw new Exception();
-//                if (Objects.equals(numCuentaReg.getText(), "")) throw new Exception();
 
                 Alumno alumno = new Alumno(userNameRegister.getText(), userRegister.getText(),
                         passRegister.getText(), Integer.parseInt(semesterRegister.getText()));
@@ -395,11 +525,11 @@ public class GuiProgram {
 
                 try {
                     GuiProgram.currentUser = dbAlumnos.readAlumno(userTxt.getText(), pwdTxt.getText());
-                    if (Objects.equals(GuiProgram.currentUser.getUsername(), null)){
+                    if (Objects.equals(GuiProgram.currentUser.getUsername(), null)) {
                         GuiProgram.currentUser = dbadmins.readAdmins(userTxt.getText(), pwdTxt.getText());
                         if (Objects.equals(GuiProgram.currentUser.getUsername(), null)) throw new Exception();
                     }
-                } catch (Exception e){
+                } catch (Exception e) {
                     throw new Exception("Usuario inválido");
                 }
 
@@ -409,7 +539,7 @@ public class GuiProgram {
                 pwdTxt.setText("");
                 if (GuiProgram.currentUser.getCurrentUser() instanceof Alumno) {
                     gui.addWindowAndWait(windowAlumno);
-                } else if (GuiProgram.currentUser.getCurrentUser() instanceof Administrador){
+                } else if (GuiProgram.currentUser.getCurrentUser() instanceof Administrador) {
                     gui.addWindowAndWait(windowAdmin);
                 }
 

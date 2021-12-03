@@ -21,8 +21,8 @@ public class TestDatabase {
             Alumno alumno = new Alumno();
             System.out.print("Nombre: ");
             alumno.setNombre(console.nextLine());
-            System.out.print("Número de cuenta: ");
-            alumno.setNumCuenta(console.nextLine());
+            System.out.println("Semestre: ");
+            alumno.setSemestre(Integer.parseInt(console.nextLine()));
 
             databaseAlumnos.agregarAlumno(alumno);
         }
@@ -31,8 +31,8 @@ public class TestDatabase {
         databaseAlumnos.eliminarAlumno("n");
 
 //        Lectura de alumnos, cuando existe y cuando no
-        System.out.println(databaseAlumnos.readAlumno("3181----0"));
-        System.out.println(databaseAlumnos.readAlumno("Num que no existe"));
+//        System.out.println(databaseAlumnos.readAlumno("3181----0"));
+//        System.out.println(databaseAlumnos.readAlumno("Num que no existe"));
 
         databaseAlumnos.saveDB();
 

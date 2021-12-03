@@ -6,9 +6,9 @@ import com.fiunam.users.Alumno;
 
 public class TestMaterias {
     public static void main(String[] args) {
-        Alumno alumno = new Alumno("edgarchalico", "Edgar Chalico", "testXD",3, "318192932");
-        Materia poo = new Materia("Programación Orientada a Objetos", 1,"Guadalupe", "001", "");
-        Materia edaii = new Materia("Estructuras de Datos y Algoritmos II", 4, "José", "001", "");
+        Alumno alumno = new Alumno("edgarchalico", "Edgar Chalico", "testXD",3);
+        Materia poo = new Materia("Programación Orientada a Objetos", 1,"Guadalupe", "001");
+        Materia edaii = new Materia("Estructuras de Datos y Algoritmos II", 4, "José", "001");
 
 //        AdminMateria.altaMateria(poo, alumno);
 //        AdminMateria.altaMateria(edaii, alumno);
