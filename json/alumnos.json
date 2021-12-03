@@ -7,7 +7,7 @@
             "0003"
         ],
         "nombre": "Edgars Feic",
-        "numCuenta": "318196960",
+        "numCuenta": "19628211",
         "password": "admin",
         "semestre": 3,
         "username": "edgarsfeic"
@@ -18,7 +18,7 @@
 
         ],
         "nombre": "Ricardo",
-        "numCuenta": "356546",
+        "numCuenta": "51081332",
         "password": null,
         "semestre": 0,
         "username": null
@@ -30,7 +30,7 @@
             "0003"
         ],
         "nombre": "Otro más",
-        "numCuenta": "3647645",
+        "numCuenta": "15868692",
         "password": null,
         "semestre": 0,
         "username": null
@@ -41,7 +41,7 @@
 
         ],
         "nombre": "pedroperez",
-        "numCuenta": "32432523",
+        "numCuenta": "12429011",
         "password": "pedroXDp",
         "semestre": 5,
         "username": "Pedro Perez"
@@ -52,7 +52,7 @@
 
         ],
         "nombre": "eduram",
-        "numCuenta": "4354365",
+        "numCuenta": "43082521",
         "password": "ed1234r",
         "semestre": 4,
         "username": "Eduardo Ramirez"
@@ -63,7 +63,7 @@
 
         ],
         "nombre": "alexlopez",
-        "numCuenta": "453456345",
+        "numCuenta": "92260052",
         "password": "3greg456re",
         "semestre": 1,
         "username": "Alex Lopez"
@@ -74,7 +74,7 @@
 
         ],
         "nombre": "srcalceto",
-        "numCuenta": "45435632",
+        "numCuenta": "89963032",
         "password": "efwet3w3",
         "semestre": 1,
         "username": "Señor Calceto :v"
@@ -83,12 +83,24 @@
         "class": "com.fiunam.users.Alumno",
         "materias": [
             "0002",
-            "0005"
+            "0005",
+            "0003"
         ],
         "nombre": "a",
-        "numCuenta": "1",
+        "numCuenta": "89770684",
         "password": "a",
         "semestre": 1,
         "username": "a"
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+
+        ],
+        "nombre": "holaxd",
+        "numCuenta": "61649878",
+        "password": "hola",
+        "semestre": 1,
+        "username": "Hola XD"
     }
 ]

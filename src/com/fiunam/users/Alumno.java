@@ -16,12 +16,11 @@ public class Alumno extends Usuario {
         this.materias = new ArrayList<>();
     }
 
-    public Alumno(String username, String nombre, String password, int semestre, String numCuenta) {
+    public Alumno(String username, String nombre, String password, int semestre) {
         super(username, password);
         this.nombre = nombre;
         this.materias = new ArrayList<>();
         this.semestre = semestre;
-        this.numCuenta = numCuenta;
     }
 
     public Alumno(String username, String password, String nombre, int semestre, String numCuenta, ArrayList<String> materias) {
