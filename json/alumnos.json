@@ -2,9 +2,8 @@
     {
         "class": "com.fiunam.users.Alumno",
         "materias": [
-            "0002",
-            "0005",
-            "0003"
+            "0003",
+            "0005"
         ],
         "nombre": "Edgars Feic",
         "numCuenta": "19628211",
@@ -26,8 +25,7 @@
     {
         "class": "com.fiunam.users.Alumno",
         "materias": [
-            "0002",
-            "0003"
+
         ],
         "nombre": "Otro más",
         "numCuenta": "15868692",
@@ -82,9 +80,7 @@
     {
         "class": "com.fiunam.users.Alumno",
         "materias": [
-            "0002",
-            "0005",
-            "0003"
+
         ],
         "nombre": "a",
         "numCuenta": "89770684",

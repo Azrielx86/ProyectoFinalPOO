@@ -12,9 +12,7 @@
     },
     {
         "alumnos": [
-            "318196960",
-            "3647645",
-            "1"
+
         ],
         "area": "Otras asignaturas",
         "class": "com.fiunam.materias.Materia",
@@ -25,8 +23,7 @@
     },
     {
         "alumnos": [
-            "318196960",
-            "3647645"
+            "19628211"
         ],
         "area": "Ciencias Básicas",
         "class": "com.fiunam.materias.Materia",
@@ -37,8 +34,7 @@
     },
     {
         "alumnos": [
-            "318196960",
-            "1"
+            "19628211"
         ],
         "area": "Ciencias Básicas",
         "class": "com.fiunam.materias.Materia",
