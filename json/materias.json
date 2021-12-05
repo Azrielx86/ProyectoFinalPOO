@@ -1,7 +1,8 @@
 [
     {
         "alumnos": [
-
+            "89770684",
+            "1587710"
         ],
         "area": "Ciencias de la ingeniería",
         "class": "com.fiunam.materias.Materia",
@@ -12,9 +13,7 @@
     },
     {
         "alumnos": [
-            "318196960",
-            "3647645",
-            "1"
+            "89770684"
         ],
         "area": "Otras asignaturas",
         "class": "com.fiunam.materias.Materia",
@@ -25,8 +24,9 @@
     },
     {
         "alumnos": [
-            "318196960",
-            "3647645"
+            "19628211",
+            "89770684",
+            "1587710"
         ],
         "area": "Ciencias Básicas",
         "class": "com.fiunam.materias.Materia",
@@ -37,8 +37,8 @@
     },
     {
         "alumnos": [
-            "318196960",
-            "1"
+            "19628211",
+            "89770684"
         ],
         "area": "Ciencias Básicas",
         "class": "com.fiunam.materias.Materia",
@@ -49,7 +49,7 @@
     },
     {
         "alumnos": [
-
+            "89770684"
         ],
         "area": "Ciencias Básicas",
         "class": "com.fiunam.materias.Materia",
@@ -60,7 +60,7 @@
     },
     {
         "alumnos": [
-
+            "89770684"
         ],
         "area": "Ciencias Sociales",
         "class": "com.fiunam.materias.Materia",
@@ -68,5 +68,71 @@
         "idMateria": "0008",
         "nombre": "Redacción",
         "profesor": "Paola"
+    },
+    {
+        "alumnos": [
+            "89770684"
+        ],
+        "area": "Ciencias de la ingeniería",
+        "class": "com.fiunam.materias.Materia",
+        "grupo": 13,
+        "idMateria": "0009",
+        "nombre": "Inteligencia Artificial",
+        "profesor": "Raul Perez"
+    },
+    {
+        "alumnos": [
+            "89770684"
+        ],
+        "area": "Otras asignaturas",
+        "class": "com.fiunam.materias.Materia",
+        "grupo": 9,
+        "idMateria": "0010",
+        "nombre": "Fundamentos de Programación",
+        "profesor": "Ernesto"
+    },
+    {
+        "alumnos": [
+            "89770684"
+        ],
+        "area": "Ciencias Básicas",
+        "class": "com.fiunam.materias.Materia",
+        "grupo": 23,
+        "idMateria": "0011",
+        "nombre": "Probabilidad",
+        "profesor": "Ricardo"
+    },
+    {
+        "alumnos": [
+            "89770684"
+        ],
+        "area": "Ciencias Sociales",
+        "class": "com.fiunam.materias.Materia",
+        "grupo": 15,
+        "idMateria": "0012",
+        "nombre": "Cultura y Comunicación",
+        "profesor": "Karla"
+    },
+    {
+        "alumnos": [
+            "89770684"
+        ],
+        "area": "Ciencias de la ingeniería",
+        "class": "com.fiunam.materias.Materia",
+        "grupo": 2,
+        "idMateria": "0013",
+        "nombre": "EDA I",
+        "profesor": "Karen"
+    },
+    {
+        "alumnos": [
+
+        ],
+        "area": "Ingeniería aplicada",
+        "class": "com.fiunam.materias.Materia",
+        "grupo": 6,
+        "idMateria": "0014",
+        "nombre": "Sistemas Distribuidos",
+        "profesor": "Jose Raul"
     }
 ]

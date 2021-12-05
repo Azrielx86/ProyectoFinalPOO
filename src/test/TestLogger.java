@@ -1,6 +1,6 @@
 package test;
 
-import com.fiunam.Logger;
+import com.fiunam.logger.Logger;
 
 public class TestLogger {
     public static void main(String[] args) {

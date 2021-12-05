@@ -1,6 +1,6 @@
 package com.fiunam.materias;
 
-import com.fiunam.Logger;
+import com.fiunam.logger.Logger;
 import com.fiunam.databases.DatabaseAlumnos;
 import com.fiunam.databases.DatabaseMaterias;
 import com.fiunam.users.Alumno;

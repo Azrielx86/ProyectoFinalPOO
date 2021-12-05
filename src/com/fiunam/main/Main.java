@@ -1,6 +1,6 @@
 package com.fiunam.main;
 
-import com.fiunam.Logger;
+import com.fiunam.logger.Logger;
 
 import java.util.Arrays;
 

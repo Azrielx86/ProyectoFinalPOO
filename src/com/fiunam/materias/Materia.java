@@ -20,12 +20,13 @@ public class Materia {
         this.alumnos = new ArrayList<>();
     }
 
-    public Materia(String nombre, int grupo, String profesor, String idMateria, String area) {
+    public Materia(String nombre, int grupo, String profesor, String area) {
         this.alumnos = new ArrayList<>();
         this.nombre = nombre;
         this.grupo = grupo;
         this.profesor = profesor;
-        this.idMateria = String.format("%04d", Integer.parseInt(idMateria));
+        this.area = area;
+//        this.idMateria = String.format("%04d", Integer.parseInt(idMateria));
     }
 
     public String getNombre() {

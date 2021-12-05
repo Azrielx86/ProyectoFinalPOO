@@ -1,6 +1,6 @@
 package com.fiunam.databases;
 
-import com.fiunam.Logger;
+import com.fiunam.logger.Logger;
 import com.fiunam.users.Alumno;
 
 import java.io.File;
@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 import flexjson.*;
 
@@ -32,10 +33,10 @@ public class DatabaseAlumnos extends Database {
 
         try (FileReader file = new FileReader(this.pathAlumnosDB)) {
             this.alumnos = jsonDeserializer.deserialize(file);
-        }catch (FileNotFoundException fnt){
+        } catch (FileNotFoundException fnt) {
             try {
                 super.createDir();
-            } catch (Exception e){
+            } catch (Exception e) {
                 log.sendError(e.getMessage());
             }
         } catch (JSONException io) {
@@ -87,6 +88,7 @@ public class DatabaseAlumnos extends Database {
      * @param alumno Objeto con la información del alumno
      */
     public void agregarAlumno(Alumno alumno) {
+        alumno.setNumCuenta(this.generarNumCuenta());
         this.alumnos.add(alumno);
         log.sendInfo("Alumno registrado: " + alumno.toString());
     }
@@ -111,7 +113,7 @@ public class DatabaseAlumnos extends Database {
     public Alumno readAlumno(String nombre, String password) {
         for (Alumno alumno : this.alumnos) {
             if (Objects.equals(alumno.getUsername(), nombre) || Objects.equals(alumno.getNombre(), nombre)) {
-                if (Objects.equals(alumno.getPassword(), password)){
+                if (Objects.equals(alumno.getPassword(), password)) {
                     return alumno;
                 }
             }
@@ -133,5 +135,22 @@ public class DatabaseAlumnos extends Database {
                 numCuenta + "\" no existe.");
     }
 
+    /**
+     * @return Número de cuenta de 8 dígitos generado para el alumno
+     */
+    private String generarNumCuenta() {
+        Random rand = new Random();
+        String numGenerado;
+        while (true) {
+            numGenerado = String.valueOf(rand.nextInt(99999999));
+            for (Alumno alumno : this.alumnos) {
+                if (Objects.equals(numGenerado, alumno.getNumCuenta())) {
+                    numGenerado = String.valueOf(rand.nextInt(99999999));
+                } else {
+                    return numGenerado;
+                }
+            }
+        }
+    }
 
 }

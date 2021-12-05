@@ -5,7 +5,7 @@ import com.fiunam.users.Usuario;
 
 public class TestReturnInsance {
     public static void main(String[] args) {
-        Alumno alumno = new Alumno("edgarsfeic", "Edgars Feic", "rlsdfhe3434", 2, "3445435");
+        Alumno alumno = new Alumno("edgarsfeic", "Edgars Feic", "rlsdfhe3434", 2);
 
         Usuario currentUser = alumno;
 
