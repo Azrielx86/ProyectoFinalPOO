@@ -1,6 +1,6 @@
 package com.fiunam.main;
 
-import com.fiunam.Logger;
+import com.fiunam.logger.Logger;
 import com.fiunam.databases.DatabaseAdmins;
 import com.fiunam.databases.DatabaseAlumnos;
 import com.fiunam.databases.DatabaseMaterias;
@@ -75,10 +75,7 @@ public class GuiProgram {
         guiAlumnoPanel.addComponent(menuAlumnoPanel.withBorder(Borders.singleLine("Menú principal")));
 
         Panel menuAlumnoAcc = new Panel(new LinearLayout());
-        new Label("Selecciona una opción.\n" +
-                "Utiliza <Tab> para moverte entre menús.\n" +
-                "Usa las flechas " + Symbols.ARROW_UP + " y " + Symbols.ARROW_DOWN + "\n" +
-                "para moverte dentro de los menús.").addTo(menuAlumnoAcc);
+        new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
         guiAlumnoPanel.addComponent(menuAlumnoAcc.withBorder(Borders.singleLine("Área de acciones (?)")));
 
         new ActionListBox(new TerminalSize(30, 5))
@@ -301,10 +298,7 @@ public class GuiProgram {
 
         Panel menuAdminAcc = new Panel(new LinearLayout());
 
-        new Label("Selecciona una opción.\n" +
-                "Utiliza <Tab> para moverte entre menús.\n" +
-                "Usa las flechas " + Symbols.ARROW_UP + " y " + Symbols.ARROW_DOWN + "\n" +
-                "para moverte dentro de los menús.").addTo(menuAdminAcc);
+        new Label(mensajeMenuInicial).addTo(menuAdminAcc);
         guiAdminPanel.addComponent(menuAdminAcc.withBorder(Borders.singleLine("Área de acciones (?)")));
 
         new ActionListBox(new TerminalSize(30, 5))
@@ -362,10 +356,7 @@ public class GuiProgram {
                     new Panel(new GridLayout(3))
                             .addComponent(new Button("Cancelar", () -> {
                                 menuAdminAcc.removeAllComponents();
-                                new Label("Selecciona una opción.\n" +
-                                        "Utiliza <Tab> para moverte entre menús.\n" +
-                                        "Usa las flechas " + Symbols.ARROW_UP + " y " + Symbols.ARROW_DOWN + "\n" +
-                                        "para moverte dentro de los menús.").addTo(menuAdminAcc);
+                                new Label(mensajeMenuInicial).addTo(menuAdminAcc);
                             }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
                                     .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER)))
 
@@ -534,12 +525,15 @@ public class GuiProgram {
                 }
 
 
-                log.sendInfo("Iniciando interfaz de alumnos.");
                 userTxt.setText("");
                 pwdTxt.setText("");
                 if (GuiProgram.currentUser.getCurrentUser() instanceof Alumno) {
+                    log.sendInfo("Iniciando interfaz de alumnos.");
+                    log.sendInfo("Sesión iniciada por:\n%s".formatted(GuiProgram.currentUser));
                     gui.addWindowAndWait(windowAlumno);
                 } else if (GuiProgram.currentUser.getCurrentUser() instanceof Administrador) {
+                    log.sendInfo("Iniciando interfaz de administradores.");
+                    log.sendInfo("Sesión iniciada por:\n%s".formatted(GuiProgram.currentUser));
                     gui.addWindowAndWait(windowAdmin);
                 }
 

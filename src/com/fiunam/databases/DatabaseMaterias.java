@@ -1,6 +1,6 @@
 package com.fiunam.databases;
 
-import com.fiunam.Logger;
+import com.fiunam.logger.Logger;
 import com.fiunam.materias.Materia;
 import flexjson.JSONDeserializer;
 import flexjson.JSONException;

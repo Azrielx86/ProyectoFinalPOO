@@ -71,7 +71,7 @@ public class Alumno extends Usuario {
             listaMaterias.append(this.materias.get(i)).append("\n");
         }
 
-        return "ALUMNO: " + this.nombre + "\n" +
+        return "ALUMNO: " + this.nombre + " | Password: " + "*".repeat(super.getPassword().length()) + "\n" +
                 "Número de cuenta: " + this.numCuenta + "\n" +
                 "Semestre: " + this.semestre + "\nLista de Materias:" + "\n" +
                 listaMaterias;

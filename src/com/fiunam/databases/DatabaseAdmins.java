@@ -1,8 +1,7 @@
 package com.fiunam.databases;
 
-import com.fiunam.Logger;
+import com.fiunam.logger.Logger;
 import com.fiunam.users.Administrador;
-import com.fiunam.users.Alumno;
 import flexjson.JSONDeserializer;
 import flexjson.JSONException;
 import flexjson.JSONSerializer;

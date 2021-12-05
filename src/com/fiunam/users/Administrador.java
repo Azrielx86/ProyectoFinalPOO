@@ -36,6 +36,6 @@ public class Administrador extends Usuario {
     @Override
     public String toString() {
         return "[ADMIN]\n" + super.toString() + "\n" +
-                "Número de trabajador" + this.numTrabajador;
+                "Número de trabajador: " + this.numTrabajador;
     }
 }
