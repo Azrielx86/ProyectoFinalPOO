@@ -67,7 +67,6 @@ Para Linux probablemente sea necesario dar permisos de ejecución con el siguien
 
 ## Generales
 
-- CORREGIR CREACION DE ARCHIVOS JSON (NO PERMITE LA EJECUCION)
 - Crear la guia de usuario en GitHub
 - Documentar todas las clases y crear el JavaDoc
 - Completar el login (métodos de inicio de sesión)

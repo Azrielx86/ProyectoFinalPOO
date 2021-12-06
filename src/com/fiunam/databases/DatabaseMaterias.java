@@ -9,6 +9,7 @@ import flexjson.JSONSerializer;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class DatabaseMaterias extends Database {
@@ -42,31 +43,28 @@ public class DatabaseMaterias extends Database {
 
         try (FileReader file = new FileReader(this.pathMateriasDB)) {
             this.materias = jsonDeserializer.deserialize(file);
-            this.idMaterias = Integer.parseInt(materias.get(materias.size()-1).getIdMateria());
-        } catch(FileNotFoundException fne){
-            try {
-                super.createDir();
+            try{
+                this.idMaterias = Integer.parseInt(materias.get(materias.size()-1).getIdMateria());
             } catch (Exception e){
-                log.sendError(e.getMessage());
+                this.idMaterias = 0;
+                log.sendWarning("(%s) Listado de materias vacio, empezando en ID 0000.".formatted(e));
             }
-        } catch (JSONException io) {
-            log.sendWarning("La base de datos \"MATERIAS\" no existe, creando una nueva.");
+        } catch (FileNotFoundException fe) {
+            log.sendWarning("La base de datos \"MATERIAS\" no existe, esperando datos para crear una nueva.");
+            this.createDB();
         } catch (Exception e) {
-            log.sendError(e.getMessage());
+            log.sendError(Arrays.toString(e.getStackTrace()));
         }
     }
 
     @Override
     protected void createDB() {
         try {
+            Database.createDir();
             File file = new File(this.pathMateriasDB);
-            final var newFile = file.createNewFile();
-
-            if (!newFile) {
-                throw new Exception("El archivo no se pudo crear");
-            }
+            if (!file.createNewFile()) throw new Exception("Error al crear el archivo " + this.pathMateriasDB);
         } catch (Exception e) {
-            log.sendError(e.getMessage());
+            log.sendError(Arrays.toString(e.getStackTrace()));
         }
     }
 
@@ -78,7 +76,7 @@ public class DatabaseMaterias extends Database {
             file.write(serializer.prettyPrint(true).include("alumnos").serialize(this.materias));
 
         } catch (Exception e) {
-            log.sendError(e.getMessage());
+            log.sendError(Arrays.toString(e.getStackTrace()));
         }
     }
 
