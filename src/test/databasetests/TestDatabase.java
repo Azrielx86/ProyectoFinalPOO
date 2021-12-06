@@ -28,7 +28,7 @@ public class TestDatabase {
         }
 
 //        Eliminado de un alumno
-        databaseAlumnos.eliminarAlumno("n");
+//        databaseAlumnos.eliminarAlumno("n");
 
 //        Lectura de alumnos, cuando existe y cuando no
 //        System.out.println(databaseAlumnos.readAlumno("3181----0"));

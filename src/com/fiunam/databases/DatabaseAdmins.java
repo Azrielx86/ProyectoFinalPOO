@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
@@ -34,31 +35,22 @@ public class DatabaseAdmins extends Database{
 
         try (FileReader file = new FileReader(this.pathAdminsDB)) {
             this.admins = jsonDeserializer.deserialize(file);
-        } catch (FileNotFoundException fnt) {
-            try {
-                super.createDir();
-            } catch (Exception e) {
-                log.sendError(e.getMessage());
-            }
-        } catch (JSONException io) {
-            log.sendWarning("La base de datos \"ADMINISTRADORES\" no existe, creando una nueva.");
+        } catch (FileNotFoundException fe) {
+            log.sendWarning("La base de datos \"ADMINISTRADORES\" no existe, esperando datos para crear una nueva.");
             this.createDB();
         } catch (Exception e) {
-            log.sendError(e.getMessage());
+            log.sendError(Arrays.toString(e.getStackTrace()));
         }
     }
 
     @Override
     protected void createDB() {
         try {
+            Database.createDir();
             File file = new File(this.pathAdminsDB);
-            final var newFile = file.createNewFile();
-
-            if (newFile) {
-                log.sendWarning("El archivo ya existe");
-            }
+            if (!file.createNewFile()) throw new Exception("Error al crear el archivo " + this.pathAdminsDB);
         } catch (Exception e) {
-            log.sendError(e.getMessage());
+            log.sendError(Arrays.toString(e.getStackTrace()));
         }
     }
 
@@ -70,7 +62,7 @@ public class DatabaseAdmins extends Database{
             file.write(serializer.prettyPrint(true).include("materias").serialize(this.admins));
 
         } catch (Exception e) {
-            log.sendError(e.getMessage());
+            log.sendError(Arrays.toString(e.getStackTrace()));
         }
     }
 
