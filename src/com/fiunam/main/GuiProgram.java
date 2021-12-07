@@ -499,7 +499,7 @@ public class GuiProgram {
                     busqueda.addComponent(new Label("Ingresa la clave de la materia: "));
                     final TextBox claveMateria = new TextBox();
                     claveMateria.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE));
-                    claveMateria.setPreferredSize(new TerminalSize(5, 1));
+                    claveMateria.setPreferredSize(new TerminalSize(15, 1));
                     claveMateria.setValidationPattern(Pattern.compile("[0-9]+")).addTo(busqueda);
 
                     Panel resultados = new Panel(new GridLayout(2));
@@ -566,7 +566,75 @@ public class GuiProgram {
 
                 })
                 .addItem("Eliminar Alumnos", () -> {
-                    // TODO
+                    menuAdminAcc.removeAllComponents();
+                    // Se crean los paneles de búsqueda y resultados
+                    Panel busqueda = new Panel(new GridLayout(2));
+                    busqueda.addTo(menuAdminAcc);
+                    busqueda.addComponent(new Label("Ingresa el número de cuenta: "));
+                    final TextBox numCuentaAl = new TextBox();
+                    numCuentaAl.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE));
+                    numCuentaAl.setPreferredSize(new TerminalSize(15, 1));
+                    numCuentaAl.setValidationPattern(Pattern.compile("[0-9]+")).addTo(busqueda);
+
+                    Panel resultados = new Panel(new GridLayout(2));
+                    menuAdminAcc.addComponent(resultados.withBorder(Borders.singleLine("Resultados")));
+                    resultados.addComponent(new Label("Realiza una búsqueda"));
+
+                    new EmptySpace(new TerminalSize(0, 1)).addTo(busqueda);
+
+                    new Button("Buscar", () -> {
+                        try {
+                            // Se limpia la ventana de resultados
+                            resultados.removeAllComponents();
+                            Panel subResultados = new Panel(new GridLayout(2));
+                            menuAdminAcc.removeComponent(resultados);
+
+                            // Se comprueba que la materia exista
+                            if (numCuentaAl.getText() == null) throw new Exception("El campo está vacío");
+//                            Materia materiaEncontrada = GuiProgram.dbMaterias.readMateria(claveMateria.getText());
+                            Alumno alumnoEncontrado = GuiProgram.dbAlumnos.readAlumno(numCuentaAl.getText());
+                            if (alumnoEncontrado.getNombre() == null) throw new Exception("La materia no existe");
+
+                            // Se muestran los detalles de la materia
+                            resultados.addComponent(subResultados);
+                            subResultados.addComponent(new Label("Nombre: "))
+                                    .addComponent(new Label(alumnoEncontrado.getNombre()))
+                                    .addComponent(new Label("Nombre de usuario: "))
+                                    .addComponent(new Label(alumnoEncontrado.getUsername()))
+                                    .addComponent(new Label("Semestre: "))
+                                    .addComponent(new Label(String.valueOf(alumnoEncontrado.getSemestre())))
+                                    .addComponent(new Label("Materias inscritas: "))
+                                    .addComponent(new Label(String.valueOf(alumnoEncontrado.getMaterias().size())));
+
+                            subResultados.addComponent(new EmptySpace(new TerminalSize(0, 0)));
+                            subResultados.addComponent(new Button("Eliminar alumno", () -> {
+
+                                // Se elimina la materia
+                                GuiProgram.dbAlumnos.eliminarAlumno(GuiProgram.dbMaterias, alumnoEncontrado.getNumCuenta());
+                                GuiProgram.dbMaterias.saveDB();
+                                GuiProgram.dbAlumnos.saveDB();
+
+                                new MessageDialogBuilder().setTitle("Aviso").setText("Alumno eliminado exitosamente")
+                                        .addButton(MessageDialogButton.OK).build().showDialog(gui);
+
+                                resultados.removeAllComponents();
+                                numCuentaAl.setText("");
+
+                            }).setTheme(GuiProgram.temaGlobal));
+//                            menuAdminAcc.removeAllComponents();
+
+                        } catch (Exception e) {
+                            new MessageDialogBuilder().setTitle("Advertencia").setText(e.getMessage())
+                                    .addButton(MessageDialogButton.Retry).build().showDialog(gui);
+                        }
+                    }).setTheme(GuiProgram.temaGlobal).addTo(busqueda);
+                    menuAdminAcc.addComponent(new Button("Cancelar", () -> {
+                        menuAdminAcc.removeAllComponents();
+                        new Label(mensajeMenuInicial).addTo(menuAdminAcc);
+                    })).setTheme(GuiProgram.temaGlobal);
+                    new EmptySpace(new TerminalSize(0, 1));
+
+                    new EmptySpace(new TerminalSize(0, 1));
 
                 })
                 .addItem("Agregar/Eliminar administradores", () -> {

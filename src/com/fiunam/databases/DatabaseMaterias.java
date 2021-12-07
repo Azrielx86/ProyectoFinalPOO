@@ -116,8 +116,6 @@ public class DatabaseMaterias extends Database {
             if (Objects.equals(this.materias.get(i).getIdMateria(), idMateria)) {
                 Materia materia = this.materias.get(i);
 
-
-//                for (int j = 0; j <= materia.getAlumnos().size(); j++) {
                 while (materia.getAlumnos().size() > 0) {
                     AdminMateria.bajaMateria(this, dbAlumnos, materia.getIdMateria(), materia.getAlumnos().get(0));
                 }
@@ -127,8 +125,7 @@ public class DatabaseMaterias extends Database {
                 return;
             }
         }
-        log.sendWarning("La materia con id \"" +
-                idMateria + "\" no existe.");
+        log.sendWarning("La materia con id \"" + idMateria + "\" no existe.");
     }
 
 

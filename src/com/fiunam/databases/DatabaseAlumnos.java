@@ -1,6 +1,7 @@
 package com.fiunam.databases;
 
 import com.fiunam.logger.Logger;
+import com.fiunam.materias.AdminMateria;
 import com.fiunam.users.Alumno;
 
 import java.io.File;
@@ -127,6 +128,23 @@ public class DatabaseAlumnos extends Database {
         }
         System.out.println("El alumno con número de cuenta \"" +
                 numCuenta + "\" no existe.");
+    }
+
+    public void eliminarAlumno(DatabaseMaterias dbmaterias, String numCuenta) {
+        for (int i = 0; i < this.alumnos.size(); i++) {
+            if (Objects.equals(this.alumnos.get(i).getNumCuenta(), numCuenta)){
+                Alumno alumno = this.alumnos.get(i);
+
+                while (alumno.getMaterias().size() > 0){
+                    AdminMateria.bajaMateria(dbmaterias, this, alumno.getMaterias().get(0), alumno.getNumCuenta());
+                }
+
+                this.alumnos.remove(i);
+                log.sendInfo("Alumno " + alumno.getNombre() + " (" + alumno.getNumCuenta() + ") eliminada.");
+                return;
+            }
+        }
+        log.sendWarning("El alumno con Número de cuenta \"" + numCuenta + "\" no existe.");
     }
 
     /**
