@@ -45,15 +45,16 @@ public class GuiProgram {
     private final static DatabaseMaterias dbMaterias = new DatabaseMaterias();
     private final static DatabaseAdmins dbadmins = new DatabaseAdmins();
     private final static SimpleTheme temaGlobal = SimpleTheme.makeTheme(true, TextColor.ANSI.BLACK,
-            TextColor.ANSI.WHITE, TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT,
-            TextColor.ANSI.WHITE, TextColor.ANSI.BLACK_BRIGHT, TextColor.ANSI.WHITE);
+            TextColor.ANSI.WHITE, TextColor.ANSI.WHITE, TextColor.ANSI.BLUE_BRIGHT,
+            TextColor.ANSI.WHITE, TextColor.ANSI.BLUE_BRIGHT, TextColor.ANSI.WHITE);
     private static Usuario currentUser;
 
     public static void run() throws IOException {
         Logger log = new Logger(GuiProgram.class);
         String mensajeMenuInicial = "Selecciona una opción.\n" +
                 "Utiliza <Tab> para moverte entre menús.\n" +
-                "Usa las flechas " + Symbols.ARROW_UP + " y " + Symbols.ARROW_DOWN + "\n" +
+                "Usa las flechas " + Symbols.ARROW_UP + ", " + Symbols.ARROW_DOWN +
+                ", " + Symbols.ARROW_LEFT + " y " + Symbols.ARROW_RIGHT + "\n" +
                 "para moverte dentro de los menús.";
 
         log.sendInfo("Iniciando terminal.");
@@ -150,7 +151,7 @@ public class GuiProgram {
                         listadoAreas.setCanCancel(true);
                         listadoAreas.build().showDialog(gui);
 
-                    }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
+                    }).setTheme(GuiProgram.temaGlobal)
                             .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
                             .addTo(panelMateriasDisp);
 
@@ -204,13 +205,13 @@ public class GuiProgram {
                                     new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
                                     log.sendWarning("Bases de datos restauradas");
                                 }
-                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)))
+                            }).setTheme(GuiProgram.temaGlobal))
                             .addComponent(new Button("Cancelar", () -> {
                                 GuiProgram.dbAlumnos.reloadDB();
                                 GuiProgram.dbMaterias.reloadDB();
                                 menuAlumnoAcc.removeAllComponents();
-                                new Label(mensajeMenuInicial);
-                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)));
+                                new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
+                            }).setTheme(GuiProgram.temaGlobal));
 
 //                    ==========Baja de materias
                 }).addItem("Baja de materias", () -> {
@@ -291,13 +292,13 @@ public class GuiProgram {
                                     new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
                                     log.sendWarning("Bases de datos restauradas");
                                 }
-                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)))
+                            }).setTheme(GuiProgram.temaGlobal))
                             .addComponent(new Button("Cancelar", () -> {
                                 GuiProgram.dbAlumnos.reloadDB();
                                 GuiProgram.dbMaterias.reloadDB();
                                 menuAlumnoAcc.removeAllComponents();
-                                new Label(mensajeMenuInicial);
-                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)));
+                                new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
+                            }).setTheme(GuiProgram.temaGlobal));
 
                 }).addItem("Información del usuario", () -> {
                     menuAlumnoAcc.removeAllComponents();
@@ -361,7 +362,7 @@ public class GuiProgram {
                         pwdUpdtA.setText("");
                         pwdUpdtB.setText("");
                         pwdUpdtC.setText("");
-                    }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAccionesA);
+                    }).setTheme(GuiProgram.temaGlobal).addTo(subMenuAccionesA);
 
 
                 }).addItem("Salir", () -> {
@@ -434,7 +435,7 @@ public class GuiProgram {
                         }
                         listadoAreasA.setCanCancel(true);
                         listadoAreasA.build().showDialog(gui);
-                    }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(creacionMaterias);
+                    }).setTheme(GuiProgram.temaGlobal).addTo(creacionMaterias);
 
                     new Label("Area seleccionada: ")
                             .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
@@ -446,7 +447,7 @@ public class GuiProgram {
                             .addComponent(new Button("Cancelar", () -> {
                                 menuAdminAcc.removeAllComponents();
                                 new Label(mensajeMenuInicial).addTo(menuAdminAcc);
-                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
+                            }).setTheme(GuiProgram.temaGlobal)
                                     .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER)))
 
                             .addComponent(new EmptySpace(new TerminalSize(20, 1)))
@@ -480,7 +481,7 @@ public class GuiProgram {
                                             .addButton(MessageDialogButton.Retry)
                                             .build().showDialog(gui);
                                 }
-                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
+                            }).setTheme(GuiProgram.temaGlobal)
                                     .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER)))
                             .addTo(menuAdminAcc);
 
@@ -560,7 +561,7 @@ public class GuiProgram {
             }
 
 
-        }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
+        }).setTheme(GuiProgram.temaGlobal).addTo(registerPanel);
         registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
         new Button("Cancelar", () -> {
             userNameRegister.setText("");
@@ -568,7 +569,7 @@ public class GuiProgram {
             passRegister.setText("");
             semesterRegister.setText("");
             gui.removeWindow(gui.getActiveWindow());
-        }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
+        }).setTheme(GuiProgram.temaGlobal).addTo(registerPanel);
 
         registerWindow.setComponent(registerPanel);
 
@@ -631,9 +632,9 @@ public class GuiProgram {
                         .addButton(MessageDialogButton.Retry).build().showDialog(gui);
             }
 
-        }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
+        }).setTheme(GuiProgram.temaGlobal).addTo(loginPanel);
         new Button("Registrarse", () -> gui.addWindowAndWait(registerWindow))
-                .setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
+                .setTheme(GuiProgram.temaGlobal).addTo(loginPanel);
         new Button("Salir", () -> {
             log.sendInfo("Finalizando programa.");
             GuiProgram.dbMaterias.saveDB();
@@ -644,7 +645,7 @@ public class GuiProgram {
             log.sendInfo("Administradores actualizados.");
             log.sendInfo("Programa finalizado.");
             System.exit(0);
-        }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
+        }).setTheme(GuiProgram.temaGlobal).addTo(loginPanel);
 
         // Finalmente se agrega el panel en la ventana
         loginWindow.setComponent(loginPanel);
