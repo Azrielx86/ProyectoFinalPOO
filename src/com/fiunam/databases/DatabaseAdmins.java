@@ -29,6 +29,10 @@ public class DatabaseAdmins extends Database{
         this.saveDB();
     }
 
+    public ArrayList<Administrador> getAdmins() {
+        return admins;
+    }
+
     @Override
     protected void initDB() {
         JSONDeserializer<ArrayList<Administrador>> jsonDeserializer = new JSONDeserializer<>();

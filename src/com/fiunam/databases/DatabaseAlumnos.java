@@ -28,6 +28,10 @@ public class DatabaseAlumnos extends Database {
         this.initDB();
     }
 
+    public ArrayList<Alumno> getAlumnos() {
+        return alumnos;
+    }
+
     @Override
     protected void initDB() {
         JSONDeserializer<ArrayList<Alumno>> jsonDeserializer = new JSONDeserializer<>();

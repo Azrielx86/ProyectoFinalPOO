@@ -97,6 +97,7 @@ public class DatabaseMaterias extends Database {
     public void agregarMateria(Materia materia) {
         materia.setIdMateria(String.valueOf(++this.idMaterias));
         this.materias.add(materia);
+        log.sendInfo("Materia " + materia.getNombre() + " (" + materia.getIdMateria() + ") agregada.");
     }
 
     public Materia readMateria(String idMateria) {

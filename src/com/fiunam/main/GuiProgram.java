@@ -388,6 +388,8 @@ public class GuiProgram {
                     log.sendInfo("Cerrando la interfaz de alumno.");
                     menuAlumnoAcc.removeAllComponents();
                     new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
+
+                    // Se establece el usuario en null para otro inicio de sesión
                     GuiProgram.currentUser = null;
                     gui.removeWindow(gui.getActiveWindow());
                 }).setTheme(GuiProgram.temaGlobal).addTo(menuAlumnoPanel);
@@ -437,111 +439,88 @@ public class GuiProgram {
                             .setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
                             .addTo(creacionMaterias);
 
-//                    new EmptySpace(new TerminalSize(0, 0)).addTo(creacionMaterias);
-
+                    // Se agrega la opción para seleccionar el area de las asignadas
                     new Label("Selecciona el área: ").setLayoutData(GuiProgram.layoutGeneral).addTo(creacionMaterias);
-                    // Campo de texto para ver el área seleccionada
-//                    Label areaSeleccionadaLabel = new Label("")
-//                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER));
-
-//                    new Button("Selecciona un área", () -> {
-//                        ActionListDialogBuilder listadoAreasA = new ActionListDialogBuilder();
-//                        listadoAreasA.setTitle("Areas disponibles").setDescription("Selecciona un área para la materia");
-//                        String areaSeleccionada = AdminMateria.getAreas()[0];
-//                        areaSeleccionadaLabel.setText(areaSeleccionada);
-//                        for (String area : AdminMateria.getAreas()) {
-//                            listadoAreasA.addAction(area, () -> areaSeleccionadaLabel.setText(area));
-//                        }
-//                        listadoAreasA.setCanCancel(true);
-//                        listadoAreasA.build().showDialog(gui);
-//                    }).setTheme(GuiProgram.temaGlobal).addTo(creacionMaterias);
-
                     ComboBox<String> selecArea = new ComboBox<>();
-                    for (String area : AdminMateria.getAreas()){
+                    for (String area : AdminMateria.getAreas()) {
                         selecArea.addItem(area);
                     }
                     selecArea.addTo(creacionMaterias);
 
-//                    new Label("Area seleccionada: ")
-//                            .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.END, GridLayout.Alignment.CENTER))
-//                            .addTo(creacionMaterias);
-//
-//                    areaSeleccionadaLabel.addTo(creacionMaterias);
-
+                    // Se crea y agrega el área de botones
                     new Panel(new GridLayout(3))
+                            // Al cancelar la acción se limpia el menú secundario y se agrega el texto principal
                             .addComponent(new Button("Cancelar", () -> {
                                 menuAdminAcc.removeAllComponents();
                                 new Label(mensajeMenuInicial).addTo(menuAdminAcc);
                             }).setTheme(GuiProgram.temaGlobal)
-                                    .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER)))
-
+                                    .setLayoutData(GuiProgram.layoutGeneral))
                             .addComponent(new EmptySpace(new TerminalSize(20, 1)))
 
+                            // Se crea el botón para crear la materia con las acciones necesarias
                             .addComponent(new Button("Crear materia", () -> {
                                 try {
+                                    // Se comprueba que los campos no esten vacíos
                                     if (Objects.equals(nombreMateria.getText(), ""))
                                         throw new Exception("Falta el nombre de la materia");
                                     if (Objects.equals(nombreProfMateria.getText(), ""))
                                         throw new Exception("Falta el nombre del profesor");
                                     if (Objects.equals(grupoMateria.getText(), ""))
                                         throw new Exception("Falta el semestre");
-//                                    if (Objects.equals(areaSeleccionadaLabel.getText(), ""))
-//                                        throw new Exception("Debes seleccionar un área");
 
-//                                    GuiProgram.dbMaterias.agregarMateria(new Materia(nombreMateria.getText(),
-//                                            Integer.parseInt(grupoMateria.getText()), nombreProfMateria.getText(), areaSeleccionadaLabel.getText()));
-
+                                    // Se crea una materia con la información proporcionada y se agrega al listado de materias
                                     GuiProgram.dbMaterias.agregarMateria(new Materia(nombreMateria.getText(),
                                             Integer.parseInt(grupoMateria.getText()), nombreProfMateria.getText(), selecArea.getText()));
-
                                     GuiProgram.dbMaterias.saveDB();
 
+                                    // Se muestra una confirmación y se muestra en pantalla
                                     new MessageDialogBuilder().setTitle("Aviso").setText("La materia se creó exitosamente")
                                             .addButton(MessageDialogButton.OK).build().showDialog(gui);
 
+                                    // Se reinician los campos del texto
                                     nombreMateria.setText("");
                                     nombreProfMateria.setText("");
                                     grupoMateria.setText("");
-//                                    areaSeleccionadaLabel.setText("");
 
                                 } catch (Exception e) {
+                                    // En caso de cualquier error, se muestra en pantalla y no se realizan cambios
                                     new MessageDialogBuilder().setTitle("Advertencia").setText(e.getMessage())
                                             .addButton(MessageDialogButton.Retry)
                                             .build().showDialog(gui);
                                 }
-                            }).setTheme(GuiProgram.temaGlobal)
-                                    .setLayoutData(GridLayout.createLayoutData(GridLayout.Alignment.CENTER, GridLayout.Alignment.CENTER)))
-                            .addTo(menuAdminAcc);
-
+                            }).setTheme(GuiProgram.temaGlobal).setLayoutData(GuiProgram.layoutGeneral)).addTo(menuAdminAcc);
                 })
                 .addItem("Salir", () -> {
+                    // Al salir, se limpia la pantalla y se cierra la ventana.
                     log.sendInfo("Cerrando la interfaz del administrador");
                     menuAdminAcc.removeAllComponents();
-                    new Label("Selecciona una opción.\n" +
-                            "Utiliza <Tab> para moverte entre menús.\n" +
-                            "Usa las flechas " + Symbols.ARROW_UP + " y " + Symbols.ARROW_DOWN + "\n" +
-                            "para moverte dentro de los menús.").addTo(menuAdminAcc);
+                    new Label(mensajeMenuInicial).addTo(menuAdminAcc);
 
+                    // Se establece el usuario en null para otro inicio de sesión
                     GuiProgram.currentUser = null;
                     gui.removeWindow(gui.getActiveWindow());
                 }).setTheme(GuiProgram.temaGlobal).addTo(menuAdminPanel);
 
+        // Se agrega la ventana de alumnos a la GUI principal.
         windowAdmin.setComponent(guiAdminPanel);
 
 //        ===================================REGISTRO DE ALUMNOS==================================
+        // Se crea la ventana para el registro de alumnos con los atributos necesarios
         BasicWindow registerWindow = new BasicWindow();
         registerWindow.setHints(List.of(Window.Hint.CENTERED));
         registerWindow.setFixedSize(new TerminalSize(60, 7));
         registerWindow.setTitle("Registro de Alumnos");
 
+        // Se crea el panel principal
         Panel registerPanel = new Panel(new GridLayout(3));
         registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
         new Label("Ingresa los datos").addTo(registerPanel);
         registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
 
+        // Se crean los campos donde se registrarán los datos
         new Label("Nombre: ").addTo(registerPanel);
-        final TextBox userNameRegister = new TextBox(new TerminalSize(25, 1));
-        userNameRegister.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
+        final TextBox usernameRegister = new TextBox(new TerminalSize(25, 1));
+        usernameRegister.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(registerPanel);
         registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
 
         new Label("Usuario: ").addTo(registerPanel);
@@ -563,42 +542,60 @@ public class GuiProgram {
 
         new Button("Registrarse", () -> {
             try {
-                if (Objects.equals(userNameRegister.getText(), "")) throw new Exception();
-                if (Objects.equals(userRegister.getText(), "")) throw new Exception();
-                if (Objects.equals(passRegister.getText(), "")) throw new Exception();
-                if (Objects.equals(semesterRegister.getText(), "")) throw new Exception();
+                if (Objects.equals(usernameRegister.getText(), "")) throw new Exception("Falta el nombre..");
+                if (Objects.equals(userRegister.getText(), "")) throw new Exception("Falta el nombre de usuario.");
+                if (Objects.equals(passRegister.getText(), "")) throw new Exception("Falta la contraseña");
+                if (Objects.equals(semesterRegister.getText(), "")) throw new Exception("Falta el semestre");
 
-                Alumno alumno = new Alumno(userRegister.getText(), userNameRegister.getText(),
+                Alumno alumno = new Alumno(userRegister.getText(), usernameRegister.getText(),
                         passRegister.getText(), Integer.parseInt(semesterRegister.getText()));
+
+                // Se comprueba que el usuario no exista en las listas de alumnos y administradores
+                for (int i = 0; i < dbAlumnos.getAlumnos().size(); i++) {
+                    if (Objects.equals(dbAlumnos.getAlumnos().get(i).getUsername(), userRegister.getText()))
+                        throw new Exception("El alumno \"" + userRegister.getText() + "\" ya existe.");
+                }
+
+                for (int i = 0; i < GuiProgram.dbadmins.getAdmins().size(); i++) {
+                    if (Objects.equals(dbadmins.getAdmins().get(i).getUsername(), userRegister.getText()))
+                        throw new Exception("Registro no permitido");
+                }
+
+                // Se guardan los cambios
                 GuiProgram.dbAlumnos.agregarAlumno(alumno);
                 GuiProgram.dbAlumnos.saveDB();
 
-                userNameRegister.setText("");
+                // Se reinician los campos
+                usernameRegister.setText("");
                 userRegister.setText("");
                 passRegister.setText("");
                 semesterRegister.setText("");
 
+                // Se muestra el aviso
                 new MessageDialogBuilder().setTitle("Aviso").setText("Registro completo")
                         .addButton(MessageDialogButton.OK).build().showDialog(gui);
 
+                // Se remueve la ventana
                 gui.removeWindow(gui.getActiveWindow());
 
             } catch (Exception e) {
-                new MessageDialogBuilder().setTitle("Advertencia").setText("Debes rellenar todos los campos: ")
+                // En caso de error, se muestra en pantalla
+                new MessageDialogBuilder().setTitle("Advertencia").setText(e.getMessage())
                         .addButton(MessageDialogButton.Retry).build().showDialog(gui);
             }
 
-
         }).setTheme(GuiProgram.temaGlobal).addTo(registerPanel);
         registerPanel.addComponent(new EmptySpace(new TerminalSize(10, 0)));
+        // Al cancelar, se remueve la pantalla y se reestablecen los campos
         new Button("Cancelar", () -> {
-            userNameRegister.setText("");
+            usernameRegister.setText("");
             userRegister.setText("");
             passRegister.setText("");
             semesterRegister.setText("");
             gui.removeWindow(gui.getActiveWindow());
         }).setTheme(GuiProgram.temaGlobal).addTo(registerPanel);
 
+        // Se agrega el panel a la ventana de registro
         registerWindow.setComponent(registerPanel);
 
 //        =======================================LOGIN PRINCIPAL======================================
