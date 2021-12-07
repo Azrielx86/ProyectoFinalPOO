@@ -92,6 +92,7 @@ public class GuiProgram {
                     ArrayList<Materia> listadoMaterias = GuiProgram.dbMaterias.getCopiaMaterias();
                     // Filtrado de las materias ya inscritas
                     listadoMaterias.removeIf(materia -> alumnoActual.getMaterias().contains(materia.getIdMateria()));
+                    listadoMaterias.removeIf(materia -> materia.cupoDisponible() == 0);
 
                     menuAlumnoAcc.removeAllComponents();
                     menuAlumnoAcc.addComponent(new Label("Inscripción de materias"));
@@ -123,6 +124,7 @@ public class GuiProgram {
                                 ArrayList<Materia> materiasFiltradas = dbMaterias.getCopiaMaterias(area);
 
                                 materiasFiltradas.removeIf(materia -> alumnoActual.getMaterias().contains(materia.getIdMateria()));
+                                materiasFiltradas.removeIf(materia -> materia.cupoDisponible() == 0);
 
                                 for (Materia materiaFiltrada : materiasFiltradas) {
                                     tablaMaterias.getTableModel().addRow(
@@ -156,10 +158,8 @@ public class GuiProgram {
 
                     tablaMaterias.setSelectAction(() -> {
                         try {
-                            List<String> idMateria = tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow());
                             tablaMateriasIns.getTableModel().addRow(tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow()));
                             tablaMaterias.getTableModel().removeRow(tablaMaterias.getSelectedRow());
-//                            AdminMateria.altaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos, idMateria.get(3), alumnoActual.getNumCuenta());
 
                         } catch (Exception e) {
                             new MessageDialogBuilder().setTitle("Advertencia").setText("Ya no hay materias disponibles")
@@ -185,7 +185,7 @@ public class GuiProgram {
                     new Panel(new GridLayout(2)).addTo(menuAlumnoAcc)
                             .addComponent(new Button("Inscribir materias", () -> {
 
-                                if (tablaMateriasIns.getTableModel().getRowCount() == 0){
+                                if (tablaMateriasIns.getTableModel().getRowCount() == 0) {
                                     new MessageDialogBuilder().setTitle("Aviso").setText("No hay materias por inscribir")
                                             .addButton(MessageDialogButton.OK).build().showDialog(gui);
                                 } else {
@@ -238,10 +238,8 @@ public class GuiProgram {
 
                     tablaMateriasInscritas.setSelectAction(() -> {
                         try {
-                            List<String> idMateria = tablaMateriasInscritas.getTableModel().getRow(tablaMateriasInscritas.getSelectedRow());
                             tablaMateriasBaja.getTableModel().addRow(tablaMateriasInscritas.getTableModel().getRow(tablaMateriasInscritas.getSelectedRow()));
                             tablaMateriasInscritas.getTableModel().removeRow(tablaMateriasInscritas.getSelectedRow());
-//                            AdminMateria.bajaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos, idMateria.get(3), alumnoActual.getNumCuenta());
 
                         } catch (Exception e) {
                             new MessageDialogBuilder().setTitle("Advertencia").setText("Ya no hay materias disponibles")
@@ -274,7 +272,7 @@ public class GuiProgram {
 
                     new Panel(new GridLayout(2)).addTo(menuAlumnoAcc)
                             .addComponent(new Button("Dar de baja", () -> {
-                                if (tablaMateriasBaja.getTableModel().getRowCount() == 0){
+                                if (tablaMateriasBaja.getTableModel().getRowCount() == 0) {
                                     new MessageDialogBuilder().setTitle("Aviso").setText("No hay materias seleccionadas")
                                             .addButton(MessageDialogButton.OK).build().showDialog(gui);
                                 } else {

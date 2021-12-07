@@ -26,7 +26,6 @@ public class Materia {
         this.grupo = grupo;
         this.profesor = profesor;
         this.area = area;
-//        this.idMateria = String.format("%04d", Integer.parseInt(idMateria));
     }
 
     public String getNombre() {
