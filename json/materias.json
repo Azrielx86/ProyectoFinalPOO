@@ -93,7 +93,8 @@
     },
     {
         "alumnos": [
-            "89770684"
+            "89770684",
+            "19628211"
         ],
         "area": "Ciencias Básicas",
         "class": "com.fiunam.materias.Materia",
