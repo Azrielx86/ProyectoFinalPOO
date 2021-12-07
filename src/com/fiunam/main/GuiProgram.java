@@ -1,6 +1,5 @@
 package com.fiunam.main;
 
-import com.fiunam.databases.Database;
 import com.fiunam.logger.Logger;
 import com.fiunam.databases.DatabaseAdmins;
 import com.fiunam.databases.DatabaseAlumnos;
@@ -160,7 +159,7 @@ public class GuiProgram {
                             List<String> idMateria = tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow());
                             tablaMateriasIns.getTableModel().addRow(tablaMaterias.getTableModel().getRow(tablaMaterias.getSelectedRow()));
                             tablaMaterias.getTableModel().removeRow(tablaMaterias.getSelectedRow());
-                            AdminMateria.altaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos, idMateria.get(3), alumnoActual.getNumCuenta());
+//                            AdminMateria.altaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos, idMateria.get(3), alumnoActual.getNumCuenta());
 
                         } catch (Exception e) {
                             new MessageDialogBuilder().setTitle("Advertencia").setText("Ya no hay materias disponibles")
@@ -185,16 +184,26 @@ public class GuiProgram {
 
                     new Panel(new GridLayout(2)).addTo(menuAlumnoAcc)
                             .addComponent(new Button("Inscribir materias", () -> {
-//                                TODO : Botones de confirmacion y conmprobar que se hayan agregado, creación de comprobante.
-                                GuiProgram.dbAlumnos.saveDB();
-                                GuiProgram.dbMaterias.saveDB();
 
-                                new MessageDialogBuilder().setTitle("Aviso").setText("Materias inscritas con éxito")
-                                        .addButton(MessageDialogButton.OK).build().showDialog(gui);
+                                if (tablaMateriasIns.getTableModel().getRowCount() == 0){
+                                    new MessageDialogBuilder().setTitle("Aviso").setText("No hay materias por inscribir")
+                                            .addButton(MessageDialogButton.OK).build().showDialog(gui);
+                                } else {
+                                    for (int i = 0; i < tablaMateriasIns.getTableModel().getRowCount(); i++) {
+                                        AdminMateria.altaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos,
+                                                tablaMateriasIns.getTableModel().getRow(i).get(3), alumnoActual.getNumCuenta());
+                                    }
 
-                                menuAlumnoAcc.removeAllComponents();
-                                new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
-                                log.sendWarning("Bases de datos restauradas");
+                                    GuiProgram.dbAlumnos.saveDB();
+                                    GuiProgram.dbMaterias.saveDB();
+
+                                    new MessageDialogBuilder().setTitle("Aviso").setText("Materias inscritas con éxito")
+                                            .addButton(MessageDialogButton.OK).build().showDialog(gui);
+
+                                    menuAlumnoAcc.removeAllComponents();
+                                    new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
+                                    log.sendWarning("Bases de datos restauradas");
+                                }
                             }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)))
                             .addComponent(new Button("Cancelar", () -> {
                                 GuiProgram.dbAlumnos.reloadDB();
@@ -205,8 +214,92 @@ public class GuiProgram {
 
 //                    ==========Baja de materias
                 }).addItem("Baja de materias", () -> {
+                    Alumno alumnoActual = (Alumno) GuiProgram.currentUser.getCurrentUser();
+
                     menuAlumnoAcc.removeAllComponents();
                     menuAlumnoAcc.addComponent(new Label("Baja de materias"));
+
+
+                    Table<String> tablaMateriasInscritas = new Table<>("Nombre", "Profesor", "Cupo", "Clave");
+                    Table<String> tablaMateriasBaja = new Table<>("Nombre", "Profesor", "Cupo", "Clave");
+
+                    tablaMateriasInscritas.setPreferredSize(new TerminalSize(50, 8));
+                    tablaMateriasBaja.setPreferredSize(new TerminalSize(50, 4));
+
+                    ArrayList<Materia> listadoMaterias = GuiProgram.dbMaterias.getCopiaMaterias();
+                    // Filtrado de las materias no inscritas
+                    listadoMaterias.removeIf(materia -> !(alumnoActual.getMaterias().contains(materia.getIdMateria())));
+
+                    for (Materia materia : listadoMaterias) {
+                        tablaMateriasInscritas.getTableModel().addRow(materia.getNombre(),
+                                materia.getProfesor(), String.valueOf(materia.cupoDisponible())
+                                , materia.getIdMateria());
+                    }
+
+                    tablaMateriasInscritas.setSelectAction(() -> {
+                        try {
+                            List<String> idMateria = tablaMateriasInscritas.getTableModel().getRow(tablaMateriasInscritas.getSelectedRow());
+                            tablaMateriasBaja.getTableModel().addRow(tablaMateriasInscritas.getTableModel().getRow(tablaMateriasInscritas.getSelectedRow()));
+                            tablaMateriasInscritas.getTableModel().removeRow(tablaMateriasInscritas.getSelectedRow());
+//                            AdminMateria.bajaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos, idMateria.get(3), alumnoActual.getNumCuenta());
+
+                        } catch (Exception e) {
+                            new MessageDialogBuilder().setTitle("Advertencia").setText("Ya no hay materias disponibles")
+                                    .addButton(MessageDialogButton.OK).build().showDialog(gui);
+                        }
+                    });
+
+                    tablaMateriasBaja.setSelectAction(() -> {
+                        try {
+                            tablaMateriasInscritas.getTableModel().addRow(tablaMateriasBaja.getTableModel().getRow(tablaMateriasBaja.getSelectedRow()));
+                            tablaMateriasBaja.getTableModel().removeRow(tablaMateriasBaja.getSelectedRow());
+                        } catch (Exception e) {
+                            new MessageDialogBuilder().setTitle("Advertencia").setText("Ya no hay materias disponibles")
+                                    .addButton(MessageDialogButton.OK).build().showDialog(gui);
+                        }
+                    });
+
+
+                    Panel materiasInscritas = new Panel();
+                    Panel bajaMaterias = new Panel();
+
+                    tablaMateriasInscritas.setTheme(GuiProgram.temaGlobal);
+                    bajaMaterias.setTheme(GuiProgram.temaGlobal);
+
+                    materiasInscritas.addComponent(tablaMateriasInscritas);
+                    bajaMaterias.addComponent(tablaMateriasBaja);
+
+                    menuAlumnoAcc.addComponent(materiasInscritas.withBorder(Borders.singleLine("Materias inscritas")));
+                    menuAlumnoAcc.addComponent(bajaMaterias.withBorder(Borders.singleLine("Materias por dar de baja")));
+
+                    new Panel(new GridLayout(2)).addTo(menuAlumnoAcc)
+                            .addComponent(new Button("Dar de baja", () -> {
+                                if (tablaMateriasBaja.getTableModel().getRowCount() == 0){
+                                    new MessageDialogBuilder().setTitle("Aviso").setText("No hay materias seleccionadas")
+                                            .addButton(MessageDialogButton.OK).build().showDialog(gui);
+                                } else {
+                                    for (int i = 0; i < tablaMateriasBaja.getTableModel().getRowCount(); i++) {
+                                        AdminMateria.bajaMateria(GuiProgram.dbMaterias, GuiProgram.dbAlumnos,
+                                                tablaMateriasBaja.getTableModel().getRow(i).get(3), alumnoActual.getNumCuenta());
+                                    }
+
+                                    GuiProgram.dbAlumnos.saveDB();
+                                    GuiProgram.dbMaterias.saveDB();
+
+                                    new MessageDialogBuilder().setTitle("Aviso").setText("Materias dadas de baja con éxito")
+                                            .addButton(MessageDialogButton.OK).build().showDialog(gui);
+
+                                    menuAlumnoAcc.removeAllComponents();
+                                    new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
+                                    log.sendWarning("Bases de datos restauradas");
+                                }
+                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)))
+                            .addComponent(new Button("Cancelar", () -> {
+                                GuiProgram.dbAlumnos.reloadDB();
+                                GuiProgram.dbMaterias.reloadDB();
+                                menuAlumnoAcc.removeAllComponents();
+                                new Label(mensajeMenuInicial);
+                            }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)));
 
                 }).addItem("Información del usuario", () -> {
                     menuAlumnoAcc.removeAllComponents();
@@ -276,10 +369,7 @@ public class GuiProgram {
                 }).addItem("Salir", () -> {
                     log.sendInfo("Cerrando la interfaz de alumno.");
                     menuAlumnoAcc.removeAllComponents();
-                    new Label("Selecciona una opción.\n" +
-                            "Utiliza <Tab> para moverte entre menús.\n" +
-                            "Usa las flechas " + Symbols.ARROW_UP + " y " + Symbols.ARROW_DOWN + "\n" +
-                            "para moverte dentro de los menús.").addTo(menuAlumnoAcc);
+                    new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
                     GuiProgram.currentUser = null;
                     gui.removeWindow(gui.getActiveWindow());
                 }).setTheme(GuiProgram.temaGlobal).addTo(menuAlumnoPanel);
@@ -451,7 +541,7 @@ public class GuiProgram {
                 if (Objects.equals(passRegister.getText(), "")) throw new Exception();
                 if (Objects.equals(semesterRegister.getText(), "")) throw new Exception();
 
-                Alumno alumno = new Alumno(userNameRegister.getText(), userRegister.getText(),
+                Alumno alumno = new Alumno(userRegister.getText(), userNameRegister.getText(),
                         passRegister.getText(), Integer.parseInt(semesterRegister.getText()));
                 GuiProgram.dbAlumnos.agregarAlumno(alumno);
                 GuiProgram.dbAlumnos.saveDB();
@@ -554,6 +644,7 @@ public class GuiProgram {
             log.sendInfo("Alumnos actualizados.");
             GuiProgram.dbadmins.saveDB();
             log.sendInfo("Administradores actualizados.");
+            log.sendInfo("Programa finalizado.");
             System.exit(0);
         }).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(loginPanel);
 
@@ -563,7 +654,6 @@ public class GuiProgram {
 
 //        GUI PRINCIPAL
         gui.addWindowAndWait(loginWindow);
-//        gui.setActiveWindow(loginWindow);
 
     }
 }
