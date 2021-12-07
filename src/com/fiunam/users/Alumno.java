@@ -16,12 +16,11 @@ public class Alumno extends Usuario {
         this.materias = new ArrayList<>();
     }
 
-    public Alumno(String username, String nombre, String password, int semestre, String numCuenta) {
+    public Alumno(String username, String nombre, String password, int semestre) {
         super(username, password);
         this.nombre = nombre;
         this.materias = new ArrayList<>();
         this.semestre = semestre;
-        this.numCuenta = numCuenta;
     }
 
     public Alumno(String username, String password, String nombre, int semestre, String numCuenta, ArrayList<String> materias) {
@@ -72,7 +71,7 @@ public class Alumno extends Usuario {
             listaMaterias.append(this.materias.get(i)).append("\n");
         }
 
-        return "ALUMNO: " + this.nombre + "\n" +
+        return "ALUMNO: " + this.nombre + " | Password: " + "*".repeat(super.getPassword().length()) + "\n" +
                 "Número de cuenta: " + this.numCuenta + "\n" +
                 "Semestre: " + this.semestre + "\nLista de Materias:" + "\n" +
                 listaMaterias;

@@ -12,17 +12,20 @@ public class Materia {
     private String profesor;
     private String idMateria;
     private ArrayList<String> alumnos;
+    // TODO: Maximo de alumnos
+    private static final int MAX_ALUMNOS = 20;
+    private String area;
 
     public Materia() {
         this.alumnos = new ArrayList<>();
     }
 
-    public Materia(String nombre, int grupo, String profesor, String idMateria) {
+    public Materia(String nombre, int grupo, String profesor, String area) {
         this.alumnos = new ArrayList<>();
         this.nombre = nombre;
         this.grupo = grupo;
         this.profesor = profesor;
-        this.idMateria = String.format("%04d", Integer.parseInt(idMateria));
+        this.area = area;
     }
 
     public String getNombre() {
@@ -63,6 +66,18 @@ public class Materia {
 
     public void setIdMateria(String idMateria) {
         this.idMateria = String.format("%04d", Integer.parseInt(idMateria));
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public int cupoDisponible() {
+        return Materia.MAX_ALUMNOS - this.alumnos.size();
     }
 
     @Override

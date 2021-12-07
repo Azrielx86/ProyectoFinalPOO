@@ -8,7 +8,8 @@ import java.nio.file.Path;
  * Métodos base para las bases de datos de Alumnos y Materias
  */
 public abstract class Database {
-    protected final String pathFiles = Path.of(".", "json").toString();
+    protected static final String staticPathFiles = Path.of(".", "json").toString();
+    protected final String pathFiles = Database.staticPathFiles;
 
     /**
      * Inicializa la base de datos, en cada subclase se especifica
@@ -28,6 +29,7 @@ public abstract class Database {
      */
     public abstract void saveDB();
 
+
     /**
      * Retorna una impresión más detallada de cada elemento
      * con un formato más legible
@@ -36,12 +38,19 @@ public abstract class Database {
     public abstract String printDB();
 
     /**
+     * Restaura la base de datos.
+     */
+    public void reloadDB(){
+        this.initDB();
+    }
+
+    /**
      * Crea la carpeta donde se guardarán los archivos json
      * @throws FileNotFoundException En caso de que no se pueda crear, lanza
      * una excepción.
      */
-    public void createDir() throws FileNotFoundException {
-        final var mkdir = new File(this.pathFiles).mkdir();
+    public static void createDir() throws FileNotFoundException {
+        final var mkdir = new File(Database.staticPathFiles).mkdir();
         if (!mkdir){
             throw new FileNotFoundException();
         }

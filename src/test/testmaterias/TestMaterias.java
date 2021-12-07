@@ -6,7 +6,7 @@ import com.fiunam.users.Alumno;
 
 public class TestMaterias {
     public static void main(String[] args) {
-        Alumno alumno = new Alumno("edgarchalico", "Edgar Chalico", "testXD",3, "318192932");
+        Alumno alumno = new Alumno("edgarchalico", "Edgar Chalico", "testXD",3);
         Materia poo = new Materia("Programación Orientada a Objetos", 1,"Guadalupe", "001");
         Materia edaii = new Materia("Estructuras de Datos y Algoritmos II", 4, "José", "001");
 
@@ -23,8 +23,8 @@ public class TestMaterias {
 
         System.out.println("============== Test Remover materias ================");
 
-        AdminMateria.bajaMateria(poo, alumno);
-        AdminMateria.bajaMateria(edaii, alumno);
+//        AdminMateria.bajaMateria(poo, alumno);
+//        AdminMateria.bajaMateria(edaii, alumno);
 
         System.out.println(alumno);
         System.out.println("POO ");

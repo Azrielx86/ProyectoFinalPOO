@@ -1,6 +1,6 @@
 package com.fiunam.databases;
 
-import com.fiunam.Logger;
+import com.fiunam.logger.Logger;
 import com.fiunam.materias.Materia;
 import flexjson.JSONDeserializer;
 import flexjson.JSONException;
@@ -9,6 +9,7 @@ import flexjson.JSONSerializer;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class DatabaseMaterias extends Database {
@@ -22,37 +23,48 @@ public class DatabaseMaterias extends Database {
         this.initDB();
     }
 
+    public ArrayList<Materia> getCopiaMaterias() {
+        return new ArrayList<>(this.materias);
+    }
+
+    public ArrayList<Materia> getCopiaMaterias(String key){
+        ArrayList<Materia> materiasFiltradas = new ArrayList<>();
+        for (Materia materia: this.materias){
+            if (Objects.equals(materia.getArea(), key)){
+                materiasFiltradas.add(materia);
+            }
+        }
+        return materiasFiltradas;
+    }
+
     @Override
     protected void initDB() {
         JSONDeserializer<ArrayList<Materia>> jsonDeserializer = new JSONDeserializer<>();
 
         try (FileReader file = new FileReader(this.pathMateriasDB)) {
             this.materias = jsonDeserializer.deserialize(file);
-            this.idMaterias = Integer.parseInt(materias.get(materias.size()-1).getIdMateria());
-        } catch(FileNotFoundException fnf){
-            try {
-                super.createDir();
+            try{
+                this.idMaterias = Integer.parseInt(materias.get(materias.size()-1).getIdMateria());
             } catch (Exception e){
-                log.sendError(e.getMessage());
+                this.idMaterias = 0;
+                log.sendWarning("(%s) Listado de materias vacio, empezando en ID 0000.".formatted(e));
             }
-        } catch (JSONException io) {
-            log.sendWarning("La base de datos \"MATERIAS\" no existe, creando una nueva.");
+        } catch (FileNotFoundException fe) {
+            log.sendWarning("La base de datos \"MATERIAS\" no existe, esperando datos para crear una nueva.");
+            this.createDB();
         } catch (Exception e) {
-            log.sendError(e.getMessage());
+            log.sendError(Arrays.toString(e.getStackTrace()));
         }
     }
 
     @Override
     protected void createDB() {
         try {
+            Database.createDir();
             File file = new File(this.pathMateriasDB);
-            final var newFile = file.createNewFile();
-
-            if (!newFile) {
-                throw new Exception("El archivo no se pudo crear");
-            }
+            if (!file.createNewFile()) throw new Exception("Error al crear el archivo " + this.pathMateriasDB);
         } catch (Exception e) {
-            log.sendError(e.getMessage());
+            log.sendError(Arrays.toString(e.getStackTrace()));
         }
     }
 
@@ -64,7 +76,7 @@ public class DatabaseMaterias extends Database {
             file.write(serializer.prettyPrint(true).include("alumnos").serialize(this.materias));
 
         } catch (Exception e) {
-            log.sendError(e.getMessage());
+            log.sendError(Arrays.toString(e.getStackTrace()));
         }
     }
 
@@ -85,6 +97,7 @@ public class DatabaseMaterias extends Database {
     public void agregarMateria(Materia materia) {
         materia.setIdMateria(String.valueOf(++this.idMaterias));
         this.materias.add(materia);
+        log.sendInfo("Materia " + materia.getNombre() + " (" + materia.getIdMateria() + ") agregada.");
     }
 
     public Materia readMateria(String idMateria) {

@@ -2,13 +2,13 @@
     {
         "class": "com.fiunam.users.Alumno",
         "materias": [
-            "0002",
+            "0003",
             "0005",
-            "0003"
+            "0011"
         ],
-        "nombre": "Edgars",
-        "numCuenta": "318196960",
-        "password": "passwdedgars",
+        "nombre": "Edgars Feic",
+        "numCuenta": "19628211",
+        "password": "admin",
         "semestre": 3,
         "username": "edgarsfeic"
     },
@@ -18,7 +18,7 @@
 
         ],
         "nombre": "Ricardo",
-        "numCuenta": "356546",
+        "numCuenta": "51081332",
         "password": null,
         "semestre": 0,
         "username": null
@@ -26,11 +26,10 @@
     {
         "class": "com.fiunam.users.Alumno",
         "materias": [
-            "0002",
-            "0003"
+
         ],
         "nombre": "Otro más",
-        "numCuenta": "3647645",
+        "numCuenta": "15868692",
         "password": null,
         "semestre": 0,
         "username": null
@@ -41,7 +40,7 @@
 
         ],
         "nombre": "pedroperez",
-        "numCuenta": "32432523",
+        "numCuenta": "12429011",
         "password": "pedroXDp",
         "semestre": 5,
         "username": "Pedro Perez"
@@ -52,9 +51,75 @@
 
         ],
         "nombre": "eduram",
-        "numCuenta": "4354365",
+        "numCuenta": "43082521",
         "password": "ed1234r",
         "semestre": 4,
         "username": "Eduardo Ramirez"
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+
+        ],
+        "nombre": "alexlopez",
+        "numCuenta": "92260052",
+        "password": "3greg456re",
+        "semestre": 1,
+        "username": "Alex Lopez"
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+
+        ],
+        "nombre": "srcalceto",
+        "numCuenta": "89963032",
+        "password": "efwet3w3",
+        "semestre": 1,
+        "username": "Señor Calceto :v"
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+            "0003",
+            "0005",
+            "0006",
+            "0008",
+            "0009",
+            "0010",
+            "0011",
+            "0012",
+            "0013",
+            "0002",
+            "0001"
+        ],
+        "nombre": "b",
+        "numCuenta": "89770684",
+        "password": "b",
+        "semestre": 1,
+        "username": "b"
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+
+        ],
+        "nombre": "holaxd",
+        "numCuenta": "61649878",
+        "password": "hola",
+        "semestre": 1,
+        "username": "Hola XD"
+    },
+    {
+        "class": "com.fiunam.users.Alumno",
+        "materias": [
+            "0003",
+            "0001"
+        ],
+        "nombre": "a",
+        "numCuenta": "1587710",
+        "password": "a",
+        "semestre": 2,
+        "username": "a"
     }
 ]

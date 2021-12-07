@@ -1,4 +1,4 @@
-package com.fiunam;
+package com.fiunam.logger;
 
 import java.io.File;
 import java.io.FileWriter;

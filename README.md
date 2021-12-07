@@ -21,7 +21,7 @@ usar las incluidas en lib.
 * lanterna (com.googlecode.lanterna)
 * flexjson (net.sf.flexjson)
 
-## Compilación (En proceso)
+## Compilación
 Para la compilación, se recomienda usar los scripts
 para Linux y Windows incluidos, o los siguientes comandos desde la raíz del proyecto.
 
@@ -33,9 +33,11 @@ Comandos para Linux
 
 Comandos para Windows (sujeto a cambios... te odio, Windows)
 
-    javac -classpath ".;lib/lanterna-3.1.1.jar;lib/flexjson-3.3.jar;" src/com/fiunam/main/*.java src/com/fiunam/materias/*.java src/com/fiunam/users/*.java src/com/fiunam/databases/*.java -d out
+    javac -encoding utf8 -classpath ".;lib/lanterna-3.1.1.jar;lib/flexjson-3.3.jar;" src/com/fiunam/main/*.java src/com/fiunam/materias/*.java src/com/fiunam/users/*.java src/com/fiunam/databases/*.java src/com/fiunam/logger/*.java -d out
     cd out
-    javaw -classpath "../lib/lanterna-3.1.1.jar;lib/flexjson-3.3.jar;" com.fiunam.main.Main
+    javaw -classpath "../lib/lanterna-3.1.1.jar;../lib/flexjson-3.3.jar;" com.fiunam.main.Main
+
+Se requiere copiar la carpeta ./json a la carpeta ./out generada en la compilación para usar las materias y usuarios de prueba.
 
 ## Ejecución desde scripts
 Para únicamente compilar, usar el script de compilación.
@@ -60,3 +62,24 @@ Para crear el .jar directamente.
 Para Linux probablemente sea necesario dar permisos de ejecución con el siguiente comando.
 
     chmod +x <script>
+
+# Pendientes
+
+## Generales
+
+- Crear la guia de usuario en GitHub
+- Documentar todas las clases y crear el JavaDoc
+- Completar el login (métodos de inicio de sesión)
+- Crear las materias y cuentas de ejemplo
+- Pruebas en Windows
+
+## Alumnos
+
+- Baja de materias
+- Eliminación de perfil (baja).
+
+## Administrador
+
+- Cargar logger en el programa (propuesta)
+- Creación de nuevos perfiles
+- Eliminación de materias
