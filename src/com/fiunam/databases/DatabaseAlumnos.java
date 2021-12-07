@@ -85,8 +85,6 @@ public class DatabaseAlumnos extends Database {
         log.sendInfo("Alumno registrado: " + alumno);
     }
 
-//    TODO : Comprobar .gets, debido al null puede causar errores.
-
     /**
      * Obtiene el objeto del Alumno por su número de cuenta
      *
@@ -146,5 +144,4 @@ public class DatabaseAlumnos extends Database {
             }
         }
     }
-
 }

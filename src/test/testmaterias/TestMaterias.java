@@ -23,8 +23,8 @@ public class TestMaterias {
 
         System.out.println("============== Test Remover materias ================");
 
-        AdminMateria.bajaMateria(poo, alumno);
-        AdminMateria.bajaMateria(edaii, alumno);
+//        AdminMateria.bajaMateria(poo, alumno);
+//        AdminMateria.bajaMateria(edaii, alumno);
 
         System.out.println(alumno);
         System.out.println("POO ");

@@ -1,4 +1,4 @@
-package test.testsaltas;
+package test.testsinscripciones;
 
 import com.fiunam.databases.DatabaseAlumnos;
 import com.fiunam.databases.DatabaseMaterias;
@@ -7,7 +7,31 @@ import com.fiunam.materias.Materia;
 import com.fiunam.users.Alumno;
 
 public class TestAltas {
+    private final static DatabaseAlumnos dbAlumnos = new DatabaseAlumnos();
+    private final static DatabaseMaterias dbMaterias = new DatabaseMaterias();
+
+
     public static void main(String[] args) {
+        test2();
+    }
+
+    private static void test2(){
+        Alumno alumno = dbAlumnos.readAlumno("89770684");
+        Materia materia = dbMaterias.readMateria("0011");
+
+        System.out.println(alumno + "\n");
+        System.out.println(materia + "\n");
+
+        AdminMateria.altaMateria(dbMaterias, dbAlumnos, materia.getIdMateria(), alumno.getNumCuenta());
+        dbMaterias.saveDB();
+        dbAlumnos.saveDB();
+
+        System.out.println(alumno + "\n");
+        System.out.println(materia + "\n");
+
+    }
+
+    private static void test1(){
         DatabaseMaterias dbMaterias = new DatabaseMaterias();
         DatabaseAlumnos dbAlumnos = new DatabaseAlumnos();
 
@@ -38,6 +62,5 @@ public class TestAltas {
 
         System.out.println(dbMaterias);
         System.out.println(dbAlumnos);
-
     }
 }
