@@ -10,7 +10,9 @@ public class Main {
         try {
             GuiProgram.run();
         }catch(Exception e){
-            log.sendError(Arrays.toString(e.getStackTrace()));
+            log.sendError(Arrays.toString(e.getStackTrace()) + " | " + e.getMessage());
+        } finally {
+            log.sendInfo("Programa finalizado.");
         }
 
     }

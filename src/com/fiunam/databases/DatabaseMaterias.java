@@ -1,7 +1,9 @@
 package com.fiunam.databases;
 
 import com.fiunam.logger.Logger;
+import com.fiunam.materias.AdminMateria;
 import com.fiunam.materias.Materia;
+import com.fiunam.users.Alumno;
 import flexjson.JSONDeserializer;
 import flexjson.JSONException;
 import flexjson.JSONSerializer;
@@ -109,14 +111,23 @@ public class DatabaseMaterias extends Database {
         return new Materia();
     }
 
-    public void eliminarMateria(String idMateria) {
+    public void eliminarMateria(DatabaseAlumnos dbAlumnos, String idMateria) {
         for (int i = 0; i < this.materias.size(); i++) {
             if (Objects.equals(this.materias.get(i).getIdMateria(), idMateria)) {
+                Materia materia = this.materias.get(i);
+
+
+//                for (int j = 0; j <= materia.getAlumnos().size(); j++) {
+                while (materia.getAlumnos().size() > 0) {
+                    AdminMateria.bajaMateria(this, dbAlumnos, materia.getIdMateria(), materia.getAlumnos().get(0));
+                }
+
                 this.materias.remove(i);
-                break;
+                log.sendInfo("Materia " + materia.getNombre() + " (" + materia.getIdMateria() + ") eliminada.");
+                return;
             }
         }
-        System.out.println("La materia con id \"" +
+        log.sendWarning("La materia con id \"" +
                 idMateria + "\" no existe.");
     }
 
