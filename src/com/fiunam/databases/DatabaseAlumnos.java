@@ -33,6 +33,10 @@ public class DatabaseAlumnos extends Database {
         return alumnos;
     }
 
+    public ArrayList<Alumno> getCopiaAlumnos() {
+        return new ArrayList<>(this.alumnos);
+    }
+
     @Override
     protected void initDB() {
         JSONDeserializer<ArrayList<Alumno>> jsonDeserializer = new JSONDeserializer<>();

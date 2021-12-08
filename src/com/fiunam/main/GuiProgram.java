@@ -93,8 +93,8 @@ public class GuiProgram {
                     // Tablas para mostrar las materias
                     Table<String> tablaMaterias = new Table<>("Nombre", "Profesor", "Cupo", "Clave");
                     Table<String> tablaMateriasIns = new Table<>("Nombre", "Profesor", "Cupo", "Clave");
-                    tablaMaterias.setPreferredSize(new TerminalSize(50, 8));
-                    tablaMateriasIns.setPreferredSize(new TerminalSize(50, 4));
+                    tablaMaterias.setPreferredSize(new TerminalSize(60, 8));
+                    tablaMateriasIns.setPreferredSize(new TerminalSize(60, 4));
 
                     // Se obtiene una copia de las materias (debido a la forma de utilizar las tablas, no se
                     // debe modificar el array principal.
@@ -219,6 +219,14 @@ public class GuiProgram {
                                     new MessageDialogBuilder().setTitle("Aviso").setText("Materias inscritas con éxito")
                                             .addButton(MessageDialogButton.OK).build().showDialog(gui);
 
+                                    while (tablaMaterias.getTableModel().getRowCount() != 0){
+                                        tablaMaterias.getTableModel().removeRow(0);
+                                    }
+
+                                    while (tablaMateriasIns.getTableModel().getRowCount() != 0){
+                                        tablaMateriasIns.getTableModel().removeRow(0);
+                                    }
+
                                     // Limpia el menú y muestra el mensaje principal
                                     menuAlumnoAcc.removeAllComponents();
                                     new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
@@ -243,8 +251,8 @@ public class GuiProgram {
                     // Crea las tablas para ver las materias inscritas y las materias por dar de baja
                     Table<String> tablaMateriasInscritas = new Table<>("Nombre", "Profesor", "Cupo", "Clave");
                     Table<String> tablaMateriasBaja = new Table<>("Nombre", "Profesor", "Cupo", "Clave");
-                    tablaMateriasInscritas.setPreferredSize(new TerminalSize(50, 8));
-                    tablaMateriasBaja.setPreferredSize(new TerminalSize(50, 4));
+                    tablaMateriasInscritas.setPreferredSize(new TerminalSize(60, 8));
+                    tablaMateriasBaja.setPreferredSize(new TerminalSize(60, 4));
 
                     // Crea el arreglo con la copia de lista de las materias
                     ArrayList<Materia> listadoMaterias = GuiProgram.dbMaterias.getCopiaMaterias();
@@ -311,6 +319,14 @@ public class GuiProgram {
                                     GuiProgram.dbMaterias.saveDB();
                                     new MessageDialogBuilder().setTitle("Aviso").setText("Materias dadas de baja con éxito")
                                             .addButton(MessageDialogButton.OK).build().showDialog(gui);
+
+                                    while (tablaMateriasInscritas.getTableModel().getRowCount() != 0){
+                                        tablaMateriasInscritas.getTableModel().removeRow(0);
+                                    }
+
+                                    while (tablaMateriasBaja.getTableModel().getRowCount() != 0){
+                                        tablaMateriasBaja.getTableModel().removeRow(0);
+                                    }
 
                                     // Remueve los componentes y muestra el mensaje inicial
                                     menuAlumnoAcc.removeAllComponents();
@@ -413,7 +429,7 @@ public class GuiProgram {
         guiAdminPanel.addComponent(menuAdminAcc.withBorder(Borders.singleLine("Área de acciones (?)")));
 
         // Crea el menú principal
-        new ActionListBox(new TerminalSize(30, 5))
+        new ActionListBox(new TerminalSize(30, 10))
                 .addItem("Crear nueva materia", () -> {
 
                     // Remueve todos los componentes del menú secundario y agrega el panel de creación de materias
@@ -489,6 +505,44 @@ public class GuiProgram {
                                             .build().showDialog(gui);
                                 }
                             }).setTheme(GuiProgram.temaGlobal).setLayoutData(GuiProgram.layoutGeneral)).addTo(menuAdminAcc);
+                })
+                .addItem("Ver listado de materias", () -> {
+                    menuAdminAcc.removeAllComponents();
+                    Panel verMaterias = new Panel();
+                    menuAdminAcc.addComponent(verMaterias.withBorder(Borders.singleLine("Materias")));
+
+                    Table<String> tablaMaterias = new Table<>("Nombre", "Profesor", "Cupo", "Clave");
+                    tablaMaterias.setPreferredSize(new TerminalSize(60, 8));
+
+                    ArrayList<Materia> materias = GuiProgram.dbMaterias.getCopiaMaterias();
+
+                    for (Materia materia : materias){
+                        tablaMaterias.getTableModel().addRow(materia.getNombre(), materia.getProfesor(),
+                                String.valueOf(materia.cupoDisponible()), materia.getIdMateria());
+                    }
+
+                    tablaMaterias.setTheme(GuiProgram.temaGlobal);
+                    tablaMaterias.addTo(verMaterias);
+
+                })
+                .addItem("Ver alumnos inscritos", () -> {
+                    menuAdminAcc.removeAllComponents();
+                    Panel verAlumnos = new Panel();
+                    menuAdminAcc.addComponent(verAlumnos.withBorder(Borders.singleLine("Alumnos inscritos")));
+
+                    Table<String> tablaAlumnos = new Table<>("Nombre", "Username", "Num. Cuenta", "Semestre", "Materias");
+                    tablaAlumnos.setPreferredSize(new TerminalSize(75, 8));
+
+                    ArrayList<Alumno> alumnos = GuiProgram.dbAlumnos.getCopiaAlumnos();
+
+                    for (Alumno alumno: alumnos){
+                        tablaAlumnos.getTableModel().addRow(alumno.getNombre(), alumno.getUsername(), alumno.getNumCuenta(),
+                                String.valueOf(alumno.getSemestre()), String.valueOf(alumno.getMaterias().size()));
+                    }
+
+                    tablaAlumnos.setTheme(GuiProgram.temaGlobal);
+                    tablaAlumnos.addTo(verAlumnos);
+
                 })
                 .addItem("Eliminar materias", () -> {
                     menuAdminAcc.removeAllComponents();
@@ -593,7 +647,7 @@ public class GuiProgram {
                             if (numCuentaAl.getText() == null) throw new Exception("El campo está vacío");
 //                            Materia materiaEncontrada = GuiProgram.dbMaterias.readMateria(claveMateria.getText());
                             Alumno alumnoEncontrado = GuiProgram.dbAlumnos.readAlumno(numCuentaAl.getText());
-                            if (alumnoEncontrado.getNombre() == null) throw new Exception("La materia no existe");
+                            if (alumnoEncontrado.getNombre() == null) throw new Exception("El alumno no existe.");
 
                             // Se muestran los detalles de la materia
                             resultados.addComponent(subResultados);
@@ -638,6 +692,9 @@ public class GuiProgram {
 
                 })
                 .addItem("Agregar/Eliminar administradores", () -> {
+                    // TODO
+                })
+                .addItem("Información del usuario", () -> {
                     // TODO
                 })
                 .addItem("Salir", () -> {
