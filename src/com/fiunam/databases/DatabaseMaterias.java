@@ -3,12 +3,11 @@ package com.fiunam.databases;
 import com.fiunam.logger.Logger;
 import com.fiunam.materias.AdminMateria;
 import com.fiunam.materias.Materia;
-import com.fiunam.users.Alumno;
 import flexjson.JSONDeserializer;
-import flexjson.JSONException;
 import flexjson.JSONSerializer;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +42,7 @@ public class DatabaseMaterias extends Database {
     protected void initDB() {
         JSONDeserializer<ArrayList<Materia>> jsonDeserializer = new JSONDeserializer<>();
 
-        try (FileReader file = new FileReader(this.pathMateriasDB)) {
+        try (FileReader file = new FileReader(this.pathMateriasDB, StandardCharsets.UTF_8)) {
             this.materias = jsonDeserializer.deserialize(file);
             try{
                 this.idMaterias = Integer.parseInt(materias.get(materias.size()-1).getIdMateria());
@@ -72,7 +71,7 @@ public class DatabaseMaterias extends Database {
 
     @Override
     public void saveDB() {
-        try (FileWriter file = new FileWriter(this.pathMateriasDB)) {
+        try (FileWriter file = new FileWriter(this.pathMateriasDB, StandardCharsets.UTF_8)) {
             JSONSerializer serializer = new JSONSerializer();
 
             file.write(serializer.prettyPrint(true).include("alumnos").serialize(this.materias));

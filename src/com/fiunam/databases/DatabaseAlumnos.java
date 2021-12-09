@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +42,7 @@ public class DatabaseAlumnos extends Database {
     protected void initDB() {
         JSONDeserializer<ArrayList<Alumno>> jsonDeserializer = new JSONDeserializer<>();
 
-        try (FileReader file = new FileReader(this.pathAlumnosDB)) {
+        try (FileReader file = new FileReader(this.pathAlumnosDB, StandardCharsets.UTF_8)) {
             this.alumnos = jsonDeserializer.deserialize(file);
         } catch (FileNotFoundException fe) {
             log.sendWarning("La base de datos \"ALUMNOS\" no existe, esperando datos para crear una nueva.");
@@ -64,7 +65,7 @@ public class DatabaseAlumnos extends Database {
 
     @Override
     public void saveDB() {
-        try (FileWriter file = new FileWriter(this.pathAlumnosDB)) {
+        try (FileWriter file = new FileWriter(this.pathAlumnosDB, StandardCharsets.UTF_8)) {
             JSONSerializer serializer = new JSONSerializer();
 
             file.write(serializer.prettyPrint(true).include("materias").serialize(this.alumnos));

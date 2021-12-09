@@ -219,11 +219,11 @@ public class GuiProgram {
                                     new MessageDialogBuilder().setTitle("Aviso").setText("Materias inscritas con éxito")
                                             .addButton(MessageDialogButton.OK).build().showDialog(gui);
 
-                                    while (tablaMaterias.getTableModel().getRowCount() != 0){
+                                    while (tablaMaterias.getTableModel().getRowCount() != 0) {
                                         tablaMaterias.getTableModel().removeRow(0);
                                     }
 
-                                    while (tablaMateriasIns.getTableModel().getRowCount() != 0){
+                                    while (tablaMateriasIns.getTableModel().getRowCount() != 0) {
                                         tablaMateriasIns.getTableModel().removeRow(0);
                                     }
 
@@ -320,11 +320,11 @@ public class GuiProgram {
                                     new MessageDialogBuilder().setTitle("Aviso").setText("Materias dadas de baja con éxito")
                                             .addButton(MessageDialogButton.OK).build().showDialog(gui);
 
-                                    while (tablaMateriasInscritas.getTableModel().getRowCount() != 0){
+                                    while (tablaMateriasInscritas.getTableModel().getRowCount() != 0) {
                                         tablaMateriasInscritas.getTableModel().removeRow(0);
                                     }
 
-                                    while (tablaMateriasBaja.getTableModel().getRowCount() != 0){
+                                    while (tablaMateriasBaja.getTableModel().getRowCount() != 0) {
                                         tablaMateriasBaja.getTableModel().removeRow(0);
                                     }
 
@@ -342,6 +342,27 @@ public class GuiProgram {
                             }).setTheme(GuiProgram.temaGlobal));
 
 //                              --------------------------------------INFORMACION DEL USUARIO---------------------------------------
+                }).addItem("Materias inscritas", () -> {
+                    menuAlumnoAcc.removeAllComponents();
+                    Panel materiasInscritas = new Panel();
+                    menuAlumnoAcc.addComponent(materiasInscritas.withBorder(Borders.singleLine("Materias inscritas")));
+
+                    Alumno alumnoActual = (Alumno) GuiProgram.currentUser.getCurrentUser();
+                    Table<String> tablaMaterias = new Table<>("Nombre", "Profesor", "Grupo");
+                    ArrayList<Materia> filtroMaterias = GuiProgram.dbMaterias.getCopiaMaterias();
+
+                    filtroMaterias.removeIf(materia -> !(alumnoActual.getMaterias().contains(materia.getIdMateria())));
+
+                    for (Materia materia : filtroMaterias) {
+                        tablaMaterias.getTableModel().addRow(materia.getNombre(),
+                                materia.getProfesor(), String.valueOf(materia.getGrupo()));
+                    }
+
+                    tablaMaterias.setPreferredSize(new TerminalSize(60, 6));
+                    tablaMaterias.setTheme(GuiProgram.temaGlobal);
+                    materiasInscritas.addComponent(tablaMaterias);
+
+
                 }).addItem("Información del usuario", () -> {
                     // Remueve los componentes del menú secundario
                     menuAlumnoAcc.removeAllComponents();
@@ -378,7 +399,6 @@ public class GuiProgram {
 
                     // Botones para la actualización de contraseña
                     new Button("Actualizar", () -> {
-                        //                    TODO : Actualización de Passwords
                         if (Objects.equals(pwdUpdtB.getText(), "") && Objects.equals(pwdUpdtC.getText(), "")) {
                             new MessageDialogBuilder().setTitle("Aviso")
                                     .setText("Debes ingresar una nueva contraseña").addButton(MessageDialogButton.Retry)
@@ -516,7 +536,7 @@ public class GuiProgram {
 
                     ArrayList<Materia> materias = GuiProgram.dbMaterias.getCopiaMaterias();
 
-                    for (Materia materia : materias){
+                    for (Materia materia : materias) {
                         tablaMaterias.getTableModel().addRow(materia.getNombre(), materia.getProfesor(),
                                 String.valueOf(materia.cupoDisponible()), materia.getIdMateria());
                     }
@@ -535,7 +555,7 @@ public class GuiProgram {
 
                     ArrayList<Alumno> alumnos = GuiProgram.dbAlumnos.getCopiaAlumnos();
 
-                    for (Alumno alumno: alumnos){
+                    for (Alumno alumno : alumnos) {
                         tablaAlumnos.getTableModel().addRow(alumno.getNombre(), alumno.getUsername(), alumno.getNumCuenta(),
                                 String.valueOf(alumno.getSemestre()), String.valueOf(alumno.getMaterias().size()));
                     }

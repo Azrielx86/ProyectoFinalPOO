@@ -3,13 +3,13 @@ package com.fiunam.databases;
 import com.fiunam.logger.Logger;
 import com.fiunam.users.Administrador;
 import flexjson.JSONDeserializer;
-import flexjson.JSONException;
 import flexjson.JSONSerializer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +37,7 @@ public class DatabaseAdmins extends Database{
     protected void initDB() {
         JSONDeserializer<ArrayList<Administrador>> jsonDeserializer = new JSONDeserializer<>();
 
-        try (FileReader file = new FileReader(this.pathAdminsDB)) {
+        try (FileReader file = new FileReader(this.pathAdminsDB, StandardCharsets.UTF_8)) {
             this.admins = jsonDeserializer.deserialize(file);
         } catch (FileNotFoundException fe) {
             log.sendWarning("La base de datos \"ADMINISTRADORES\" no existe, esperando datos para crear una nueva.");
@@ -60,7 +60,7 @@ public class DatabaseAdmins extends Database{
 
     @Override
     public void saveDB() {
-        try (FileWriter file = new FileWriter(this.pathAdminsDB)) {
+        try (FileWriter file = new FileWriter(this.pathAdminsDB, StandardCharsets.UTF_8)) {
             JSONSerializer serializer = new JSONSerializer();
 
             file.write(serializer.prettyPrint(true).include("materias").serialize(this.admins));
