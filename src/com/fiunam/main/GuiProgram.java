@@ -715,9 +715,6 @@ public class GuiProgram {
                     // TODO
                 })
                 .addItem("Información del usuario", () -> {
-//                    Panel admWindow = new Panel(new GridLayout(2));
-//                    menuAdminAcc.addComponent(admWindow.withBorder(Borders.singleLine("Información del administrador.")));
-
                     // Remueve los componentes del menú secundario
                     menuAdminAcc.removeAllComponents();
                     Administrador adminActual = (Administrador) GuiProgram.currentUser.getCurrentUser();
@@ -768,8 +765,6 @@ public class GuiProgram {
                         pwdUpdtB.setText("");
                         pwdUpdtC.setText("");
                     }).setTheme(GuiProgram.temaGlobal).addTo(subMenuAccionesA);
-
-
 
                 })
                 .addItem("Salir", () -> {
