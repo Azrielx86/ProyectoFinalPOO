@@ -715,7 +715,62 @@ public class GuiProgram {
                     // TODO
                 })
                 .addItem("Información del usuario", () -> {
-                    // TODO
+//                    Panel admWindow = new Panel(new GridLayout(2));
+//                    menuAdminAcc.addComponent(admWindow.withBorder(Borders.singleLine("Información del administrador.")));
+
+                    // Remueve los componentes del menú secundario
+                    menuAdminAcc.removeAllComponents();
+                    Administrador adminActual = (Administrador) GuiProgram.currentUser.getCurrentUser();
+
+                    // Agrega los nuevos componentes al menú secundario
+                    Panel infoAdmin = new Panel(new GridLayout(2));
+                    menuAdminAcc.addComponent(infoAdmin.withBorder(Borders.singleLine("Información del alumno")));
+                    Panel subMenuAccionesA = new Panel(new GridLayout(2));
+                    menuAdminAcc.addComponent(subMenuAccionesA.withBorder(Borders.singleLine("Actualización de contraseña")));
+
+                    // Muestra la información del usuario
+                    new Label("Nombre:").setLayoutData(GuiProgram.layoutGeneral).addTo(infoAdmin);
+                    new Label(adminActual.getNombre()).addTo(infoAdmin);
+                    new Label("Número de trabajador: ").setLayoutData(GuiProgram.layoutGeneral).addTo(infoAdmin);
+                    new Label(adminActual.getNumTrabajador()).addTo(infoAdmin);
+
+                    // Area de la actualización de la contraseña
+                    new Label("Contraseña actual: ").setLayoutData(GuiProgram.layoutGeneral).addTo(subMenuAccionesA);
+                    final TextBox pwdUpdtA = new TextBox().setMask('*');
+                    pwdUpdtA.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAccionesA);
+
+                    new Label("Contraseña nueva: ").setLayoutData(GuiProgram.layoutGeneral).addTo(subMenuAccionesA);
+                    final TextBox pwdUpdtB = new TextBox().setMask('*');
+                    pwdUpdtB.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAccionesA);
+
+                    new Label("Repite la contraseña: ").setLayoutData(GuiProgram.layoutGeneral).addTo(subMenuAccionesA);
+                    final TextBox pwdUpdtC = new TextBox().setMask('*');
+                    pwdUpdtC.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAccionesA);
+
+                    new EmptySpace(new TerminalSize(0, 0)).addTo(subMenuAccionesA);
+
+                    // Botones para la actualización de contraseña
+                    new Button("Actualizar", () -> {
+                        if (Objects.equals(pwdUpdtB.getText(), "") && Objects.equals(pwdUpdtC.getText(), "")) {
+                            new MessageDialogBuilder().setTitle("Aviso")
+                                    .setText("Debes ingresar una nueva contraseña").addButton(MessageDialogButton.Retry)
+                                    .build().showDialog(gui);
+                        } else if (Objects.equals(pwdUpdtA.getText(), adminActual.getPassword()) && adminActual.changePassword(pwdUpdtB.getText(), pwdUpdtC.getText())) {
+                            new MessageDialogBuilder().setTitle("Aviso")
+                                    .setText("Contraseña actualizada con éxito").addButton(MessageDialogButton.OK)
+                                    .build().showDialog(gui);
+                        } else {
+                            new MessageDialogBuilder().setTitle("Aviso")
+                                    .setText("Las contraseñas no coinciden").addButton(MessageDialogButton.Retry)
+                                    .build().showDialog(gui);
+                        }
+                        pwdUpdtA.setText("");
+                        pwdUpdtB.setText("");
+                        pwdUpdtC.setText("");
+                    }).setTheme(GuiProgram.temaGlobal).addTo(subMenuAccionesA);
+
+
+
                 })
                 .addItem("Salir", () -> {
                     // Al salir, se limpia la pantalla y se cierra la ventana.
@@ -903,8 +958,51 @@ public class GuiProgram {
         loginWindow.setComponent(loginPanel);
 
 
-//        GUI PRINCIPAL
-        gui.addWindowAndWait(loginWindow);
+//        ========================================================= GUI PRINCIPAL ==========================================================
+        // Comprobación del primer inicio de sesión
+        if (Objects.equals(GuiProgram.dbadmins.getAdmins().get(0).getPassword(), "admin")) {
+            BasicWindow primerInicio = new BasicWindow();
+            primerInicio.setTitle("Primer inicio");
+            primerInicio.setHints(List.of(Window.Hint.CENTERED));
+
+            Panel msjInicio = new Panel(new GridLayout(2));
+            primerInicio.setComponent(msjInicio);
+
+            final TextBox newPwd = new TextBox();
+            terminal.setCursorPosition(2, 2);
+            newPwd.setMask('*').setPreferredSize(new TerminalSize(15, 1));
+
+            new Label("Ingresa una nueva contraseña:").addTo(msjInicio);
+            newPwd.addTo(msjInicio).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE));
+
+            new Button("Salir", () -> System.exit(0)).setTheme(GuiProgram.temaGlobal).addTo(msjInicio);
+
+            new Button("Iniciar", () -> {
+                try {
+                    if (Objects.equals(newPwd.getText(), ""))
+                        throw new Exception("Debes ingresar una nueva contraseña.");
+                    if (Objects.equals(newPwd.getText(), "admin"))
+                        throw new Exception("La contraseña debe de ser distinta");
+
+                    GuiProgram.currentUser = GuiProgram.dbadmins.getAdmins().get(0);
+                    currentUser.setPassword(newPwd.getText());
+
+                    new MessageDialogBuilder().setTitle("Aviso").setText("Contraseña establecida con éxito")
+                            .addButton(MessageDialogButton.OK).build().showDialog(gui);
+
+                    gui.removeWindow(primerInicio);
+                    gui.addWindowAndWait(loginWindow);
+
+                } catch (Exception e) {
+                    new MessageDialogBuilder().setTitle("Advertencia").setText(e.getMessage())
+                            .addButton(MessageDialogButton.Retry).build().showDialog(gui);
+                }
+            }).setTheme(GuiProgram.temaGlobal).addTo(msjInicio);
+
+            gui.addWindowAndWait(primerInicio);
+        } else {
+            gui.addWindowAndWait(loginWindow);
+        }
 
     }
 }

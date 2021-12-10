@@ -63,7 +63,7 @@ public class DatabaseAdmins extends Database{
         try (FileWriter file = new FileWriter(this.pathAdminsDB, StandardCharsets.UTF_8)) {
             JSONSerializer serializer = new JSONSerializer();
 
-            file.write(serializer.prettyPrint(true).include("materias").serialize(this.admins));
+            file.write(serializer.prettyPrint(true).serialize(this.admins));
 
         } catch (Exception e) {
             log.sendError(Arrays.toString(e.getStackTrace()));
@@ -149,7 +149,7 @@ public class DatabaseAdmins extends Database{
      * Para la primera ejecución del programa se deben de establecer los valores
      * del admin por defecto. (TODO)
      */
-    private void establecerAdminPorDefeto(String password){
+    private void establecerAdminPorDefecto(String password){
         this.adminPorDefecto.setPassword(password);
     }
 
