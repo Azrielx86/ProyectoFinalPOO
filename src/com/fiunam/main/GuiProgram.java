@@ -532,7 +532,7 @@ public class GuiProgram {
                     menuAdminAcc.addComponent(verMaterias.withBorder(Borders.singleLine("Materias")));
 
                     Table<String> tablaMaterias = new Table<>("Nombre", "Profesor", "Cupo", "Clave");
-//                    tablaMaterias.setPreferredSize(new TerminalSize(60, 8));
+                    tablaMaterias.setPreferredSize(new TerminalSize(60, 8));
 
                     ArrayList<Materia> materias = GuiProgram.dbMaterias.getCopiaMaterias();
 
@@ -731,7 +731,7 @@ public class GuiProgram {
                             .addTo(agregarAdmin);
 
                     new Label("Ingresa una contraseña: ").setLayoutData(GuiProgram.layoutGeneral).addTo(agregarAdmin);
-                    final TextBox adminPwd = new TextBox();
+                    final TextBox adminPwd = new TextBox().setMask('*');
                     adminPwd.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
                             .setPreferredSize(new TerminalSize(20, 1))
                             .addTo(agregarAdmin);

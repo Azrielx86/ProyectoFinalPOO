@@ -15,6 +15,21 @@ creación y manejo de materias, y almacenarlos en archivos JSON
 (En sustitución de alguna base de datos, ya que no es requisito 
 para este proyecto).
 
+## Screenshots
+ 
+Interfaz de los alumnos.
+
+![Inerfaz_Alumnos](./docs/screenshots/InterfazAlumnos.png)
+
+Interfaz de los administradores.
+
+![Interfaz_Admins](./docs/screenshots/InterfazAdmins.png)
+
+Inscripción de materias
+
+![Inscripciones](./docs/screenshots/InscripcionMaterias.png)
+
+
 ## Dependencias
 Para manejar las dependencias, se recomienda instalarlas con Maven o 
 usar las incluidas en lib.
@@ -31,7 +46,7 @@ Comandos para Linux
     cd out
     java -cp ".:../lib/*" com.fiunam.main.Main
 
-Comandos para Windows (sujeto a cambios... te odio, Windows)
+Comandos para Windows
 
     javac -encoding utf8 -classpath ".;lib/lanterna-3.1.1.jar;lib/flexjson-3.3.jar;" src/com/fiunam/main/*.java src/com/fiunam/materias/*.java src/com/fiunam/users/*.java src/com/fiunam/databases/*.java src/com/fiunam/logger/*.java -d out
     cd out
