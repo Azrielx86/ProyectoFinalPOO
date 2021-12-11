@@ -81,7 +81,7 @@ public class GuiProgram {
         guiAlumnoPanel.addComponent(menuAlumnoPanel.withBorder(Borders.singleLine("Menú principal")));
         Panel menuAlumnoAcc = new Panel(new LinearLayout());
         new Label(mensajeMenuInicial).addTo(menuAlumnoAcc);
-        guiAlumnoPanel.addComponent(menuAlumnoAcc.withBorder(Borders.singleLine("Área de acciones (?)")));
+        guiAlumnoPanel.addComponent(menuAlumnoAcc.withBorder(Borders.singleLine()));
 
 //                  ------------------------------------------ALTA DE MATERIAS------------------------------------------
         // Menú principal
@@ -219,11 +219,11 @@ public class GuiProgram {
                                     new MessageDialogBuilder().setTitle("Aviso").setText("Materias inscritas con éxito")
                                             .addButton(MessageDialogButton.OK).build().showDialog(gui);
 
-                                    while (tablaMaterias.getTableModel().getRowCount() != 0){
+                                    while (tablaMaterias.getTableModel().getRowCount() != 0) {
                                         tablaMaterias.getTableModel().removeRow(0);
                                     }
 
-                                    while (tablaMateriasIns.getTableModel().getRowCount() != 0){
+                                    while (tablaMateriasIns.getTableModel().getRowCount() != 0) {
                                         tablaMateriasIns.getTableModel().removeRow(0);
                                     }
 
@@ -320,11 +320,11 @@ public class GuiProgram {
                                     new MessageDialogBuilder().setTitle("Aviso").setText("Materias dadas de baja con éxito")
                                             .addButton(MessageDialogButton.OK).build().showDialog(gui);
 
-                                    while (tablaMateriasInscritas.getTableModel().getRowCount() != 0){
+                                    while (tablaMateriasInscritas.getTableModel().getRowCount() != 0) {
                                         tablaMateriasInscritas.getTableModel().removeRow(0);
                                     }
 
-                                    while (tablaMateriasBaja.getTableModel().getRowCount() != 0){
+                                    while (tablaMateriasBaja.getTableModel().getRowCount() != 0) {
                                         tablaMateriasBaja.getTableModel().removeRow(0);
                                     }
 
@@ -342,6 +342,27 @@ public class GuiProgram {
                             }).setTheme(GuiProgram.temaGlobal));
 
 //                              --------------------------------------INFORMACION DEL USUARIO---------------------------------------
+                }).addItem("Materias inscritas", () -> {
+                    menuAlumnoAcc.removeAllComponents();
+                    Panel materiasInscritas = new Panel();
+                    menuAlumnoAcc.addComponent(materiasInscritas.withBorder(Borders.singleLine("Materias inscritas")));
+
+                    Alumno alumnoActual = (Alumno) GuiProgram.currentUser.getCurrentUser();
+                    Table<String> tablaMaterias = new Table<>("Nombre", "Profesor", "Grupo");
+                    ArrayList<Materia> filtroMaterias = GuiProgram.dbMaterias.getCopiaMaterias();
+
+                    filtroMaterias.removeIf(materia -> !(alumnoActual.getMaterias().contains(materia.getIdMateria())));
+
+                    for (Materia materia : filtroMaterias) {
+                        tablaMaterias.getTableModel().addRow(materia.getNombre(),
+                                materia.getProfesor(), String.valueOf(materia.getGrupo()));
+                    }
+
+                    tablaMaterias.setPreferredSize(new TerminalSize(60, 6));
+                    tablaMaterias.setTheme(GuiProgram.temaGlobal);
+                    materiasInscritas.addComponent(tablaMaterias);
+
+
                 }).addItem("Información del usuario", () -> {
                     // Remueve los componentes del menú secundario
                     menuAlumnoAcc.removeAllComponents();
@@ -378,7 +399,6 @@ public class GuiProgram {
 
                     // Botones para la actualización de contraseña
                     new Button("Actualizar", () -> {
-                        //                    TODO : Actualización de Passwords
                         if (Objects.equals(pwdUpdtB.getText(), "") && Objects.equals(pwdUpdtC.getText(), "")) {
                             new MessageDialogBuilder().setTitle("Aviso")
                                     .setText("Debes ingresar una nueva contraseña").addButton(MessageDialogButton.Retry)
@@ -426,7 +446,7 @@ public class GuiProgram {
         guiAdminPanel.addComponent(menuAdminPanel.withBorder(Borders.singleLine("Menú principal")));
         Panel menuAdminAcc = new Panel(new LinearLayout());
         new Label(mensajeMenuInicial).addTo(menuAdminAcc);
-        guiAdminPanel.addComponent(menuAdminAcc.withBorder(Borders.singleLine("Área de acciones (?)")));
+        guiAdminPanel.addComponent(menuAdminAcc.withBorder(Borders.singleLine()));
 
         // Crea el menú principal
         new ActionListBox(new TerminalSize(30, 10))
@@ -512,11 +532,11 @@ public class GuiProgram {
                     menuAdminAcc.addComponent(verMaterias.withBorder(Borders.singleLine("Materias")));
 
                     Table<String> tablaMaterias = new Table<>("Nombre", "Profesor", "Cupo", "Clave");
-                    tablaMaterias.setPreferredSize(new TerminalSize(60, 8));
+//                    tablaMaterias.setPreferredSize(new TerminalSize(60, 8));
 
                     ArrayList<Materia> materias = GuiProgram.dbMaterias.getCopiaMaterias();
 
-                    for (Materia materia : materias){
+                    for (Materia materia : materias) {
                         tablaMaterias.getTableModel().addRow(materia.getNombre(), materia.getProfesor(),
                                 String.valueOf(materia.cupoDisponible()), materia.getIdMateria());
                     }
@@ -535,7 +555,7 @@ public class GuiProgram {
 
                     ArrayList<Alumno> alumnos = GuiProgram.dbAlumnos.getCopiaAlumnos();
 
-                    for (Alumno alumno: alumnos){
+                    for (Alumno alumno : alumnos) {
                         tablaAlumnos.getTableModel().addRow(alumno.getNombre(), alumno.getUsername(), alumno.getNumCuenta(),
                                 String.valueOf(alumno.getSemestre()), String.valueOf(alumno.getMaterias().size()));
                     }
@@ -691,11 +711,124 @@ public class GuiProgram {
                     new EmptySpace(new TerminalSize(0, 1));
 
                 })
-                .addItem("Agregar/Eliminar administradores", () -> {
-                    // TODO
+                .addItem("Agregar administradores", () -> {
+                    // Se limpia la pantalla de acciones
+                    menuAdminAcc.removeAllComponents();
+                    Panel agregarAdmin = new Panel(new GridLayout(2));
+                    menuAdminAcc.addComponent(agregarAdmin.withBorder(Borders.singleLine("Agregar administrador")));
+
+                    // Se crean los espacios para ingresar los datos
+                    new Label("Ingresa el nombre: ").setLayoutData(GuiProgram.layoutGeneral).addTo(agregarAdmin);
+                    final TextBox adminName = new TextBox();
+                    adminName.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
+                            .setPreferredSize(new TerminalSize(20, 1))
+                            .addTo(agregarAdmin);
+
+                    new Label("Ingresa el nombre de usuario: ").setLayoutData(GuiProgram.layoutGeneral).addTo(agregarAdmin);
+                    final TextBox adminUsrNm = new TextBox();
+                    adminUsrNm.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
+                            .setPreferredSize(new TerminalSize(20, 1))
+                            .addTo(agregarAdmin);
+
+                    new Label("Ingresa una contraseña: ").setLayoutData(GuiProgram.layoutGeneral).addTo(agregarAdmin);
+                    final TextBox adminPwd = new TextBox();
+                    adminPwd.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE))
+                            .setPreferredSize(new TerminalSize(20, 1))
+                            .addTo(agregarAdmin);
+
+                    // Se crea el panel de botones
+                    new Panel(new GridLayout(3))
+                            .addComponent(new Button("Cancelar", () -> {
+                                // Al cancelar, se limpia el panel de acciones
+                                menuAdminAcc.removeAllComponents();
+                                menuAdminAcc.addComponent(new Label(mensajeMenuInicial));
+                            }).setTheme(GuiProgram.temaGlobal))
+                            .addComponent(new EmptySpace(new TerminalSize(20, 1)))
+                            .addComponent(new Button("Agregar", () -> {
+                                // Sección para ingresar la información de usuario
+                                try {
+                                    if (Objects.equals(adminName.getText(), ""))
+                                        throw new Exception("Falta un nombre.");
+                                    if (Objects.equals(adminUsrNm.getText(), ""))
+                                        throw new Exception("Falta un nombre de usuario");
+                                    if (Objects.equals(adminPwd.getText(), ""))
+                                        throw new Exception("Falta una contraseña");
+
+                                    GuiProgram.dbadmins.agregarAdmin(new Administrador(
+                                            adminUsrNm.getText(), adminPwd.getText(), adminName.getText()
+                                    ));
+                                    GuiProgram.dbadmins.saveDB();
+
+                                    // Se reestablecen los campos
+                                    adminName.setText("");
+                                    adminPwd.setText("");
+                                    adminPwd.setText("");
+
+                                    // Se limpia la pantalla de acciones y se muestra un mensaje en la pantalla
+                                    menuAdminAcc.removeAllComponents();
+                                    menuAdminAcc.addComponent(new Label(mensajeMenuInicial));
+                                    new MessageDialogBuilder().setText("Aviso").setText("Administrador agregado")
+                                            .addButton(MessageDialogButton.OK).build().showDialog(gui);
+                                } catch (Exception e) {
+                                    new MessageDialogBuilder().setTitle("Advertencia").setText(e.getMessage())
+                                            .addButton(MessageDialogButton.Retry).build().showDialog(gui);
+                                }
+                            }).setTheme(GuiProgram.temaGlobal)).addTo(menuAdminAcc);
                 })
                 .addItem("Información del usuario", () -> {
-                    // TODO
+                    // Remueve los componentes del menú secundario
+                    menuAdminAcc.removeAllComponents();
+                    Administrador adminActual = (Administrador) GuiProgram.currentUser.getCurrentUser();
+
+                    // Agrega los nuevos componentes al menú secundario
+                    Panel infoAdmin = new Panel(new GridLayout(2));
+                    menuAdminAcc.addComponent(infoAdmin.withBorder(Borders.singleLine("Información del usuario")));
+                    Panel subMenuAccionesA = new Panel(new GridLayout(2));
+                    menuAdminAcc.addComponent(subMenuAccionesA.withBorder(Borders.singleLine("Actualización de contraseña")));
+
+                    // Muestra la información del usuario
+                    new Label("Nombre:").setLayoutData(GuiProgram.layoutGeneral).addTo(infoAdmin);
+                    new Label(adminActual.getNombre()).addTo(infoAdmin);
+                    new Label("Nombre de usuario: ").setLayoutData(GuiProgram.layoutGeneral).addTo(infoAdmin);
+                    new Label(adminActual.getUsername()).addTo(infoAdmin);
+                    new Label("Número de trabajador: ").setLayoutData(GuiProgram.layoutGeneral).addTo(infoAdmin);
+                    new Label(adminActual.getNumTrabajador()).addTo(infoAdmin);
+
+                    // Area de la actualización de la contraseña
+                    new Label("Contraseña actual: ").setLayoutData(GuiProgram.layoutGeneral).addTo(subMenuAccionesA);
+                    final TextBox pwdUpdtA = new TextBox().setMask('*');
+                    pwdUpdtA.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAccionesA);
+
+                    new Label("Contraseña nueva: ").setLayoutData(GuiProgram.layoutGeneral).addTo(subMenuAccionesA);
+                    final TextBox pwdUpdtB = new TextBox().setMask('*');
+                    pwdUpdtB.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAccionesA);
+
+                    new Label("Repite la contraseña: ").setLayoutData(GuiProgram.layoutGeneral).addTo(subMenuAccionesA);
+                    final TextBox pwdUpdtC = new TextBox().setMask('*');
+                    pwdUpdtC.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE)).addTo(subMenuAccionesA);
+
+                    new EmptySpace(new TerminalSize(0, 0)).addTo(subMenuAccionesA);
+
+                    // Botones para la actualización de contraseña
+                    new Button("Actualizar", () -> {
+                        if (Objects.equals(pwdUpdtB.getText(), "") && Objects.equals(pwdUpdtC.getText(), "")) {
+                            new MessageDialogBuilder().setTitle("Aviso")
+                                    .setText("Debes ingresar una nueva contraseña").addButton(MessageDialogButton.Retry)
+                                    .build().showDialog(gui);
+                        } else if (Objects.equals(pwdUpdtA.getText(), adminActual.getPassword()) && adminActual.changePassword(pwdUpdtB.getText(), pwdUpdtC.getText())) {
+                            new MessageDialogBuilder().setTitle("Aviso")
+                                    .setText("Contraseña actualizada con éxito").addButton(MessageDialogButton.OK)
+                                    .build().showDialog(gui);
+                        } else {
+                            new MessageDialogBuilder().setTitle("Aviso")
+                                    .setText("Las contraseñas no coinciden").addButton(MessageDialogButton.Retry)
+                                    .build().showDialog(gui);
+                        }
+                        pwdUpdtA.setText("");
+                        pwdUpdtB.setText("");
+                        pwdUpdtC.setText("");
+                    }).setTheme(GuiProgram.temaGlobal).addTo(subMenuAccionesA);
+
                 })
                 .addItem("Salir", () -> {
                     // Al salir, se limpia la pantalla y se cierra la ventana.
@@ -832,7 +965,6 @@ public class GuiProgram {
         // Para los botones, se les agrega la acción en el constructor, dicha acción es un Runnable.
         new Button("Ingresar", () -> {
             try {
-                //            TODO : Login
                 if (Objects.equals(userTxt.getText(), "")) throw new Exception("Debes rellenar todos los campos");
                 if (Objects.equals(pwdTxt.getText(), "")) throw new Exception("Debes rellenar todos los campos");
 
@@ -883,8 +1015,51 @@ public class GuiProgram {
         loginWindow.setComponent(loginPanel);
 
 
-//        GUI PRINCIPAL
-        gui.addWindowAndWait(loginWindow);
+//        ========================================================= GUI PRINCIPAL ==========================================================
+        // Comprobación del primer inicio de sesión
+        if (Objects.equals(GuiProgram.dbadmins.getAdmins().get(0).getPassword(), "admin")) {
+            BasicWindow primerInicio = new BasicWindow();
+            primerInicio.setTitle("Primer inicio");
+            primerInicio.setHints(List.of(Window.Hint.CENTERED));
+
+            Panel msjInicio = new Panel(new GridLayout(2));
+            primerInicio.setComponent(msjInicio);
+
+            final TextBox newPwd = new TextBox();
+            terminal.setCursorPosition(2, 2);
+            newPwd.setMask('*').setPreferredSize(new TerminalSize(15, 1));
+
+            new Label("Ingresa una nueva contraseña:").addTo(msjInicio);
+            newPwd.addTo(msjInicio).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE));
+
+            new Button("Salir", () -> System.exit(0)).setTheme(GuiProgram.temaGlobal).addTo(msjInicio);
+
+            new Button("Iniciar", () -> {
+                try {
+                    if (Objects.equals(newPwd.getText(), ""))
+                        throw new Exception("Debes ingresar una nueva contraseña.");
+                    if (Objects.equals(newPwd.getText(), "admin"))
+                        throw new Exception("La contraseña debe de ser distinta");
+
+                    GuiProgram.currentUser = GuiProgram.dbadmins.getAdmins().get(0);
+                    currentUser.setPassword(newPwd.getText());
+
+                    new MessageDialogBuilder().setTitle("Aviso").setText("Contraseña establecida con éxito")
+                            .addButton(MessageDialogButton.OK).build().showDialog(gui);
+
+                    gui.removeWindow(primerInicio);
+                    gui.addWindowAndWait(loginWindow);
+
+                } catch (Exception e) {
+                    new MessageDialogBuilder().setTitle("Advertencia").setText(e.getMessage())
+                            .addButton(MessageDialogButton.Retry).build().showDialog(gui);
+                }
+            }).setTheme(GuiProgram.temaGlobal).addTo(msjInicio);
+
+            gui.addWindowAndWait(primerInicio);
+        } else {
+            gui.addWindowAndWait(loginWindow);
+        }
 
     }
 }

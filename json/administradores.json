@@ -3,7 +3,7 @@
         "class": "com.fiunam.users.Administrador",
         "nombre": "Admin",
         "numTrabajador": "0000001",
-        "password": "admin",
+        "password": "admin1",
         "username": "admin"
     }
 ]
