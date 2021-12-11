@@ -17,6 +17,11 @@ public class Administrador extends Usuario {
         this.numTrabajador = numTrabajador;
     }
 
+    public Administrador(String username, String password, String nombre) {
+        super(username, password);
+        this.nombre = nombre;
+    }
+
     public String getNombre() {
         return nombre;
     }

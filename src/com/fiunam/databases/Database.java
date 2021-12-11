@@ -33,6 +33,7 @@ public abstract class Database {
     /**
      * Retorna una impresión más detallada de cada elemento
      * con un formato más legible
+     *
      * @return String con los datos
      */
     public abstract String printDB();
@@ -40,25 +41,27 @@ public abstract class Database {
     /**
      * Restaura la base de datos.
      */
-    public void reloadDB(){
+    public void reloadDB() {
         this.initDB();
     }
 
     /**
      * Crea la carpeta donde se guardarán los archivos json
+     *
      * @throws FileNotFoundException En caso de que no se pueda crear, lanza
-     * una excepción.
+     *                               una excepción.
      */
-    public static void createDir() throws FileNotFoundException {
+    public static void createDir() throws Exception {
         final var mkdir = new File(Database.staticPathFiles).mkdir();
-        if (!mkdir){
-            throw new FileNotFoundException();
+        if (!mkdir) {
+            throw new Exception("No se pudo crear el directorio.");
         }
     }
 
     /**
      * Al imprimir los datos, se retornan con el formato de
      * printDB();
+     *
      * @return String con los datos
      */
     public String toString() {

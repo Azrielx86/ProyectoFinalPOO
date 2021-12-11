@@ -75,11 +75,8 @@ Para Linux probablemente sea necesario dar permisos de ejecución con el siguien
 
 ## Alumnos
 
-- Baja de materias
 - Eliminación de perfil (baja).
 
 ## Administrador
 
-- Cargar logger en el programa (propuesta)
 - Creación de nuevos perfiles
-- Eliminación de materias
