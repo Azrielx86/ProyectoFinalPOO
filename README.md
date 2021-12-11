@@ -68,7 +68,6 @@ Para Linux probablemente sea necesario dar permisos de ejecución con el siguien
 ## Generales
 
 - Crear la guia de usuario en GitHub
-- Documentar todas las clases y crear el JavaDoc
 - Completar el login (métodos de inicio de sesión)
 - Crear las materias y cuentas de ejemplo
 - Pruebas en Windows
@@ -76,7 +75,3 @@ Para Linux probablemente sea necesario dar permisos de ejecución con el siguien
 ## Alumnos
 
 - Eliminación de perfil (baja).
-
-## Administrador
-
-- Creación de nuevos perfiles
