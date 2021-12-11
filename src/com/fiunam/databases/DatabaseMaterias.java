@@ -19,11 +19,20 @@ public class DatabaseMaterias extends Database {
     private final String pathMateriasDB = Paths.get(super.pathFiles, "materias.json").toString();
     private int idMaterias;
 
+    /**
+     * Constructor principal de la lista de materias, inicia lo necesario para
+     * manejar la lista.
+     */
     public DatabaseMaterias() {
         this.materias = new ArrayList<>();
         this.initDB();
     }
 
+    /**
+     * Crea una copia de las materias, para no modificar la lista principal en algunas acciones,
+     * como el filtrado de materias.
+     * @return Copia de la lista de materias
+     */
     public ArrayList<Materia> getCopiaMaterias() {
         return new ArrayList<>(this.materias);
     }
@@ -101,6 +110,12 @@ public class DatabaseMaterias extends Database {
         log.sendInfo("Materia " + materia.getNombre() + " (" + materia.getIdMateria() + ") agregada.");
     }
 
+    /**
+     * Busca una materia en la lista a partir de su ID
+     * @param idMateria ID de la materia
+     * @return La materia si se encuentra, en caso contrario, una materia
+     * con sus atributos nulos
+     */
     public Materia readMateria(String idMateria) {
         for (Materia materia : this.materias) {
             if (Objects.equals(materia.getIdMateria(), idMateria)) {
@@ -110,6 +125,11 @@ public class DatabaseMaterias extends Database {
         return new Materia();
     }
 
+    /**
+     * Da de baja la materia de todos los alumnos que estaban inscritos, y luego se elimina
+     * @param dbAlumnos Base de datos de los alumnos.
+     * @param idMateria ID de la materia
+     */
     public void eliminarMateria(DatabaseAlumnos dbAlumnos, String idMateria) {
         for (int i = 0; i < this.materias.size(); i++) {
             if (Objects.equals(this.materias.get(i).getIdMateria(), idMateria)) {
@@ -126,6 +146,4 @@ public class DatabaseMaterias extends Database {
         }
         log.sendWarning("La materia con id \"" + idMateria + "\" no existe.");
     }
-
-
 }

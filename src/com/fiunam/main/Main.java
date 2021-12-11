@@ -14,6 +14,5 @@ public class Main {
         } finally {
             log.sendInfo("Programa finalizado.");
         }
-
     }
 }
