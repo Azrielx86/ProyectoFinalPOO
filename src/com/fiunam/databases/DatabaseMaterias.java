@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * Crea y maneja la información de las materias
+ */
 public class DatabaseMaterias extends Database {
     private final Logger log = new Logger(DatabaseMaterias.class);
     private ArrayList<Materia> materias;

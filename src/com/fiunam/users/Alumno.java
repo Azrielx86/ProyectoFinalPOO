@@ -12,10 +12,21 @@ public class Alumno extends Usuario {
     private String numCuenta;
     private ArrayList<String> materias;
 
+    /**
+     * Constructor vacío de la clase Alumno, inicializa el ArrayList,
+     * esto es necesario aunque no contenga elementos
+     */
     public Alumno() {
         this.materias = new ArrayList<>();
     }
 
+    /**
+     * Constructor que crea un objeto Alumno con sus datos
+     * @param username Nombre de usuario
+     * @param nombre Nombre completo
+     * @param password Contraseña
+     * @param semestre Semestre que está cursando
+     */
     public Alumno(String username, String nombre, String password, int semestre) {
         super(username, password);
         this.nombre = nombre;
@@ -23,6 +34,15 @@ public class Alumno extends Usuario {
         this.semestre = semestre;
     }
 
+    /**
+     * Constructor que crea un objeto Alumno con sus datos, su número de cuenta, y la lista de materias.
+     * @param username Nombre de usuario
+     * @param nombre Nombre completo
+     * @param password Contraseña
+     * @param semestre Semestre que está cursando
+     * @param numCuenta Número de cuenta
+     * @param materias Lista de materias
+     */
     public Alumno(String username, String password, String nombre, int semestre, String numCuenta, ArrayList<String> materias) {
         super(username, password);
         this.nombre = nombre;

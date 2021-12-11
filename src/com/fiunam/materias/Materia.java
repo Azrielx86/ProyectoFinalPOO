@@ -14,10 +14,21 @@ public class Materia {
     private static final int MAX_ALUMNOS = 20;
     private String area;
 
+    /**
+     * Constructor vacío, inicializa el ArrayList de alumnos,
+     * es necesario aunque no haya elementos en la lista.
+     */
     public Materia() {
         this.alumnos = new ArrayList<>();
     }
 
+    /**
+     * Constructor que recibe los datos de la materia
+     * @param nombre Nombre de la materia
+     * @param grupo Grupo
+     * @param profesor Profesor que imparte la materia
+     * @param area Area a la que pertenece
+     */
     public Materia(String nombre, int grupo, String profesor, String area) {
         this.alumnos = new ArrayList<>();
         this.nombre = nombre;
