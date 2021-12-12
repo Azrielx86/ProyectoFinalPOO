@@ -1007,7 +1007,6 @@ public class GuiProgram {
             log.sendInfo("Alumnos actualizados.");
             GuiProgram.dbadmins.saveDB();
             log.sendInfo("Administradores actualizados.");
-            //System.exit(0);
             try {
                 screen.stopScreen();
                 log.sendInfo("Interfaz finalizada.");
@@ -1037,7 +1036,14 @@ public class GuiProgram {
             new Label("Ingresa una nueva contraseña:").addTo(msjInicio);
             newPwd.addTo(msjInicio).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE));
 
-            new Button("Salir", () -> System.exit(0)).setTheme(GuiProgram.temaGlobal).addTo(msjInicio);
+            new Button("Salir", () -> {
+                try {
+                    log.sendInfo("Finalizando interfaz.");
+                    screen.stopScreen();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).setTheme(GuiProgram.temaGlobal).addTo(msjInicio);
 
             new Button("Iniciar", () -> {
                 try {
