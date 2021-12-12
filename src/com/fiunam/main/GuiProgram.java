@@ -30,6 +30,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -49,15 +50,14 @@ public class GuiProgram {
             TextColor.ANSI.WHITE, TextColor.ANSI.WHITE, TextColor.ANSI.BLUE_BRIGHT,
             TextColor.ANSI.WHITE, TextColor.ANSI.BLUE_BRIGHT, TextColor.ANSI.BLACK);
     private static Usuario currentUser;
+    private final static Logger log = new Logger(GuiProgram.class);
+    private final static String mensajeMenuInicial = "Selecciona una opción.\n" +
+            "Utiliza <Tab> para moverte entre menús.\n" +
+            "Usa las flechas " + Symbols.ARROW_UP + ", " + Symbols.ARROW_DOWN +
+            ", " + Symbols.ARROW_LEFT + " y " + Symbols.ARROW_RIGHT + "\n" +
+            "para moverte dentro de los menús.";
 
-    public static void run() throws IOException {
-        Logger log = new Logger(GuiProgram.class);
-        String mensajeMenuInicial = "Selecciona una opción.\n" +
-                "Utiliza <Tab> para moverte entre menús.\n" +
-                "Usa las flechas " + Symbols.ARROW_UP + ", " + Symbols.ARROW_DOWN +
-                ", " + Symbols.ARROW_LEFT + " y " + Symbols.ARROW_RIGHT + "\n" +
-                "para moverte dentro de los menús.";
-
+    public static void start() throws IOException {
         log.sendInfo("Iniciando terminal.");
         // Crea un objeto terminal y screen para crear la aplicación de consola
         Terminal terminal = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(GuiProgram.WIDTH, GuiProgram.HEIGHT)).createTerminal();
@@ -1007,8 +1007,13 @@ public class GuiProgram {
             log.sendInfo("Alumnos actualizados.");
             GuiProgram.dbadmins.saveDB();
             log.sendInfo("Administradores actualizados.");
-            log.sendInfo("Programa finalizado.");
-            System.exit(0);
+            //System.exit(0);
+            try {
+                screen.stopScreen();
+                log.sendInfo("Interfaz finalizada.");
+            } catch (IOException e) {
+                log.sendError(Arrays.toString(e.getStackTrace()) + " | " + e.getMessage());
+            }
         }).setTheme(GuiProgram.temaGlobal).addTo(loginPanel);
 
         // Finalmente se agrega el panel en la ventana
