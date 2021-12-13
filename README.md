@@ -86,7 +86,3 @@ Para Linux probablemente sea necesario dar permisos de ejecución con el siguien
 - Completar el login (métodos de inicio de sesión)
 - Crear las materias y cuentas de ejemplo
 - Pruebas en Windows
-
-## Alumnos
-
-- Eliminación de perfil (baja).
