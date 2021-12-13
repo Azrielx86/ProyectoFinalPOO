@@ -1009,7 +1009,9 @@ public class GuiProgram {
             log.sendInfo("Administradores actualizados.");
             try {
                 screen.stopScreen();
+                terminal.close();
                 log.sendInfo("Interfaz finalizada.");
+                System.exit(0);
             } catch (IOException e) {
                 log.sendError(Arrays.toString(e.getStackTrace()) + " | " + e.getMessage());
             }
