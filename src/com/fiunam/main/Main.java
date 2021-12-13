@@ -16,9 +16,6 @@ public class Main {
             GuiProgram.start();
         } catch (Exception e) {
             log.sendError(Arrays.toString(e.getStackTrace()) + " | " + e.getMessage());
-        } finally {
-            log.sendInfo("Programa finalizado.");
-            System.exit(0);
         }
     }
 }
