@@ -70,19 +70,7 @@ Para compilar y ejecutar.
     ./run.sh
     ./run.bat
 
-Para crear el .jar directamente.
-
-    (pendiente)
-
 Para Linux probablemente sea necesario dar permisos de ejecución con el siguiente comando.
 
     chmod +x <script>
 
-# Pendientes
-
-## Generales
-
-- Crear la guia de usuario en GitHub
-- Completar el login (métodos de inicio de sesión)
-- Crear las materias y cuentas de ejemplo
-- Pruebas en Windows

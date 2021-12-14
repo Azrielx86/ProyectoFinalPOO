@@ -775,6 +775,79 @@ public class GuiProgram {
                                 }
                             }).setTheme(GuiProgram.temaGlobal)).addTo(menuAdminAcc);
                 })
+                .addItem("Eliminar administradores", () -> {
+                    menuAdminAcc.removeAllComponents();
+                    // Se crean los paneles de búsqueda y resultados
+                    Panel busqueda = new Panel(new GridLayout(2));
+                    busqueda.addTo(menuAdminAcc);
+                    busqueda.addComponent(new Label("Ingresa el número de trabajador: "));
+                    final TextBox numTrabAdm = new TextBox();
+                    numTrabAdm.setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE));
+                    numTrabAdm.setPreferredSize(new TerminalSize(15, 1));
+                    numTrabAdm.setValidationPattern(Pattern.compile("[0-9]+")).addTo(busqueda);
+
+                    Panel resultados = new Panel(new GridLayout(2));
+                    menuAdminAcc.addComponent(resultados.withBorder(Borders.singleLine("Resultados")));
+                    resultados.addComponent(new Label("Realiza una búsqueda"));
+
+                    new EmptySpace(new TerminalSize(0, 1)).addTo(busqueda);
+
+                    new Button("Buscar", () -> {
+                        try {
+                            // Se limpia la ventana de resultados
+                            resultados.removeAllComponents();
+                            Panel subResultados = new Panel(new GridLayout(2));
+                            menuAdminAcc.removeComponent(resultados);
+
+                            // Se comprueba que el administrador exista
+                            if (numTrabAdm.getText() == null) throw new Exception("El campo está vacío");
+                            Administrador admEncontrado = GuiProgram.dbadmins.readAdmins(numTrabAdm.getText());
+                            if (admEncontrado.getNombre() == null) throw new Exception("El administrador no existe.");
+                            // Se comprueba que exista al menos un administrador
+                            if (GuiProgram.dbadmins.getAdmins().size() == 1)
+                                throw new Exception("Debe haber al menos un administrador");
+                            // Se comprueba que no sea el administrador actual
+                            if (admEncontrado == GuiProgram.currentUser)
+                                throw new Exception("No se puede eliminar el administrador actual");
+
+                            // Se muestran los detalles de la materia
+                            resultados.addComponent(subResultados);
+                            subResultados.addComponent(new Label("Nombre: "))
+                                    .addComponent(new Label(admEncontrado.getNombre()))
+                                    .addComponent(new Label("Nombre de usuario: "))
+                                    .addComponent(new Label(admEncontrado.getUsername()))
+                                    .addComponent(new Label("Número de trabajador: "))
+                                    .addComponent(new Label(admEncontrado.getNumTrabajador()));
+
+                            subResultados.addComponent(new EmptySpace(new TerminalSize(0, 0)));
+                            subResultados.addComponent(new Button("Eliminar Administrador", () -> {
+
+                                // Se elimina el administrador
+                                GuiProgram.dbadmins.eliminarAdministrador(numTrabAdm.getText());
+                                GuiProgram.dbadmins.saveDB();
+
+                                new MessageDialogBuilder().setTitle("Aviso").setText("Administrador eliminado exitosamente")
+                                        .addButton(MessageDialogButton.OK).build().showDialog(gui);
+
+                                resultados.removeAllComponents();
+                                numTrabAdm.setText("");
+
+                            }).setTheme(GuiProgram.temaGlobal));
+//                            menuAdminAcc.removeAllComponents();
+
+                        } catch (Exception e) {
+                            new MessageDialogBuilder().setTitle("Advertencia").setText(e.getMessage())
+                                    .addButton(MessageDialogButton.Retry).build().showDialog(gui);
+                        }
+                    }).setTheme(GuiProgram.temaGlobal).addTo(busqueda);
+                    menuAdminAcc.addComponent(new Button("Cancelar", () -> {
+                        menuAdminAcc.removeAllComponents();
+                        new Label(mensajeMenuInicial).addTo(menuAdminAcc);
+                    })).setTheme(GuiProgram.temaGlobal);
+                    new EmptySpace(new TerminalSize(0, 1));
+
+                    new EmptySpace(new TerminalSize(0, 1));
+                })
                 .addItem("Información del usuario", () -> {
                     // Remueve los componentes del menú secundario
                     menuAdminAcc.removeAllComponents();
@@ -1032,16 +1105,22 @@ public class GuiProgram {
             primerInicio.setComponent(msjInicio);
 
             final TextBox newPwd = new TextBox();
-            terminal.setCursorPosition(2, 2);
             newPwd.setMask('*').setPreferredSize(new TerminalSize(15, 1));
+
+            final TextBox newPwd2 = new TextBox();
+            newPwd2.setMask('*').setPreferredSize(new TerminalSize(15, 1));
 
             new Label("Ingresa una nueva contraseña:").addTo(msjInicio);
             newPwd.addTo(msjInicio).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE));
+
+            new Label("Repita la contraseña:").addTo(msjInicio);
+            newPwd2.addTo(msjInicio).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE));
 
             new Button("Salir", () -> {
                 try {
                     log.sendInfo("Finalizando interfaz.");
                     screen.stopScreen();
+                    System.exit(0);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -1049,6 +1128,8 @@ public class GuiProgram {
 
             new Button("Iniciar", () -> {
                 try {
+                    if (!Objects.equals(newPwd.getText(), newPwd2.getText()))
+                        throw new Exception("Las contraseñas no coinciden");
                     if (Objects.equals(newPwd.getText(), ""))
                         throw new Exception("Debes ingresar una nueva contraseña.");
                     if (Objects.equals(newPwd.getText(), "admin"))
@@ -1056,6 +1137,7 @@ public class GuiProgram {
 
                     GuiProgram.currentUser = GuiProgram.dbadmins.getAdmins().get(0);
                     currentUser.setPassword(newPwd.getText());
+                    GuiProgram.currentUser = null;
 
                     new MessageDialogBuilder().setTitle("Aviso").setText("Contraseña establecida con éxito")
                             .addButton(MessageDialogButton.OK).build().showDialog(gui);
@@ -1064,6 +1146,8 @@ public class GuiProgram {
                     gui.addWindowAndWait(loginWindow);
 
                 } catch (Exception e) {
+                    newPwd.setText("");
+                    newPwd2.setText("");
                     new MessageDialogBuilder().setTitle("Advertencia").setText(e.getMessage())
                             .addButton(MessageDialogButton.Retry).build().showDialog(gui);
                 }
