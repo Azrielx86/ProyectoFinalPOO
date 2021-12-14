@@ -5,5 +5,19 @@
         "numTrabajador": "0000001",
         "password": "admin1",
         "username": "admin"
+    },
+    {
+        "class": "com.fiunam.users.Administrador",
+        "nombre": "Edgars Admin",
+        "numTrabajador": "72818573",
+        "password": "admin",
+        "username": "edgarsadm"
+    },
+    {
+        "class": "com.fiunam.users.Administrador",
+        "nombre": "Rodrigo Admin",
+        "numTrabajador": "60781154",
+        "password": "admin",
+        "username": "rodriadm"
     }
 ]

@@ -1105,16 +1105,22 @@ public class GuiProgram {
             primerInicio.setComponent(msjInicio);
 
             final TextBox newPwd = new TextBox();
-            terminal.setCursorPosition(2, 2);
             newPwd.setMask('*').setPreferredSize(new TerminalSize(15, 1));
+
+            final TextBox newPwd2 = new TextBox();
+            newPwd2.setMask('*').setPreferredSize(new TerminalSize(15, 1));
 
             new Label("Ingresa una nueva contraseña:").addTo(msjInicio);
             newPwd.addTo(msjInicio).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE));
+
+            new Label("Repita la contraseña:").addTo(msjInicio);
+            newPwd2.addTo(msjInicio).setTheme(new SimpleTheme(TextColor.ANSI.BLACK, TextColor.ANSI.WHITE));
 
             new Button("Salir", () -> {
                 try {
                     log.sendInfo("Finalizando interfaz.");
                     screen.stopScreen();
+                    System.exit(0);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -1122,6 +1128,8 @@ public class GuiProgram {
 
             new Button("Iniciar", () -> {
                 try {
+                    if (!Objects.equals(newPwd.getText(), newPwd2.getText()))
+                        throw new Exception("Las contraseñas no coinciden");
                     if (Objects.equals(newPwd.getText(), ""))
                         throw new Exception("Debes ingresar una nueva contraseña.");
                     if (Objects.equals(newPwd.getText(), "admin"))
@@ -1129,6 +1137,7 @@ public class GuiProgram {
 
                     GuiProgram.currentUser = GuiProgram.dbadmins.getAdmins().get(0);
                     currentUser.setPassword(newPwd.getText());
+                    GuiProgram.currentUser = null;
 
                     new MessageDialogBuilder().setTitle("Aviso").setText("Contraseña establecida con éxito")
                             .addButton(MessageDialogButton.OK).build().showDialog(gui);
@@ -1137,6 +1146,8 @@ public class GuiProgram {
                     gui.addWindowAndWait(loginWindow);
 
                 } catch (Exception e) {
+                    newPwd.setText("");
+                    newPwd2.setText("");
                     new MessageDialogBuilder().setTitle("Advertencia").setText(e.getMessage())
                             .addButton(MessageDialogButton.Retry).build().showDialog(gui);
                 }
